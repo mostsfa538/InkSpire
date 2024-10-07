@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  f_name    String
+  l_name    String
+  email     String   @unique
+  image     String
+  password  String
+  cards     Card[]
+  orders    Order[]
+  reviews   Review[]
+  OnHolds   OnHold[]
+}
+
+model Book {
+  id          Int      @id @default(autoincrement())
+  title       String
+  author      String
+  image       String
+  description String
+  price       Decimal  @db.Decimal(10, 2)
+  category    String
+  quantity    Int
+  cards       Card[]
+  orders      Order[]
+  reviews     Review[]
+}
+
+model Card {
+  id      Int  @id @default(autoincrement())
+  user    User @relation(fields: [id_user], references: [id])
+  id_user Int
+  book    Book @relation(fields: [id_book], references: [id])
+  id_book Int
+  quantity Int
+}
+
+model Order {
+  id           Int      @id @default(autoincrement())
+  user         User     @relation(fields: [id_user], references: [id])
+  id_user      Int
+  book         Book     @relation(fields: [id_book], references: [id])
+  id_book      Int
+  total_price  Decimal  @db.Decimal(5, 2)
+  address      String
+  phone_number String
+  order_status OrderStatus
+}
+
+model Review {
+  id      Int  @id @default(autoincrement())
+  user    User @relation(fields: [id_user], references: [id])
+  id_user Int
+  book    Book @relation(fields: [id_book], references: [id])
+  id_book Int
+  rating  Int  @default(1)
+  body    String
+}
+
+model OnHold {
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [id_user], references: [id])
+  id_user     Int
+  title       String
+  author      String
+  image       String
+  description String
+  price       Decimal  @db.Decimal(5, 2)
+  status      HoldStatus
+  created_at  DateTime @default(now())
+}
+
+enum OrderStatus {
+  pending
+  delivering
+  cancelled
+  completed
+}
+
+enum HoldStatus {
+  pending
+  cancelled
+  accepted
+}
