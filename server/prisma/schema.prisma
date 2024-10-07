@@ -18,6 +18,7 @@ model User {
   orders    Order[]
   reviews   Review[]
   OnHolds   OnHold[]
+  Favorites Favorite[]
 }
 
 model Book {
@@ -32,6 +33,7 @@ model Book {
   cards       Card[]
   orders      Order[]
   reviews     Review[]
+  Favorites Favorite[]
 }
 
 model Card {
@@ -76,6 +78,14 @@ model OnHold {
   price       Decimal  @db.Decimal(5, 2)
   status      HoldStatus
   created_at  DateTime @default(now())
+}
+
+model Favorite {
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [id_user], references: [id])
+  id_user Int
+  book    Book  @relation(fields: [id_book], references: [id])
+  id_book Int
 }
 
 enum OrderStatus {

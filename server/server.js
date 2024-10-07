@@ -1,6 +1,5 @@
 const express = require('express');
 const adminRoute = require('./src/routes/adminBookRoutes.js');
-
 const app = express();
 
 app.use(express.json());
