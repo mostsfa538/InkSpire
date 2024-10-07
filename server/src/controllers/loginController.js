@@ -7,7 +7,7 @@ class loginContoller {
         if (req.session.isAuthenticated) {
             return res.status(200).json({"message": "user already authenticated, logout first"})
         }
-        return res.render('login')
+        res.status(200).json({"page": "login page"})
     }
     static async postLogin (req, res) {
         const {email, password} = req.body
@@ -33,13 +33,7 @@ class loginContoller {
                 req.session.user = { id: user.id, email: user.email };;
                 req.session.isAuthenticated = true
                 console.log(req.session)
-                res.status(200).send(
-                    `<form action="/logout" method="POST">
-                        <button type="submit">logout</button>
-                    </form>
-                    `
-                )
-                // return res.status(200).json({"message": "loggedIn successfully"})
+                return res.status(200).json({"message": "loggedIn successfully"})
             })
         } catch (error) {
             console.error(error)
