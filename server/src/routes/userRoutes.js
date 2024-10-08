@@ -3,6 +3,8 @@ const express = require('express');
 const reviewController = require('../controllers/reviewController');
 const reviewValidator = require('../validators/reviewValidator');
 const handleValidationErrors = require('../middlewares/validationErrorHandler');
+const favoriteController = require('../controllers/favoriteController');
+const favoriteValidator = require('../validators/favoriteValidator');
 
 const router = express.Router();
 
@@ -39,6 +41,24 @@ router.delete('/delete/:id',
     reviewValidator.validateReviewId,
     handleValidationErrors,
     reviewController.deleteReview
+);
+
+router.post(
+    '/add',
+    favoriteValidator.validateCreateFavorite,
+    favoriteController.createFavorite
+);
+
+router.get(
+    '/:userId', 
+    favoriteValidator.validateUserId
+    ,favoriteController.getFavoritesByUser
+);
+
+router.delete(
+    '/delete/:id',
+    favoriteValidator.validateID,
+    favoriteController.deleteFavorite
 );
 
 module.exports = router;
