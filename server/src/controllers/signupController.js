@@ -25,12 +25,19 @@ class singupController {
             await prisma.user.create({
                 data: newUser
             }).then(user => {
-                req.session.user = { id: user.id, email: user.email };
-                return res.status(200).json({"message": "signedUp successfully"})
+                req.session.user = newUser;
+                return res.status(200).json({
+                    "message": "signedUp successfully",
+                    "sessionID": req.session.id,
+                    "userData": newUser
+                })
+            }).catch(() => {
+                return res.status(401).json({
+                    "message": "user already have an account, login instead"})
             })
         } catch(error){
             console.log(error)
-            return res.status(401).json({"message": `signup failed, user already have an account`})
+            return res.status(500).json({"message": `signup failed`})
         }
     } 
 }

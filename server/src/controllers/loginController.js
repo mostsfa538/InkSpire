@@ -10,9 +10,7 @@ class loginContoller {
         const {email, password} = req.body
         try {
             const user = await prisma.user.findFirst({
-                where: { email },
-                select: { id: true, email: true, password: true },
-                // Select only necessary fields
+                where: { email }
             })
             if (!user) {
                 return res.status(404).send({"message": "no user found"})
@@ -21,9 +19,12 @@ class loginContoller {
                 if (!valid) {
                     return res.status(401).json({"message": "wrong email or password"})
                 }
-                req.session.user = { id: user.id, email: user.email };;
-                req.session.isAuthenticated = true
-                return res.status(200).json({"message": "loggedIn successfully"})
+                req.session.user = user;
+                return res.status(200).json({
+                    "message": "loggedIn successfully",
+                    "sessionID": req.session.id,
+                    "userData": req.session.user
+                })
             })
         } catch (error) {
             console.error(error)

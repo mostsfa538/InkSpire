@@ -14,4 +14,5 @@ router.post("/signup",
     handleValidationErrors,
     singupController.postSignup
 )
+
 module.exports = router
