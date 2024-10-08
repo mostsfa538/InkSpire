@@ -4,10 +4,12 @@ const adminRoute = require('./src/routes/adminBookRoutes.js');
 const loginRoute = require('./src/routes/loginRoutes.js');
 const signupRoute = require('./src/routes/signupRoutes.js')
 const session = require('./src/middlewares/session.js');
+const cors = require('cors');
 
 const userRoute = require('./src/routes/userRoutes.js');
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session)
