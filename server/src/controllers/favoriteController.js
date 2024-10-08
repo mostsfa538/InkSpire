@@ -7,6 +7,15 @@ class favoriteController {
         const userId = req.body.userId;
         const bookId = req.body.bookId;
         try {
+            const book = await prisma.favorite.findFirst({
+                where: {
+                    id: bookId
+                }
+            });
+            if (book) {
+                return res.status(409).json({ message: "Favorite entry for this book already exists" });
+            }
+
             const favorite = await prisma.favorite.create({
                 data: {
                     user: {
@@ -36,6 +45,9 @@ class favoriteController {
                     user: {
                         id: userId
                     }
+                },
+                include: {
+                    book: true,
                 }
             });
             if (!favorites) {
@@ -43,6 +55,7 @@ class favoriteController {
             }
             res.status(200).json(favorites);
         } catch (err) {
+            console.log(err);
             res.status(500).json({ message: 'An error occurred during favorite retrieval' });
         }
     }
@@ -60,6 +73,9 @@ class favoriteController {
             }
             res.status(200).json({ message: 'Favorite deleted successfully' });
         } catch (err) {
+            if (err.code === 'P2025') {
+                return res.status(404).json({ message: "Favorite not found" });
+            }
             res.status(500).json({ message: 'An error occurred during favorite deletion' });
         }
     }

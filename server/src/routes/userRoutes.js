@@ -50,13 +50,13 @@ router.post(
 );
 
 router.get(
-    '/:userId', 
-    favoriteValidator.validateUserId
-    ,favoriteController.getFavoritesByUser
+    '/favorites/:userId',
+    favoriteValidator.validateUserId,
+    favoriteController.getFavoritesByUser
 );
 
 router.delete(
-    '/delete/:id',
+    '/favorites/delete/:id',
     favoriteValidator.validateID,
     favoriteController.deleteFavorite
 );
