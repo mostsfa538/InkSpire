@@ -17,8 +17,8 @@ class loginContoller {
             if (!user) {
                 return res.status(404).send({"message": "no user found"})
             }
-            bcrypt.compare(password, user.password).then(Valid => {
-                if (!Valid) {
+            bcrypt.compare(password, user.password).then(valid => {
+                if (!valid) {
                     return res.status(401).json({"message": "wrong email or password"})
                 }
                 req.session.user = { id: user.id, email: user.email };;
