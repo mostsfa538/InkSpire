@@ -9,12 +9,12 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  f_name    String
-  l_name    String
-  email     String   @unique
-  image     String
+  f_name    String ? @db.VarChar(50)
+  l_name    String ? @db.VarChar(50)
+  email     String   @unique @db.VarChar(255)
+  image     String ?
   password  String
-  cards     Card[]
+  carts     Cart[]
   orders    Order[]
   reviews   Review[]
   OnHolds   OnHold[]
@@ -30,13 +30,13 @@ model Book {
   price       Decimal  @db.Decimal(10, 2)
   category    String
   quantity    Int
-  cards       Card[]
+  carts       Cart[]
   orders      Order[]
   reviews     Review[]
   Favorites Favorite[]
 }
 
-model Card {
+model Cart {
   id      Int  @id @default(autoincrement())
   user    User @relation(fields: [id_user], references: [id])
   id_user Int
