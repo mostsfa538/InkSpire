@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import App from './routes/App.tsx'
+import SignIn from './routes/SignIn.tsx'
+import SignUp from './routes/SignUp.tsx'
 
 import { AuthProvider } from './context/authContext.tsx'
 
@@ -16,6 +18,14 @@ const router = createBrowserRouter([
     {
         path: '/',
         element: <App />,
+    },
+    {
+        path: '/signin',
+        element: <SignIn />,
+    },
+    {
+        path: '/signup',
+        element: <SignUp />,
     }
 ])
 

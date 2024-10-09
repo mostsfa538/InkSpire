@@ -32,10 +32,20 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
+    const signup = async (user: User) => {
+        try {
+            const response = await axios.post(`${SERVER_URL}/signup`, user, { withCredentials: true });
+            setUser(response.data.user);
+            setError(null);  // Clear any previous errors
+        } catch (error) {
+            setError('Signup failed. Please try again.');  // Set error message
+        }
+    };
+
     const logout = async () => {
         try {
             await axios.post(`${SERVER_URL}/logout`, {}, { withCredentials: true });
-            setUser(null);
+            setUser(null); // Clear user state
             setError(null);  // Clear any previous errors
         } catch (error) {
             setError('Logout failed. Please try again.');  // Set error message
@@ -47,7 +57,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, error }}>
+        <AuthContext.Provider value={{ user, login, logout, signup, error }}>
             {children}
         </AuthContext.Provider>
     );

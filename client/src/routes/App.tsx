@@ -1,16 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../features/app/store'
-import { increment, decrement } from '../features/counter/Counter';
+import useAuth from "../hooks/useAuth"
 
 function App() {
-    const count = useSelector((state: RootState) => state.counter.value);
-    const dispatch = useDispatch();
-
+    const { user, logout } = useAuth()
     return (
     <>
-        <button onClick={() => dispatch(decrement())}>-</button>
-        <h1>Counter: {count}</h1>
-        <button onClick={() => dispatch(increment())}>+</button>
+        Hello {user && (<button onClick={logout}>Logout</button>)}
     </>
   )
 }
