@@ -28,8 +28,7 @@ class singupController {
                 req.session.user = newUser;
                 return res.status(200).json({
                     "message": "signedUp successfully",
-                    "sessionID": req.session.id,
-                    "userData": newUser
+                    "user": newUser
                 })
             }).catch(() => {
                 return res.status(401).json({
