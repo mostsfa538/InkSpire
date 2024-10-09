@@ -11,11 +11,6 @@ const validateBookId = [
         .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
 ];
 
-const validateUserId = [
-    param('userId')
-        .isInt({ gt: 0 }).withMessage('User ID must be a positive integer')
-];
-
 const validateCreateReview = [
     check('bookId')
         .isInt({ gt: 0 }).withMessage('Book ID must be a positive integer'),
@@ -45,7 +40,6 @@ const validateUpdateReview = [
 module.exports = {
     validateReviewId,
     validateBookId,
-    validateUserId, 
     validateCreateReview, 
     validateUpdateReview
 };

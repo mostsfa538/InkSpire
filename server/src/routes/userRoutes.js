@@ -12,31 +12,33 @@ const userValidator = require('../validators/userValidator');
 const router = express.Router();
 
 router.post(
-    '/create',
+    'reviews/:userId/create',
     checkSession,
+    userValidator.validateUserId,
     reviewValidator.validateCreateReview,
     handleValidationErrors,
     reviewController.createReview
 );
 
 router.get(
-    '/book/:bookId',
+    'reviews/:userId/book/:bookId',
     checkSession,
+    userValidator.validateUserId,
     reviewValidator.validateBookId,
     handleValidationErrors,
     reviewController.getReviewsByBook
 );
 
 router.get(
-    '/:userId',
+    'reviews/:userId',
     checkSession,
-    reviewValidator.validateUserId,
+    userValidator.validateUserId,
     handleValidationErrors,
     reviewController.getReviewsByUser
 );
 
 router.put(
-    '/update/:id',
+    'reviews/:userId/update/:id',
     checkSession,
     reviewValidator.validateUpdateReview,
     reviewValidator.validateReviewId,
@@ -45,16 +47,18 @@ router.put(
 );
 
 router.delete(
-    '/delete/:id',
+    'reviews/:userId/delete/:id',
     checkSession,
+    userValidator.validateUserId,
     reviewValidator.validateReviewId,
     handleValidationErrors,
     reviewController.deleteReview
 );
 
 router.post(
-    '/add',
+    '/favorites/:userId/add',
     checkSession,
+    userValidator.validateUserId,
     favoriteValidator.validateCreateFavorite,
     favoriteController.createFavorite
 );
@@ -62,7 +66,7 @@ router.post(
 router.get(
     '/favorites/:userId',
     checkSession,
-    favoriteValidator.validateUserId,
+    userValidator.validateUserId,
     favoriteController.getFavoritesByUser
 );
 
@@ -72,13 +76,53 @@ router.delete(
     favoriteValidator.validateID,
     favoriteController.deleteFavorite
 );
-// -------------------------
+
 router.get(
-    '/search/:searchTerm',
+    '/:userId/search/:searchTerm',
     checkSession,
+    userValidator.validateUserId,
     userValidator.validateSearch,
     handleValidationErrors,
     userController.searchByCategory
+);
+
+router.post(
+    '/:userId/upload/',
+    checkSession,
+    userValidator.validateUserId,
+    userValidator.validateUploadBook,
+    handleValidationErrors,
+    userController.uploadBook
+);
+
+router.put(
+    '/:userId/update/:id',
+    checkSession,
+    userValidator.validateUserId,
+    userValidator.updateBook,
+    handleValidationErrors,
+    userController.updateBook
+);
+
+router.get(
+    '/:userId/status/',
+    checkSession,
+    userValidator.validateUserId,
+    userController.showBooksStatus
+);
+
+router.delete(
+    '/:userId/delete/:id',
+    checkSession,
+    userValidator.validateUserId,
+    userController.deleteBook
+);
+
+router.post(
+    '/:userId/profile',
+    checkSession,
+    userValidator.validateUpdateProfile,
+    userController.updateProfile
 );
 
 module.exports = router;
