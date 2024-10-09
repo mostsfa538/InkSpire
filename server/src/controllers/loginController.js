@@ -22,8 +22,7 @@ class loginContoller {
                 req.session.user = user;
                 return res.status(200).json({
                     "message": "loggedIn successfully",
-                    "sessionID": req.session.id,
-                    "userData": req.session.user
+                    "user": req.session.user
                 })
             })
         } catch (error) {
