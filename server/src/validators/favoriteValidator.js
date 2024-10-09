@@ -5,10 +5,6 @@ const validateID = [
         .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
 ];
 
-const validateUserId = [
-    param('userId')
-    .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
-]
 const validateCreateFavorite = [
     check('userId')
         .not().isEmpty().withMessage('User ID is required')
@@ -18,7 +14,7 @@ const validateCreateFavorite = [
         .isInt({ gt: 0 }).withMessage('Book ID must be a positive integer')
 ];
 
-module.exports = { validateID,
-    validateUserId,
+module.exports = {
+    validateID,
     validateCreateFavorite
 };
