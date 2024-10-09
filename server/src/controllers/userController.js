@@ -60,7 +60,6 @@ class userController {
                     image: image,
                     price: price,
                     description: description,
-                    price: price,
                     status: "pending",
                     user: {
                         connect: {
