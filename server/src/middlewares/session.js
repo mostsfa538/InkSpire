@@ -1,7 +1,7 @@
 const session = require("express-session")
 require('dotenv').config()
 module.exports = session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'your-default-secret',
     name: "sessionCookie",
     resave: false,
     saveUninitialized: false,

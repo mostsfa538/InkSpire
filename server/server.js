@@ -22,10 +22,7 @@ app.use('/api/admin', adminRoute);
 app.use('/api/user', userRoute);
 
 app.use('/', homeRoute);
-app.use('/admin', adminRoute);
 app.use('/', loginRoute);
 app.use('/', signupRoute)
 
-app.listen(3000, () => {
-    console.log("listening")
-});
+app.listen(3000);

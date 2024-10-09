@@ -26,7 +26,6 @@ class loginContoller {
                 })
             })
         } catch (error) {
-            console.error(error)
             return res.status(500).json({"message": "server error"})
         }
     }
@@ -36,7 +35,6 @@ class loginContoller {
             res.clearCookie('sessionCookie')
             res.status(200).json({"message": 'logged out successfully'})
         } catch(error){
-            console.error(error)
             return res.status(500).json({"message": "logout failed"})
         }
     }
