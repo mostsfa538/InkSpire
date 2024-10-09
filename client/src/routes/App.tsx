@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from './features/app/store'
-import { increment, decrement } from './features/counter/Counter';
+import { RootState } from '../features/app/store'
+import { increment, decrement } from '../features/counter/Counter';
 
 function App() {
     const count = useSelector((state: RootState) => state.counter.value);

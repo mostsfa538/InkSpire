@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 import axios from "axios";
 
@@ -53,12 +53,4 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     );
 };
 
-const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
-};
-
-export { AuthProvider, useAuth };
+export { AuthProvider, AuthContext };
