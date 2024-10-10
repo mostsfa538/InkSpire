@@ -3,3 +3,8 @@ export interface User {
     email: string;
     password: string;
 };
+
+export type AuthError = {
+    status: number;
+    msg: string;
+}
