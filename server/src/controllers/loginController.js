@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt")
 
 class loginContoller {
     static async getLogin(req, res) {
-        res.status(200).json({"page": "login page"})
+        res.status(200).json({ user: req.session.user })
     }
     static async postLogin (req, res) {
         const {email, password} = req.body
