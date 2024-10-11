@@ -12,7 +12,7 @@ function Alert({ type, message }: AlertProps) {
 
     return (
         <div
-            className={`${style[type]} border-2 p-4 text-sm font-semibold rounded-lg flex items-center`}>
+            className={`${style[type]} border-2 p-4 text-sm font-semibold rounded-lg flex items-center shadow-lg`}>
             {type === "error" && (
                 <MdOutlineReportGmailerrorred className="mr-2 text-xl" />
             )}
