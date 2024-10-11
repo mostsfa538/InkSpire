@@ -30,16 +30,17 @@ export default {
                 },
             },
             keyframes: {
-                fadeIn: {
-                    '0%': { opacity: 0 },
-                    '100%': { opacity: 1 },
+                fadeInOut: {
+                    "0%, 100%": { opacity: 0 },
+                    "10%, 80%": { opacity: 1 },
                 },
             },
             animation: {
-                fadeIn: "fadeIn 1s ease-in forwards",
+                fadeInOut: "fadeInOut 5.5s ease-in-out forwards",
             },
             backgroundImage: {
                 'sign-in-hero': "url('/signin-hero.jpg')",
+                'sign-up-hero': "url('/signup-hero.jpg')",
             }
         },
     },
