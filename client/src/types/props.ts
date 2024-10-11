@@ -28,3 +28,8 @@ export type ButtonProps = {
     onClick: (e: React.FormEvent) => void
     disabled?: boolean
 };
+
+export type AlertProps = {
+    type: 'error' | 'success' | 'info',
+    message: string
+};

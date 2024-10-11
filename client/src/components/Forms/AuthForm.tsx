@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 
 import Input from "../UI/Input";
+import Alert from "../UI/Alert";
 import Button from "../UI/Button";
 
 import { Link, Navigate } from "react-router-dom";
@@ -54,9 +55,7 @@ function AuthForm({ type }: AuthFormProps) {
                         } />
                     </div>
                     <span className="flex-1">
-                        {
-                            error && (<p className="bg-error-background border-error-border border-2 text-error-text p-4 text-sm font-bold rounded-md max-md:text-xs">{error.msg}</p>)
-                        }
+                        {error && <Alert type="error" message={error.msg} />}
                     </span>
                     <span className="text-sm text-center max-sm:text-xs">
                         {
