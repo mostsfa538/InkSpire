@@ -1,4 +1,4 @@
-import { AuthError, User } from "./data";
+import { User } from "./data";
 
 export type AuthContextType = {
     user: User | null;
@@ -20,7 +20,11 @@ export type InputComponentProps = {
 }
 
 export type AuthFormProps = {
-    title: string;
-    error: AuthError | null;
-    action: (user: User) => void;
+    type: string;
+};
+
+export type ButtonProps = {
+    text: string,
+    onClick: (e: React.FormEvent) => void
+    disabled?: boolean
 };

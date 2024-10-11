@@ -1,7 +1,7 @@
-import SignInPage from '../pages/SignInPage'
+import AuthPage from '../pages/AuthPage'
 
 function SignIn() {
-    return <SignInPage />
+    return <AuthPage type='signin' />
 }
 
 export default SignIn
