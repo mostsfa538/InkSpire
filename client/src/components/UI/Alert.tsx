@@ -1,24 +1,30 @@
-import { AlertProps } from "../../types/props"
-
+import { AlertProps } from "../../types/props";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 
-
 function Alert({ type, message }: AlertProps) {
     const style = {
-        error: 'bg-error-background border-error-border text-error-text',
-        success: 'bg-success-background border-success-border text-success-text',
-        info: 'bg-info-background border-info-border text-info-text'
-    }
+        error: "bg-red-100 border-red-400 text-red-700",
+        success: "bg-green-100 border-green-400 text-green-700",
+        info: "bg-blue-100 border-blue-400 text-blue-700",
+    };
 
-    return <div className={`${style[type]} border-2 p-4 text-sm font-bold rounded-md max-md:text-xs flex items-center justify-center`}>
-        {type === 'error' && <MdOutlineReportGmailerrorred className="mr-2" />}
-        {type === 'success' && <IoIosCheckmarkCircleOutline className="mr-2" />}
-        {type === 'info' && <IoMdInformationCircleOutline className="mr-2" />}
-        {message}
-    </div>
-
+    return (
+        <div
+            className={`${style[type]} border-2 p-4 text-sm font-semibold rounded-lg flex items-center`}>
+            {type === "error" && (
+                <MdOutlineReportGmailerrorred className="mr-2 text-xl" />
+            )}
+            {type === "success" && (
+                <IoIosCheckmarkCircleOutline className="mr-2 text-xl" />
+            )}
+            {type === "info" && (
+                <IoMdInformationCircleOutline className="mr-2 text-xl" />
+            )}
+            <span className="font-sans">{message}</span>
+        </div>
+    );
 }
 
-export default Alert
+export default Alert;
