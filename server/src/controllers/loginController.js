@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient;
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const { use } = require('bcrypt/promises');
 
 class loginContoller {
     static async getLogin(req, res) {
@@ -10,7 +11,14 @@ class loginContoller {
         const {email, password} = req.body
         try {
             const user = await prisma.user.findFirst({
-                where: { email }
+                where: { email },
+                include: {
+                    carts: {include: {items: true}},
+                    orders: true,
+                    reviews: true,
+                    OnHolds: true,
+                    Favorites: true
+                }
             })
             if (!user) {
                 return res.status(404).send({"message": "no user found"})
@@ -22,7 +30,10 @@ class loginContoller {
                 req.session.user = user;
                 return res.status(200).json({
                     "message": "loggedIn successfully",
-                    "user": req.session.user
+                    "user": {
+                        ...user,
+                        password: ""
+                    }
                 })
             })
         } catch (error) {
@@ -39,6 +50,5 @@ class loginContoller {
         }
     }
 }
-
 
 module.exports = loginContoller

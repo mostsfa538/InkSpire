@@ -1,8 +1,8 @@
 const express = require('express');
-const homeRoute = require('./src/routes/home.js');
 const adminRoute = require('./src/routes/adminBookRoutes.js');
 const loginRoute = require('./src/routes/loginRoutes.js');
 const signupRoute = require('./src/routes/signupRoutes.js')
+const cartRoutes = require("./src/routes/cartRoutes.js")
 const session = require('./src/middlewares/session.js');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -21,8 +21,9 @@ app.use(session)
 app.use('/api/admin', adminRoute);
 app.use('/api/user', userRoute);
 
-app.use('/', homeRoute);
 app.use('/', loginRoute);
 app.use('/', signupRoute)
+
+app.use('/', cartRoutes)
 
 app.listen(3000);
