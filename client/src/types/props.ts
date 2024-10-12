@@ -14,7 +14,7 @@ export type AuthProviderProps = {
 
 export type InputComponentProps = { 
     onChange: (value: string) => void, 
-    placeholder: string, 
+    label: string, 
     type: string, 
     defaultValue: string 
 }

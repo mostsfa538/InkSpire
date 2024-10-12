@@ -43,11 +43,11 @@ function AuthForm({ type }: AuthFormProps) {
                         </h3>
                     </header>
                     <div className="flex-[2] flex flex-col gap-4 p-2">
-                        <Input type="email" placeholder="Email" defaultValue={email} onChange={setEmail} />
-                        <Input type="password" placeholder="Password" defaultValue={password} onChange={setPassword} />
+                        <Input type="email" label="Email" defaultValue={email} onChange={setEmail} />
+                        <Input type="password" label="Password" defaultValue={password} onChange={setPassword} />
                         {
                             type === "signup" && (
-                                <Input type="password" placeholder="Confirm Password" defaultValue={confirmPassword} onChange={setConfirmPassword} />
+                                <Input type="password" label="Confirm Password" defaultValue={confirmPassword} onChange={setConfirmPassword} />
                             )
                         }
                         <Button text={type === "signup" ? "Sign Up" : "Sign In"} onClick={handleSubmit} disabled={
