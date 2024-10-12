@@ -50,7 +50,7 @@ class userController {
     }
 
     static async uploadBook(req, res) {
-        const { title, author, image, price, description } = req.body;
+        const { title, author, image, price, description, category } = req.body;
         const userId = req.params.userId;
         try {
             const book = await prisma.onHold.create({
@@ -60,6 +60,7 @@ class userController {
                     image: image,
                     price: price,
                     description: description,
+                    category: category,
                     status: "pending",
                     user: {
                         connect: {
@@ -107,8 +108,11 @@ class userController {
                     id: parseInt(bookId)
                 }
             });
-            res.status(200).json(book);
+            res.status(200).json({message: 'Book deleted successfully'});
         } catch (err) {
+            if (err.code === 'P2025') {
+                return res.status(404).json({ message: 'Book not found' });
+            }
             res.status(500).json({ message: 'An error occurred during delete' });
         }
     }
@@ -118,8 +122,8 @@ class userController {
         try {
             const books = await prisma.onHold.findMany({
                 where: {
-                    id: parseInt(userId)
-                }
+                    id: parseInt(userId),
+                },
             });
             if (!books) {
                 return res.status(404).json({ message: "No books found" });

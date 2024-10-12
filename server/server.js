@@ -1,6 +1,5 @@
 const express = require('express');
-const homeRoute = require('./src/routes/home.js');
-const adminRoute = require('./src/routes/adminBookRoutes.js');
+const adminRoute = require('./src/routes/adminRoutes.js');
 const loginRoute = require('./src/routes/loginRoutes.js');
 const signupRoute = require('./src/routes/signupRoutes.js')
 const session = require('./src/middlewares/session.js');
@@ -21,7 +20,6 @@ app.use(session)
 app.use('/api/admin', adminRoute);
 app.use('/api/user', userRoute);
 
-app.use('/', homeRoute);
 app.use('/', loginRoute);
 app.use('/', signupRoute)
 

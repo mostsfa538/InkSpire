@@ -127,3 +127,63 @@
 - **Description**: Updates the user's profile.
 - **Request Params**:
   - `userId` (path): ID of the user.
+
+### show the books
+- **URL**: `/`
+- **Method**: `GET`
+- **Description**: Show all the books.
+
+
+## Admin Endpoints
+
+### Create a Book
+
+- **URL**: `/admin/create`
+- **Method**: `POST`
+- **Description**: Creates a new book entry.
+- **Request Body**: The body must include the book details.
+  
+### Get All Books
+
+- **URL**: `/admin`
+- **Method**: `GET`
+- **Description**: Retrieves a list of all books.
+
+### Update a Book
+
+- **URL**: `/admin/update/:id`
+- **Method**: `PUT`
+- **Description**: Updates a book entry by its ID.
+- **Request Params**:
+  - `id` (path): ID of the book to be updated.
+- **Request Body**: The body must include the updated book details.
+
+### Delete a Book
+
+- **URL**: `/admin/delete/:id`
+- **Method**: `DELETE`
+- **Description**: Deletes a book entry by its ID.
+- **Request Params**:
+  - `id` (path): ID of the book to be deleted.
+
+### Get Book Requests
+
+- **URL**: `/admin/requests`
+- **Method**: `GET`
+- **Description**: Retrieves a list of all book requests.
+
+### Approve a Request
+
+- **URL**: `/admin/approve/:id`
+- **Method**: `PUT`
+- **Description**: Approves a book request by its ID.
+- **Request Params**:
+  - `id` (path): ID of the request to be approved.
+
+### Reject a Request
+
+- **URL**: `/admin/reject/:id`
+- **Method**: `PUT`
+- **Description**: Rejects a book request by its ID.
+- **Request Params**:
+  - `id` (path): ID of the request to be rejected.

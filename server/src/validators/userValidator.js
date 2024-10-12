@@ -1,7 +1,7 @@
 const {check} = require('express-validator');
 
 const validateUserId = [
-    check('id')
+    check('userId')
         .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
 ];
 
@@ -37,7 +37,12 @@ const validateUploadBook = [
       .trim()
       .notEmpty().withMessage('Description cannot be empty')
       .isString().withMessage('Description must be a string')
-      .isLength({ max: 1000 }).withMessage('Description is too long (max 1000 characters)')
+      .isLength({ max: 1000 }).withMessage('Description is too long (max 1000 characters)'),
+    check('category')
+        .trim()
+        .notEmpty().withMessage('Category cannot be empty')
+        .isString().withMessage('Category must be a string')
+        .isLength({ max: 100 }).withMessage('Category is too long (max 100 characters)'),
 ];
 
 const validateUpdateProfile = [

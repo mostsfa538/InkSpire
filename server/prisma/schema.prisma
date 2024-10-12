@@ -78,6 +78,7 @@ model OnHold {
   price       Decimal  @db.Decimal(5, 2)
   status      HoldStatus
   created_at  DateTime @default(now())
+  category    String
 }
 
 model Favorite {

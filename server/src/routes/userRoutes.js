@@ -11,6 +11,9 @@ const userValidator = require('../validators/userValidator');
 
 const router = express.Router();
 
+
+router.get('/', userController.getBooks);
+
 router.post(
     'reviews/:userId/create',
     checkSession,
@@ -88,7 +91,7 @@ router.get(
 
 router.post(
     '/:userId/upload/',
-    checkSession,
+    // checkSession,
     userValidator.validateUserId,
     userValidator.validateUploadBook,
     handleValidationErrors,

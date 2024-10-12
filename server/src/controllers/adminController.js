@@ -92,6 +92,90 @@ class bookController {
             res.status(500).json({ message: 'An error occurred during book deletion' });
         }
     }
+
+    static async getRequests(req, res) {
+        try {
+            const requests = await prisma.onHold.findMany({
+                where: {
+                    status: 'pending'
+                }
+            })
+            if (!requests)
+                return res.status(401).json({ message: "No books found" });
+            return res.status(200).json(requests);
+        } catch (err) {
+            res.status(500).json({ message: "An error occurred" });
+        }
+    }
+
+    static async approveRequest(req, res) {
+        const id = req.params.id;
+        try {
+            const request = await prisma.onHold.findFirst({
+                where: {
+                    id: parseInt(id),
+                }
+            });
+            if (!request) {
+                return res.status(401).json({ message: "Request not found" });
+            }
+
+            const book = await prisma.book.create({
+                data: {
+                    title: request.title,
+                    author: request.author,
+                    description: request.description,
+                    image: request.image,
+                    price: request.price,
+                    category: request.category,
+                    quantity: 1
+                }
+            });
+            if (book) {
+                await prisma.onHold.update({
+                    where: {
+                        id: parseInt(id),
+                    },
+                    data: {
+                        status: 'accepted'
+                    }
+                });
+            }
+            res.status(200).json({ message: 'Request approved successfully' });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ message: 'An error occurred during request approval' });
+        }
+    }
+
+    static async rejectRequest(req, res) {
+        const id = req.params.id;
+        try {
+            const request = await prisma.onHold.findFirst({
+                where: {
+                    id: parseInt(id),
+                }
+            });
+            if (!request) {
+                return res.status(401).json({ message: "Request not found" });
+            }
+            await prisma.onHold.update({
+                where: {
+                    id: parseInt(id),
+                },
+                data: {
+                    status: 'cancelled'
+                }
+            });
+            res.status(200).json({ message: 'Request rejected successfully' });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ message: 'An error occurred during request rejection' });
+        }
+    }
+
+
+
 }
 
 module.exports = bookController;

@@ -1,5 +1,4 @@
 const { PrismaClient } = require('@prisma/client');
-const { connect } = require('../routes/adminBookRoutes');
 const prisma = new PrismaClient;
 
 class favoriteController {
