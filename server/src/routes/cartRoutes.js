@@ -123,8 +123,74 @@ router.post(
         }
     }
 )
-// router.post(
-//     '/user/:user_id/cart/:cart_id/cartItem/:cartItem_id/delete',
-// )
+router.delete(
+    '/user/:user_id/cart/:cart_id/cartItem/:cartItem_id/',
+    checkSession,
+    async (req, res) => {
+
+        if (!Number.isInteger(parseInt(req.params.user_id)) || 
+            !Number.isInteger(parseInt(req.params.cart_id)) ||
+            !Number.isInteger(parseInt(req.params.cartItem_id))
+        )
+
+        return res.status(401).json({"message": "IDs must be an integer"})
+
+
+        if (parseInt(req.params.user_id <= 0) || 
+            parseInt(req.params.cart_id) <= 0 ||
+            parseInt(req.params.cartItem_id) <=0){
+                return res.status(401).json({"message": "IDs can't be less than or equal to zero"})
+            }
+
+        if (parseInt(req.params.user_id) !== req.session.user.id){
+            console.log(req.params.user_id, req.session.user.id)
+            return res.status(401).json({"message": "no match with current userId"})
+        }
+
+        try {
+            const cart = await prisma.cart.findFirst({
+
+                where: {
+                    id: parseInt(req.params.cart_id),
+                    user_id: parseInt(req.params.user_id)
+                },
+
+                include: {items: true}
+            })
+
+            if (!cart)
+
+                return res.status(404).json({"message": "no match between userId and cartId"})
+
+            let deletedItmeIndex = -1;
+
+            for (let i = 0; i < cart.items.length; i++){
+
+                if (cart.items[i].id === parseInt(req.params.cartItem_id)) {
+                    deletedItmeIndex = i
+                    break
+                }
+            }
+
+            if (deletedItmeIndex == -1)
+
+                return res.status(404).json({"message": "no cartItem exist in cart with given cartItemId"})
+
+            const deletedItem = await prisma.cartItem.delete({
+
+                where: {id: parseInt(req.params.cartItem_id)}
+            })
+
+            if (!deletedItem)
+                return res.status(500).json({"message": "couldn't delete cartItem"})
+
+            return res.status(200).json({"message": "cartItem deleted successfully"})
+
+        } catch(error) {
+            return res.status(500).json({"message": "error occured while quering from database"})
+        }
+    }
+)
+
 
 module.exports = router
