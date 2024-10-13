@@ -19,6 +19,8 @@ model User {
   reviews   Review[]
   OnHolds   OnHold[]
   Favorites Favorite[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt 
 }
 
 model Book {
@@ -34,23 +36,30 @@ model Book {
   cartItems   CartItem[]
   reviews     Review[]
   Favorites   Favorite[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Cart {
   id      Int        @id @default(autoincrement())
-  user    User       @relation(fields: [user_id], references: [id])
+  user    User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id Int
   items   CartItem[]
   Order   Order[]
+  name String @db.VarChar(50) @default("cartName")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model CartItem {
   id       Int  @id @default(autoincrement())
-  cart     Cart @relation(fields: [cart_id], references: [id])
+  cart     Cart @relation(fields: [cart_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   cart_id  Int
   book     Book @relation(fields: [book_id], references: [id])
   book_id  Int
   quantity Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Order {
@@ -63,6 +72,7 @@ model Order {
   address      String
   phone_number String
   order_status OrderStatus
+  createdAt DateTime @default(now())
 }
 
 model Review {
@@ -108,3 +118,4 @@ enum HoldStatus {
   cancelled
   accepted
 }
+

@@ -5,7 +5,10 @@ const { use } = require('bcrypt/promises');
 
 class loginContoller {
     static async getLogin(req, res) {
-        res.status(200).json({ user: req.session.user })
+        res.status(200).json({ user: {
+            ...req.session.user,
+            password: ""
+        }})
     }
     static async postLogin (req, res) {
         const {email, password} = req.body
