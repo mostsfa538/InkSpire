@@ -24,6 +24,6 @@ app.use('/api/user', userRoute);
 app.use('/', loginRoute);
 app.use('/', signupRoute)
 
-app.use('/', cartRoutes)
+app.use('/api/user', cartRoutes)
 
 app.listen(3000);

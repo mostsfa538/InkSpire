@@ -7,7 +7,7 @@ const router = require('express').Router()
 
 // getting all user carts
 router.get(
-    '/user/:user_id/carts/',
+    '/:user_id/carts/',
     checkSession,
     cartValidator.validateUserId,
     handleValidationErrors,
@@ -16,7 +16,7 @@ router.get(
 
 // adding new cart
 router.post(
-    "/user/:user_id/carts/add",
+    "/:user_id/carts/add",
     checkSession,
     cartValidator.validateUserId,
     handleValidationErrors,
@@ -25,7 +25,7 @@ router.post(
 
 // getting only one cart with id
 router.get(
-    '/user/:user_id/carts/:cart_id',
+    '/:user_id/carts/:cart_id',
     checkSession,
     cartValidator.validateUserId,
     cartValidator.validateCartId,
@@ -36,7 +36,7 @@ router.get(
 
 // deleting an entire cart
 router.delete(
-    "/user/:user_id/carts/:cart_id",
+    "/:user_id/carts/:cart_id",
     checkSession,
     cartValidator.validateUserId,
     cartValidator.validateCartId,
@@ -46,7 +46,7 @@ router.delete(
 
 // only emptying a cart without deleting it
 router.put(
-    "/user/:user_id/cart/:cart_id/empty",
+    "/:user_id/cart/:cart_id/empty",
     checkSession,
     cartValidator.validateUserId,
     cartValidator.validateCartId,
@@ -56,7 +56,7 @@ router.put(
 
 // adding cartItem to a specific cart
 router.post(
-    '/user/:user_id/carts/:cart_id/book/:book_id/:quantity',
+    '/:user_id/carts/:cart_id/book/:book_id/:quantity',
     checkSession,
     cartValidator.validateUserId,
     cartValidator.validateCartId,
@@ -68,7 +68,7 @@ router.post(
 
 // deleting cartItem from specific cart
 router.delete(
-    '/user/:user_id/cart/:cart_id/cartItem/:cartItem_id/',
+    '/:user_id/cart/:cart_id/cartItem/:cartItem_id/',
     checkSession,
     cartValidator.validateUserId,
     cartValidator.validateCartId,

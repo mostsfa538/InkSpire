@@ -11,12 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.20.0",
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "express": "^4.21.0",
     "express-session": "^1.18.0",
     "express-validator": "^7.2.0",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "punycode": "^2.3.1"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",
