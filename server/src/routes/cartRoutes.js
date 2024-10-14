@@ -77,5 +77,15 @@ router.delete(
     cartController.deleteCartItem
 )
 
-
+// updating cartItem quantity
+router.put(
+    "/:user_id/cart/:cart_id/cartItem/:cartItem_id/:quantity",
+    checkSession,
+    cartValidator.validateUserId,
+    cartValidator.validateCartId,
+    cartValidator.validateCartItemId,
+    cartValidator.validateQuantity,
+    handleValidationErrors,
+    cartController.updateQuantity
+)
 module.exports = router
