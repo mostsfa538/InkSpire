@@ -23,6 +23,13 @@ class cartController {
         }
     }
 
+    static async checkBookAvailablity(book, quantitiy) {
+        if (book.available < quantitiy) {
+            return false
+        }
+        return true
+    }
+
     static async getCarts(req, res) {
         const carts = await prisma.cart.findMany({
             where: {user_id: req.session.user.id},
@@ -104,7 +111,7 @@ class cartController {
             return res.status(500).json({"message": "can't empty"})
         }
     }
-
+    
     static async addCartItem (req, res) {
         const {user_id, cart_id, book_id, quantity} = req.params
         try{
@@ -122,6 +129,12 @@ class cartController {
             })
             if(!book)
                 return res.status(401).json({"message": "no book exists with the given id"})
+            if (!(await cartController.checkBookAvailablity(book, quantity))) {
+                return res.status(401).json({
+                    "message": "the book is not available with given quantity",
+                    "solve": "try to decrease quantity"
+                })
+            }
             const cartItem = await prisma.cartItem.create({
                 data: {
                     book: { connect: { id: parseInt(book_id) } },
@@ -142,17 +155,17 @@ class cartController {
                 return res.status(500).json({"message": "can't create cart item"})
             const user = await cartController.getUpdatedUser(parseInt(user_id))
             if(!user)
-                return res.status(500).json({"message": "error occurred"})
+                return res.status(500).json({"message": "can't get updated user"})
             req.session.user = { ...user, password:"" }
             return res.status(200).json({
                 "message": "item added to cart successfully",
                 "user": req.session.user
             })
         }catch(err){
+            console.log(err)
             return res.status(500).json({"message": "error has occured"})
         }
     }
-
     static async deleteCartItem(req, res) {
         try {
             const cart = await prisma.cart.findFirst({
