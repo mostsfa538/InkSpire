@@ -1,5 +1,5 @@
 const express = require('express');
-const adminRoute = require('./src/routes/adminBookRoutes.js');
+const adminRoute = require('./src/routes/adminRoutes.js');
 const loginRoute = require('./src/routes/loginRoutes.js');
 const signupRoute = require('./src/routes/signupRoutes.js')
 const cartRoutes = require("./src/routes/cartRoutes.js")
@@ -24,6 +24,6 @@ app.use('/api/user', userRoute);
 app.use('/', loginRoute);
 app.use('/', signupRoute)
 
-app.use('/', cartRoutes)
+app.use('/api/user', cartRoutes)
 
 app.listen(3000);
