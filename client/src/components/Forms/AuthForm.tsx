@@ -32,7 +32,9 @@ function AuthForm({ type }: AuthFormProps) {
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-center">
-            <img className="w-1/6" src="/logo.ico" alt="logo" />
+            <Link className="w-1/6" to='/'>
+                <img src="/logo.ico" alt="logo" />
+            </Link>
             <div className="w-1/2 h-2/3">
                 <form className="flex flex-col h-full"
                     onSubmit={handleSubmit}>
