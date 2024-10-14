@@ -8,84 +8,102 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  f_name    String ? @db.VarChar(50)
-  l_name    String ? @db.VarChar(50)
-  email     String   @unique @db.VarChar(255)
-  image     String ?
+  id        Int        @id @default(autoincrement())
+  f_name    String?    @db.VarChar(50)
+  l_name    String?    @db.VarChar(50)
+  email     String     @unique @db.VarChar(255)
+  image     String?
   password  String
   carts     Cart[]
   orders    Order[]
   reviews   Review[]
   OnHolds   OnHold[]
   Favorites Favorite[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt 
 }
 
 model Book {
-  id          Int      @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   title       String
   author      String
   image       String
   description String
-  price       Decimal  @db.Decimal(10, 2)
+  price       Decimal    @db.Decimal(10, 2)
   category    String
-  quantity    Int
-  carts       Cart[]
-  orders      Order[]
+  available    Int
+  sold Int @default(0)
+  cartItems   CartItem[]
   reviews     Review[]
-  Favorites Favorite[]
+  Favorites   Favorite[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Cart {
-  id      Int  @id @default(autoincrement())
-  user    User @relation(fields: [id_user], references: [id])
-  id_user Int
-  book    Book @relation(fields: [id_book], references: [id])
-  id_book Int
-  quantity Int
+  id      Int        @id @default(autoincrement())
+  user    User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id Int
+  items   CartItem[]
+  Order   Order[]
+  name String @db.VarChar(50) @default("cartName")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model CartItem {
+  id       Int  @id @default(autoincrement())
+  cart     Cart @relation(fields: [cart_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  cart_id  Int
+  book     Book @relation(fields: [book_id], references: [id])
+  book_id  Int
+  quantity Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Order {
-  id           Int      @id @default(autoincrement())
-  user         User     @relation(fields: [id_user], references: [id])
+  id           Int         @id @default(autoincrement())
+  user         User        @relation(fields: [id_user], references: [id])
   id_user      Int
-  book         Book     @relation(fields: [id_book], references: [id])
-  id_book      Int
-  total_price  Decimal  @db.Decimal(5, 2)
+  cart         Cart        @relation(fields: [cart_id], references: [id])
+  cart_id      Int
+  total_price  Decimal     @db.Decimal(5, 2)
   address      String
   phone_number String
   order_status OrderStatus
+  createdAt DateTime @default(now())
 }
 
 model Review {
-  id      Int  @id @default(autoincrement())
-  user    User @relation(fields: [id_user], references: [id])
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [id_user], references: [id])
   id_user Int
-  book    Book @relation(fields: [id_book], references: [id])
+  book    Book   @relation(fields: [id_book], references: [id])
   id_book Int
-  rating  Int  @default(1)
+  rating  Int    @default(1)
   body    String
 }
 
 model OnHold {
-  id          Int      @id @default(autoincrement())
-  user        User     @relation(fields: [id_user], references: [id])
+  id          Int        @id @default(autoincrement())
+  user        User       @relation(fields: [id_user], references: [id])
   id_user     Int
   title       String
   author      String
   image       String
   description String
-  price       Decimal  @db.Decimal(5, 2)
+  price       Decimal    @db.Decimal(5, 2)
   status      HoldStatus
   created_at  DateTime @default(now())
   category    String
 }
 
 model Favorite {
-  id      Int   @id @default(autoincrement())
-  user    User  @relation(fields: [id_user], references: [id])
+  id      Int  @id @default(autoincrement())
+  user    User @relation(fields: [id_user], references: [id])
   id_user Int
-  book    Book  @relation(fields: [id_book], references: [id])
+  book    Book @relation(fields: [id_book], references: [id])
   id_book Int
 }
 
@@ -101,3 +119,4 @@ enum HoldStatus {
   cancelled
   accepted
 }
+
