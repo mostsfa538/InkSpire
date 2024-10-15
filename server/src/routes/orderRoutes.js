@@ -23,7 +23,16 @@ router.get(
     cartOrderValidator.validateUserId,
     handleValidationErrors,
     orderController.getOrders
-) 
+)
+
+// getting order wiht id
+router.get(
+    "/:user_id/order/:order_id",
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateOrderId,
+    handleValidationErrors,
+    orderController.getOrderById
+)
 
 // // adding item to order cart (while in pendgin) PUT
 // router.put(
@@ -38,13 +47,5 @@ router.get(
 //     "/:user_id:order/cart/cart_id"
 // )
 
-// // getting order wiht id
-// router.get(
-//     "/:user_id/order/:order_id",
-//     cartOrderValidator.validateUserId,
-//     cartOrderValidator.validateOrderId,
-//     handleValidationErrors,
-//     orderController.getOrderById
-// )
 
 module.exports = router

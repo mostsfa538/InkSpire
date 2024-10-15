@@ -73,9 +73,27 @@ class orderController {
         }
     }
 
-    // static async getOrderById(req, res) {
-        // also has the logic of getorderstatus
-    // }
+    static async getOrderById(req, res) {
+        try {
+            const {user_id, order_id} = req.params
+            const order = await prisma.order.findFirst({
+                where: {
+                    id: parseInt(order_id),
+                    user_id: parseInt(user_id)
+                },
+                include: {cart: {include: {items: {include: {book: true}}}}}
+            })
+            if (!order)
+                return res.status(401).json({"message": "no order found with given id to the user"})
+            return res.status(200).json({
+                "message": "order read successfully",
+                "order": order
+            })
+        } catch(error) {
+            console.log(error)
+            return res.status(500).json("an error occurred")
+        }
+    }
 
     // needs createAt logic
     // can update only while in bendig stage within one day of order
