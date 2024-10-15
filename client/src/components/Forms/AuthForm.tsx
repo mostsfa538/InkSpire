@@ -5,8 +5,9 @@ import useAuth from "../../hooks/useAuth";
 import Input from "../UI/Input";
 import Alert from "../UI/Alert";
 import Button from "../UI/Button";
+import CustomLink from "../UI/CustomLink";
 
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import { AuthFormProps } from "../../types/props";
 
@@ -32,9 +33,9 @@ function AuthForm({ type }: AuthFormProps) {
 
     return (
         <div className="w-full h-full flex flex-col items-center justify-center">
-            <Link className="w-1/6" to='/'>
+            <CustomLink styles="w-1/6" to='/'>
                 <img src="/logo.ico" alt="logo" />
-            </Link>
+            </CustomLink>
             <div className="w-1/2 h-2/3">
                 <form className="flex flex-col h-full"
                     onSubmit={handleSubmit}>
@@ -59,20 +60,16 @@ function AuthForm({ type }: AuthFormProps) {
                     <span className="flex-1">
                         {error && <Alert type="error" message={error.msg} />}
                     </span>
-                    <span className="text-sm text-center max-sm:text-xs">
+                    <span className="text-sm text-center text-nowrap max-sm:text-xs">
                         {
                             type === "signin" ?
                             <span>
                                 Don't have an account?{" "}
-                                <Link className="text-tertiary font-bold hover:underline" reloadDocument to="/signup">
-                                    Sign Up
-                                </Link>
+                                <CustomLink to="/signup">Sign Up</CustomLink>
                             </span> : 
                             <span>
                                 Already have an account?{" "}
-                                <Link className="text-tertiary font-bold hover:underline" reloadDocument to="/signin">
-                                    Sign In
-                                </Link>
+                                <CustomLink to="/signin">Sign In</CustomLink>
                             </span>
                         }
                     </span>
