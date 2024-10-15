@@ -53,29 +53,25 @@ class orderController {
         }
     }
 
-    // static async afterOrder_DB_update() {
-
-    // }
-    // static async getOrders(req, res) {
-    //     // include everyting
-    //     try {
-    //         const orders = await prisma.order.findMany({
-    //             where: {
-    //                 id_user: parseInt(req.params.user_id)
-    //             },
-    //             include: {cart: {include: {items: {include: {book: true}}}}}
-    //         })
-    //         if (!orders)
-    //             return res.status(401).json({"message": "user doesn't have any orders yet"})
-    //         return res.status(200).json({
-    //             "message": "orders read successfully",
-    //             orders: orders
-    //         })
-    //     } catch (error) {
-    //         console.log(error)
-    //         return res.status(500).json({"message": "user doesn't have any orders yet"})
-    //     }
-    // }
+    static async getOrders(req, res) {
+        try {
+            const orders = await prisma.order.findMany({
+                where: {
+                    user_id: parseInt(req.params.user_id)
+                },
+                include: {cart: {include: {items: {include: {book: true}}}}}
+            })
+            if (orders.length === 0)
+                return res.status(200).json({"message": "user doesn't have any orders yet"})
+            return res.status(200).json({
+                "message": "orders read successfully",
+                orders: orders
+            })
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({"message": "user doesn't have any orders yet"})
+        }
+    }
 
     // static async getOrderById(req, res) {
         // also has the logic of getorderstatus
@@ -111,7 +107,9 @@ class orderController {
 
     // }
 }
+    // static async afterOrder_DB_update() {
 
+    // }
             // i will keep all carts and orders as it is even after delivering
             // for future reference if needed
             // will only decrease item quantity when order state is pending

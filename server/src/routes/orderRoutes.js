@@ -10,12 +10,20 @@ router.post(
     checkSession,
     cartOrderValidator.validateUserId,
     cartOrderValidator.validateCartId,
-    // cartOrderValidator.validateOrderId,
     cartOrderValidator.validateOrderAdress,
     cartOrderValidator.validateOrderPhoneNumber,
     handleValidationErrors,
     orderController.addOrder
 )
+
+// getting all user orders
+router.get(
+    "/:user_id/orders",
+    checkSession,
+    cartOrderValidator.validateUserId,
+    handleValidationErrors,
+    orderController.getOrders
+) 
 
 // // adding item to order cart (while in pendgin) PUT
 // router.put(
@@ -29,14 +37,7 @@ router.post(
 // router.put(
 //     "/:user_id:order/cart/cart_id"
 // )
-// // getting all user orders
-// router.get(
-//     "/:user_id/orders",
-//     checkSession,
-//     cartOrderValidator.validateUserId,
-//     handleValidationErrors,
-//     orderController.getOrders
-// ) 
+
 // // getting order wiht id
 // router.get(
 //     "/:user_id/order/:order_id",
