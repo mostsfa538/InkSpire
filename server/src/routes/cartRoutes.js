@@ -1,5 +1,5 @@
 const checkSession = require("../middlewares/sessionState");
-const cartValidator = require('../validators/cartValidator')
+const cartOrderValidator = require('../validators/cartOrderValidator')
 const cartController = require('../controllers/cartController')
 const handleValidationErrors = require('../middlewares/validationErrorHandler')
 
@@ -9,7 +9,7 @@ const router = require('express').Router()
 router.get(
     '/:user_id/carts/',
     checkSession,
-    cartValidator.validateUserId,
+    cartOrderValidator.validateUserId,
     handleValidationErrors,
     cartController.getCarts
 )
@@ -18,7 +18,7 @@ router.get(
 router.post(
     "/:user_id/carts/add",
     checkSession,
-    cartValidator.validateUserId,
+    cartOrderValidator.validateUserId,
     handleValidationErrors,
     cartController.addCart
 )
@@ -27,8 +27,8 @@ router.post(
 router.get(
     '/:user_id/carts/:cart_id',
     checkSession,
-    cartValidator.validateUserId,
-    cartValidator.validateCartId,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateCartId,
     handleValidationErrors,
     cartController.getCartById
 )
@@ -38,8 +38,8 @@ router.get(
 router.delete(
     "/:user_id/carts/:cart_id",
     checkSession,
-    cartValidator.validateUserId,
-    cartValidator.validateCartId,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateCartId,
     handleValidationErrors,
     cartController.deleteCart
 )
@@ -48,8 +48,8 @@ router.delete(
 router.put(
     "/:user_id/cart/:cart_id/empty",
     checkSession,
-    cartValidator.validateUserId,
-    cartValidator.validateCartId,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateCartId,
     handleValidationErrors,
     cartController.emptyCart
 )
@@ -58,10 +58,10 @@ router.put(
 router.post(
     '/:user_id/carts/:cart_id/book/:book_id/:quantity',
     checkSession,
-    cartValidator.validateUserId,
-    cartValidator.validateCartId,
-    cartValidator.validateBookId,
-    cartValidator.validateQuantity,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateCartId,
+    cartOrderValidator.validateBookId,
+    cartOrderValidator.validateQuantity,
     handleValidationErrors,
     cartController.addCartItem
 )
@@ -70,12 +70,22 @@ router.post(
 router.delete(
     '/:user_id/cart/:cart_id/cartItem/:cartItem_id/',
     checkSession,
-    cartValidator.validateUserId,
-    cartValidator.validateCartId,
-    cartValidator.validateCartItemId,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateCartId,
+    cartOrderValidator.validateCartItemId,
     handleValidationErrors,
     cartController.deleteCartItem
 )
 
-
+// updating cartItem quantity
+router.put(
+    "/:user_id/cart/:cart_id/cartItem/:cartItem_id/:quantity",
+    checkSession,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateCartId,
+    cartOrderValidator.validateCartItemId,
+    cartOrderValidator.validateQuantity,
+    handleValidationErrors,
+    cartController.updateQuantity
+)
 module.exports = router

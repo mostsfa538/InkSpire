@@ -23,6 +23,13 @@ class cartController {
         }
     }
 
+    static async checkBookAvailablity(book, quantity) {
+        if (book.available < quantity) {
+            return false
+        }
+        return true
+    }
+
     static async getCarts(req, res) {
         const carts = await prisma.cart.findMany({
             where: {user_id: req.session.user.id},
@@ -114,7 +121,7 @@ class cartController {
                         if (req.session.user.carts[i].items[j].book_id === parseInt(req.params.book_id))
                             return res.status(401).json({
                                 "message": "book already exists in cart",
-                                "solve": "try to update book quantitiy instead",
+                                "solve": "try to update book quantity instead",
                                 "user": await cartController.getUpdatedUser(req.session.user.id)
                             })
             const book = await prisma.book.findFirst({
@@ -122,6 +129,12 @@ class cartController {
             })
             if(!book)
                 return res.status(401).json({"message": "no book exists with the given id"})
+            if (!(await cartController.checkBookAvailablity(book, quantity))) {
+                return res.status(401).json({
+                    "message": "the book is not available with given quantity",
+                    "solve": "try to decrease quantity"
+                })
+            }
             const cartItem = await prisma.cartItem.create({
                 data: {
                     book: { connect: { id: parseInt(book_id) } },
@@ -142,17 +155,17 @@ class cartController {
                 return res.status(500).json({"message": "can't create cart item"})
             const user = await cartController.getUpdatedUser(parseInt(user_id))
             if(!user)
-                return res.status(500).json({"message": "error occurred"})
+                return res.status(500).json({"message": "can't get updated user"})
             req.session.user = { ...user, password:"" }
             return res.status(200).json({
                 "message": "item added to cart successfully",
                 "user": req.session.user
             })
         }catch(err){
+            console.log(err)
             return res.status(500).json({"message": "error has occured"})
         }
     }
-
     static async deleteCartItem(req, res) {
         try {
             const cart = await prisma.cart.findFirst({
@@ -181,6 +194,40 @@ class cartController {
             return res.status(200).json({"message": "cartItem deleted successfully"})
         } catch(error) {
             return res.status(500).json({"message": "error occured while quering from database"})
+        }
+    }
+
+    static async updateQuantity(req, res) {
+        const {user_id, cart_id, cartItem_id, quantity} = req.params  
+        try {
+            const cartItem = await prisma.cartItem.findFirst({
+                where: {id: parseInt(cartItem_id)},
+                include: {book: true}
+            })
+            if (!cartItem)
+                return res.status(401).json({"message": "no cart item exists with given id"})
+            if (cartItem.cart_id !== parseInt(cart_id))
+                return res.status(401).json({"message": "cart doesn't have given cartItem"})
+            if (!(await cartController.checkBookAvailablity(cartItem.book, parseInt(quantity))))
+                return res.status(401).json("the book is not available with given quantity")
+            const updatingItem = await prisma.cartItem.update({
+                where: {
+                    id: parseInt(cartItem_id),
+                    cart_id: parseInt(cart_id),
+                },
+                data: {
+                    quantity: parseInt(quantity)
+                }
+            })
+            if (!updatingItem)
+                return res.status(500).json({"message": "can't update item quantity"})
+            return res.status(200).json({
+                "message": "book quantity updated successfully",
+                user: await cartController.getUpdatedUser(parseInt(user_id))
+            })
+        } catch(error) {
+            console.log(error)
+            return res.status(500).json({"message": "an error has occurred"})
         }
     }
 }

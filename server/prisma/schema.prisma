@@ -64,8 +64,8 @@ model CartItem {
 
 model Order {
   id           Int         @id @default(autoincrement())
-  user         User        @relation(fields: [id_user], references: [id])
-  id_user      Int
+  user         User        @relation(fields: [user_id], references: [id])
+  user_id      Int
   cart         Cart        @relation(fields: [cart_id], references: [id])
   cart_id      Int
   total_price  Decimal     @db.Decimal(5, 2)
@@ -73,6 +73,8 @@ model Order {
   phone_number String
   order_status OrderStatus
   createdAt DateTime @default(now())
+  pendingTime DateTime @default(now())
+  deliveryDate DateTime ?
 }
 
 model Review {
