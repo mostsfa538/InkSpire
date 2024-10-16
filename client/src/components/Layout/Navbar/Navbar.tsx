@@ -1,20 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../features/app/store';
-import { toggleSideMenu } from '../../../features/UI/UI';
-
 import useAuth from '../../../hooks/useAuth';
-
-import { IoIosMenu, IoMdClose } from 'react-icons/io';
 
 import Carts from '../Cart/Carts';
 import NavLinks from './NavLinks';
 import SideMenu from './SideMenu';
 import CustomLink from '../../UI/CustomLink';
 
+
 function Navbar() {
     const { user, logout } = useAuth();
-    const { displaySideMenu } = useSelector((state: RootState) => state.UI);
-    const dispatch = useDispatch();
 
     return (
         <nav className="relative flex w-full py-2 px-8 max-md:px-4">
@@ -23,9 +16,6 @@ function Navbar() {
                     <NavLinks />
                 </div>
                 <div className="md:hidden">
-                    <div onClick={() => dispatch(toggleSideMenu())}>
-                        {!displaySideMenu ? <IoIosMenu /> : <IoMdClose />}
-                    </div>
                     <SideMenu />
                 </div>
             </div>
