@@ -8,6 +8,7 @@ const favoriteController = require('../controllers/favoriteController');
 const favoriteValidator = require('../validators/favoriteValidator');
 const userController = require('../controllers/userController');
 const userValidator = require('../validators/userValidator');
+const payingController = require('../controllers/payingController');
 
 const router = express.Router();
 
@@ -127,5 +128,20 @@ router.post(
     userValidator.validateUpdateProfile,
     userController.updateProfile
 );
+
+router.post(
+    '/:userId/create-order',
+    checkSession, 
+    payingController.createOrder);
+
+router.get(
+    '/:userId/complete-order',
+    checkSession,
+    payingController.completeOrder);
+
+router.get(
+    '/:userId/cancel-order',
+    checkSession,
+    payingController.cancelOrder);
 
 module.exports = router;
