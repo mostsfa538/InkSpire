@@ -45,7 +45,7 @@ model Cart {
   user    User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id Int
   items   CartItem[]
-  Order   Order[]
+  Order   Order ?
   name String @db.VarChar(50) @default("cartName")
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -67,14 +67,16 @@ model Order {
   user         User        @relation(fields: [user_id], references: [id])
   user_id      Int
   cart         Cart        @relation(fields: [cart_id], references: [id])
-  cart_id      Int
-  total_price  Decimal     @db.Decimal(5, 2)
+  cart_id      Int         @unique
+  total_price  Decimal     @db.Decimal(10, 2)
   address      String
   phone_number String
   order_status OrderStatus
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
   pendingTime DateTime @default(now())
   deliveryDate DateTime ?
+  payementMethod payement @default(visa)
 }
 
 model Review {
@@ -112,7 +114,6 @@ model Favorite {
 enum OrderStatus {
   pending
   delivering
-  cancelled
   completed
 }
 
@@ -120,5 +121,10 @@ enum HoldStatus {
   pending
   cancelled
   accepted
+}
+
+enum payement {
+  cash
+  visa
 }
 

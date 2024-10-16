@@ -33,7 +33,7 @@ async function updatePendingOrders () {
             }
         }
     } catch(error) {
-        console.log("catch error", error)
+        // console.log("catch error", error)
     }
 }
 

@@ -5,15 +5,6 @@ const handleValidationErrors = require('../middlewares/validationErrorHandler')
 
 const router = require('express').Router()
 
-// getting all user carts
-router.get(
-    '/:user_id/carts/',
-    checkSession,
-    cartOrderValidator.validateUserId,
-    handleValidationErrors,
-    cartController.getCarts
-)
-
 // adding new cart
 router.post(
     "/:user_id/carts/add",
@@ -21,6 +12,15 @@ router.post(
     cartOrderValidator.validateUserId,
     handleValidationErrors,
     cartController.addCart
+)
+
+// getting all user carts
+router.get(
+    '/:user_id/carts/',
+    checkSession,
+    cartOrderValidator.validateUserId,
+    handleValidationErrors,
+    cartController.getCarts
 )
 
 // getting only one cart with id
@@ -33,6 +33,15 @@ router.get(
     cartController.getCartById
 )
 
+// only emptying a cart without deleting it
+router.put(
+    "/:user_id/cart/:cart_id/empty",
+    checkSession,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateCartId,
+    handleValidationErrors,
+    cartController.emptyCart
+)
 
 // deleting an entire cart
 router.delete(
@@ -44,15 +53,6 @@ router.delete(
     cartController.deleteCart
 )
 
-// only emptying a cart without deleting it
-router.put(
-    "/:user_id/cart/:cart_id/empty",
-    checkSession,
-    cartOrderValidator.validateUserId,
-    cartOrderValidator.validateCartId,
-    handleValidationErrors,
-    cartController.emptyCart
-)
 
 // adding cartItem to a specific cart
 router.post(
@@ -66,17 +66,6 @@ router.post(
     cartController.addCartItem
 )
 
-// deleting cartItem from specific cart
-router.delete(
-    '/:user_id/cart/:cart_id/cartItem/:cartItem_id/',
-    checkSession,
-    cartOrderValidator.validateUserId,
-    cartOrderValidator.validateCartId,
-    cartOrderValidator.validateCartItemId,
-    handleValidationErrors,
-    cartController.deleteCartItem
-)
-
 // updating cartItem quantity
 router.put(
     "/:user_id/cart/:cart_id/cartItem/:cartItem_id/:quantity",
@@ -87,5 +76,16 @@ router.put(
     cartOrderValidator.validateQuantity,
     handleValidationErrors,
     cartController.updateQuantity
+)
+
+// deleting cartItem from specific cart
+router.delete(
+    '/:user_id/cart/:cart_id/cartItem/:cartItem_id/',
+    checkSession,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateCartId,
+    cartOrderValidator.validateCartItemId,
+    handleValidationErrors,
+    cartController.deleteCartItem
 )
 module.exports = router

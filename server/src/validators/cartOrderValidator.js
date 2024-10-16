@@ -24,6 +24,9 @@ const validateOrderAdress = [
 const validateOrderPhoneNumber = [
     param('number').isString().isLength({min: 5, max: 12})
 ]
+const validatePayementMethod = [
+    param('payement').isString().withMessage("payement method must be a string")
+]
 module.exports = {
     validateUserId,
     validateCartId,
@@ -32,5 +35,6 @@ module.exports = {
     validateBookId,
     validateOrderId,
     validateOrderAdress,
-    validateOrderPhoneNumber
+    validateOrderPhoneNumber,
+    validatePayementMethod
 }
