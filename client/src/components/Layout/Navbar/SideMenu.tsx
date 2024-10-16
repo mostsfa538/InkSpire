@@ -9,13 +9,13 @@ function SideMenu({ displaySideMenu }: { displaySideMenu: boolean }) {
                     <img className="w-10 h-10" src="/logo.png" alt="logo" />
                     <h1 className="text-lg">Inkspire</h1>
                 </div>
-                <div className="flex bg-slate-200 items-center p-2 gap-2 rounded-md">
-                    <label htmlFor=""><BiSearch /></label>
-                    <input className="outline-none bg-slate-200 text-black" type="text" placeholder="Search" />
+                <div className="flex bg-gray-200 items-center p-2 gap-2 rounded-md">
+                    <BiSearch />
+                    <input className="outline-none bg-gray-200 text-black" type="text" placeholder="Search" />
                 </div>
             </header>
             <div className="flex flex-col gap-y-2 text-sm">
-                <span className="text-slate-500 text-xs">Navigation</span>
+                <span className="text-gray-500 text-xs">Navigation</span>
                 <div className="pl-2">
                     <NavLinks flexFlow="flex-col" />
                 </div>

@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { User } from "./data";
 
 export type AuthContextType = {
@@ -32,4 +33,12 @@ export type ButtonProps = {
 export type AlertProps = {
     type: 'error' | 'success' | 'info',
     message: string
+};
+
+export type CustomLinkProps = { 
+    children: ReactNode, 
+    to: string, 
+    styles?: string, 
+    button?: boolean,
+    onClick?: () => void
 };
