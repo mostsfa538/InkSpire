@@ -28,7 +28,7 @@ model Book {
   title       String
   author      String
   image       String
-  description String
+  description String     @db.VarChar(255)
   price       Decimal    @db.Decimal(10, 2)
   category    String
   available    Int
@@ -113,6 +113,7 @@ model Favorite {
 
 enum OrderStatus {
   pending
+  cancel
   delivering
   completed
 }

@@ -1,5 +1,4 @@
 const router = require("express").Router()
-const  checkSession = require("../middlewares/sessionState.js")
 const loginValidator = require("../validators/loginValidator")
 const handleValidationErrors = require("../middlewares/validationErrorHandler")
 const singupController = require('../controllers/signupController')

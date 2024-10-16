@@ -15,6 +15,23 @@ class userController {
         }
     }
 
+    static async getBook(req, res) {
+        const id = req.params.id;
+        try {
+            const book = await prisma.book.findFirst({
+                where: {
+                    id: parseInt(id),
+                }
+            });
+            if (!book) {
+                return res.status(401).json({ message: "Book not found" });
+            }
+            res.status(200).json(book);
+        } catch (err) {
+            res.status(500).json({ message: 'An error occurred during book retrieval' });
+        }
+    }
+
     static async searchByCategory(req, res) {
         const { searchTerm } = req.params;
         try {
