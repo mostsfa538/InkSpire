@@ -53,4 +53,10 @@ const validateUpdateBook = [
         .isInt({ gt: 0 }).withMessage('Quantity must be an integer greater than 0')
 ];
 
-module.exports = { validateID, validateCreateBook, validateUpdateBook };
+const validateUpdateOrder = [
+    check('status')
+        .isIn(['cancel', 'delivering', 'completed'])
+        .withMessage('Status must be either "cancel" or "delivering" or "completed"')
+];
+
+module.exports = { validateUpdateOrder, validateID, validateCreateBook, validateUpdateBook };

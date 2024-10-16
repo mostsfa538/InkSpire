@@ -15,6 +15,13 @@ const router = express.Router();
 
 router.get('/', userController.getBooks);
 
+router.get(
+    '/:id',
+    userValidator.validateBookId,
+    handleValidationErrors,
+    userController.getBook
+);
+
 router.post(
     'reviews/:userId/create',
     checkSession,

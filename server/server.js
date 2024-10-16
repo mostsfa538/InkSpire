@@ -29,6 +29,4 @@ app.use('/', signupRoute)
 app.use('/api/user', cartRoutes)
 app.use('/api/user', orderRoutes)
 
-checkPendingOrders()
-
 app.listen(3000);

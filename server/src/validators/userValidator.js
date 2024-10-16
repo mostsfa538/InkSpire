@@ -98,8 +98,14 @@ const updateBook = [
         .isLength({ max: 1000 }).withMessage('Description is too long (max 1000 characters)')
 ];
 
+const validateBookId = [
+    check('id')
+        .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
+]
+
 module.exports = {
     validateUserId,
+    validateBookId,
     validateUploadBook,
     validateSearch,
     validateUpdateProfile,
