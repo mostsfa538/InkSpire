@@ -36,7 +36,7 @@ function AuthForm({ type }: AuthFormProps) {
             <CustomLink styles="w-1/6" to='/'>
                 <img src="/logo.ico" alt="logo" />
             </CustomLink>
-            <div className="w-1/2 h-2/3">
+            <div className="w-1/2 h-2/3 max-md:w-full max-md:p-2">
                 <form className="flex flex-col h-full"
                     onSubmit={handleSubmit}>
                     <header className="flex-1 flex flex-col justify-center items-center">

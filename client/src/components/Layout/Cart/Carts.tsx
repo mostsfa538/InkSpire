@@ -12,7 +12,7 @@ function Carts({ carts }: { carts: CartType[] }) {
     const dispatch = useDispatch();
 
     return (
-        <div className="flex justify-end">
+        <div className="flex justify-end z-40">
             <BiShoppingBag className="text-xl text-secondary cursor-pointer max-md:text-sm" onClick={() => dispatch(toggleCart())} />
             <div className="absolute top-full max-w-full max-md:p-2 max-md:left-0">
                 <div className={`bg-white py-4 rounded-xl gap-4 ${!displayCarts ? 'w-0 px-0' : 'px-4 w-96 max-w-full'} text-nowrap overflow-hidden transition-all ease-in-out duration-300`}>

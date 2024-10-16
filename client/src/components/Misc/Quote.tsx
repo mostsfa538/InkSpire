@@ -16,11 +16,11 @@ function Quote() {
     }, [])
 
     return (
-        <div key={quote.author} className="flex flex-col animate-fadeInOut opacity-0">
+        <div key={quote.author} className="flex flex-col animate-fadeInOut opacity-0 max-lg:text-sm">
             <q className='italic font-serif text-center'>{quote.quote}</q>
             <span className="flex justify-end">— {quote.author}</span>
         </div>
-  )
+    )
 }
 
 export default Quote

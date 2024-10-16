@@ -26,7 +26,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
-    const login = async (user: User) => {
+    const login = async (user: { email: string; password: string }) => {
         try {
             const response = await axios.post(`${SERVER_URL}/login`, user, { withCredentials: true });
             setUser(response.data.user);
@@ -38,7 +38,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
-    const signup = async (user: User) => {
+    const signup = async (user: { email: string; password: string; }) => {
         try {
             const response = await axios.post(`${SERVER_URL}/signup`, user, { withCredentials: true });
             setUser(response.data.user);

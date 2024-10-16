@@ -10,7 +10,7 @@ function Navbar() {
     const { user, logout } = useAuth();
 
     return (
-        <nav className="relative flex w-full py-2 px-8 max-md:px-4">
+        <nav className="relative flex w-full py-2 px-8 max-md:px-4 z-50">
             <div className="flex-1 flex items-center">
                 <div className="max-md:hidden">
                     <NavLinks />
@@ -31,7 +31,6 @@ function Navbar() {
             {!user ? (
                 <div className="flex gap-4 text-nowrap max-md:gap-2 max-lg:text-xs">
                     <CustomLink to='/signin' button styles='border border-tertiary hover:bg-white'>Sign In</CustomLink>
-                    <CustomLink to='/signup' button styles='bg-secondary text-white hover:bg-tertiary'>Sign Up</CustomLink>
                 </div>
                 ) : 
                 <div className='text-nowrap'>
