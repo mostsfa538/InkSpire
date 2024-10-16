@@ -1,7 +1,10 @@
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../features/app/store';
 import NavLinks from "./NavLinks"
 import { BiSearch } from "react-icons/bi"
 
-function SideMenu({ displaySideMenu }: { displaySideMenu: boolean }) {
+function SideMenu() {
+    const { displaySideMenu } = useSelector((state: RootState) => state.UI);
     return (
         <div className={`flex flex-col absolute gap-y-2 top-full rounded-xl mx-4 bg-white text-tertiary font-semibold w-fit p-4 ${displaySideMenu ? 'left-0' : 'left-[-1000px]'} transition-all md:hidden`}>
             <header className='flex flex-col text-sm justify-center gap-2'>
