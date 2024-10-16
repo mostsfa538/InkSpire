@@ -1,5 +1,6 @@
 # API Documentation
 
+## users api/user
 ## Reviews
 
 ### Create a Review
@@ -27,7 +28,6 @@
 - **Request Params**:
   - `userId` (path): ID of the user.
 
-
 ### Update a Review
 
 - **URL**: `/reviews/:userId/update/:id`
@@ -45,7 +45,6 @@
 - **Request Params**:
   - `userId` (path): ID of the user.
   - `id` (path): ID of the review.
-
 
 ## Favorites
 
@@ -79,10 +78,10 @@
 
 - **URL**: `/:userId/search/:searchTerm`
 - **Method**: `GET`
-- **Description**: Searches for books by any Term.
+- **Description**: Searches for books by any term.
 - **Request Params**:
   - `userId` (path): ID of the user.
-  - `searchTerm` (path): Search term to filter books by any Term.
+  - `searchTerm` (path): Search term to filter books.
 
 ### Upload a Book
 
@@ -92,11 +91,11 @@
 - **Request Params**:
   - `userId` (path): ID of the user.
 
-### Update a book
+### Update a Book
 
 - **URL**: `/:userId/update/:id`
 - **Method**: `PUT`
-- **Description**: Update a book to the user's collection.
+- **Description**: Updates a book in the user's collection.
 - **Request Params**:
   - `userId` (path): ID of the user.
   - `id` (path): ID of the book record.
@@ -108,7 +107,7 @@
 - **Description**: Removes a book from onHold by its ID.
 - **Request Params**:
   - `userId` (path): ID of the user.
-  - `id` (path): ID of the favorite record.
+  - `id` (path): ID of the book.
 
 ## User Profile and Status
 
@@ -128,21 +127,47 @@
 - **Request Params**:
   - `userId` (path): ID of the user.
 
-### show the books
-- **URL**: `/`
+## Orders
+
+### Create an Order
+
+- **URL**: `/:userId/create-order`
+- **Method**: `POST`
+- **Description**: Creates a new order for a user.
+- **Request Params**:
+  - `userId` (path): ID of the user.
+
+### Complete an Order
+
+- **URL**: `/:userId/complete-order`
 - **Method**: `GET`
-- **Description**: Show all the books.
+- **Description**: Completes a user's order.
+- **Request Params**:
+  - `userId` (path): ID of the user.
 
+### Cancel an Order
 
-## Admin Endpoints
+- **URL**: `/:userId/cancel-order`
+- **Method**: `GET`
+- **Description**: Cancels a user's order.
+- **Request Params**:
+  - `userId` (path): ID of the user.
+
+### Get book
+- **URL**: `/:id`
+- **Method**: Get book with id.
+- **Request Params**:
+  - `id` (path): ID of the book.
+
+## Admin Endpoints api/admin
 
 ### Create a Book
 
-- **URL**: `/admin/create`
+- **URL**: `/create`
 - **Method**: `POST`
 - **Description**: Creates a new book entry.
 - **Request Body**: The body must include the book details.
-  
+
 ### Get All Books
 
 - **URL**: `/admin`
@@ -151,7 +176,7 @@
 
 ### Update a Book
 
-- **URL**: `/admin/update/:id`
+- **URL**: `/update/:id`
 - **Method**: `PUT`
 - **Description**: Updates a book entry by its ID.
 - **Request Params**:
@@ -160,7 +185,7 @@
 
 ### Delete a Book
 
-- **URL**: `/admin/delete/:id`
+- **URL**: `/delete/:id`
 - **Method**: `DELETE`
 - **Description**: Deletes a book entry by its ID.
 - **Request Params**:
@@ -168,13 +193,13 @@
 
 ### Get Book Requests
 
-- **URL**: `/admin/requests`
+- **URL**: `/requests`
 - **Method**: `GET`
 - **Description**: Retrieves a list of all book requests.
 
 ### Approve a Request
 
-- **URL**: `/admin/approve/:id`
+- **URL**: `/approve/:id`
 - **Method**: `PUT`
 - **Description**: Approves a book request by its ID.
 - **Request Params**:
@@ -182,8 +207,37 @@
 
 ### Reject a Request
 
-- **URL**: `/admin/reject/:id`
+- **URL**: `/reject/:id`
 - **Method**: `PUT`
 - **Description**: Rejects a book request by its ID.
 - **Request Params**:
   - `id` (path): ID of the request to be rejected.
+
+### Get All Orders
+
+- **URL**: `/orders`
+- **Method**: `GET`
+- **Description**: Retrieves a list of all orders.
+
+### Update an Order
+
+- **URL**: `/update-order/:id`
+- **Method**: `PUT`
+- **Description**: Updates an order entry by its ID.
+- **Request Params**:
+  - `id` (path): ID of the order to be updated.
+- **Request Body**: The body must include the updated order details.
+
+### Delete an Order
+
+- **URL**: `/delete-order/:id`
+- **Method**: `DELETE`
+- **Description**: Deletes an order entry by its ID.
+- **Request Params**:
+  - `id` (path): ID of the order to be deleted.
+
+### Get book
+- **URL**: `/:id`
+- **Method**: Get book with id.
+- **Request Params**:
+  - `id` (path): ID of the book.

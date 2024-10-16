@@ -6,11 +6,17 @@ const handleValidationErrors = require('../middlewares/validationErrorHandler');
 const router = express.Router();
 
 router.post(
-    '/create', 
-    adminBookValidator.validateCreateBook, 
+    '/create',
+    adminBookValidator.validateCreateBook,
     handleValidationErrors, adminController.createBook
 );
 router.get('/', adminController.getBooks);
+
+router.get('/:id',
+    adminBookValidator.validateID,
+    handleValidationErrors,
+    adminController.getBook
+);
 
 router.put(
     '/update/:id',
@@ -19,7 +25,7 @@ router.put(
     handleValidationErrors,
     adminController.updateBook
 );
-router.delete('/delete/:id', 
+router.delete('/delete/:id',
     adminBookValidator.validateID,
     handleValidationErrors,
     adminController.deleteBook
@@ -38,5 +44,21 @@ router.put('/reject/:id',
     handleValidationErrors,
     adminController.rejectRequest
 );
+
+router.get('/orders', adminController.getOrders);
+
+router.put('/update-order/:id',
+    adminBookValidator.validateID,
+    adminBookValidator.validateUpdateOrder,
+    handleValidationErrors,
+    adminController.updateOrder
+);
+
+router.delete('/delete-order/:id',
+    adminBookValidator.validateID,
+    handleValidationErrors,
+    adminController.deleteOrder
+);
+
 
 module.exports = router;

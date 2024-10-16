@@ -43,6 +43,23 @@ class bookController {
         }
     }
 
+    static async getBook(req, res) {
+        const id = req.params.id;
+        try {
+            const book = await prisma.book.findFirst({
+                where: {
+                    id: parseInt(id),
+                }
+            });
+            if (!book) {
+                return res.status(401).json({ message: "Book not found" });
+            }
+            res.status(200).json(book);
+        } catch (err) {
+            res.status(500).json({ message: 'An error occurred during book retrieval' });
+        }
+    }
+
     static async updateBook(req, res) {
         const id = req.params.id;
         const title = req.body.title;
@@ -174,7 +191,56 @@ class bookController {
         }
     }
 
+    static async getOrders(req, res) {
+        try {
+            const orders = await prisma.Order.findMany();
+            res.status(200).json(orders);
+        } catch {
+            if (err.code === 'P2025') {
+                return res.status(404).json({ message: "No orders" });
+            }
+            res.status(500).json({ message: 'An error occurred during show' });
+        }
+    }
 
+    static async updateOrder(req, res) {
+        const id = req.params.id;
+        const status = req.body.status;
+        try {
+            const order = await prisma.Order.update({
+                where: {
+                    id: parseInt(id),
+                },
+                data: {
+                    order_status: status
+                }
+            });
+            if (!order) {
+                return res.status(401).json({ message: "Order not found" });
+            }
+            res.status(200).json({ message: 'Order updated successfully' });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ message: 'An error occurred during order update' });
+        }
+    }
+
+    static async deleteOrder(req, res) {
+        const id = req.params.id;
+        try {
+            const order = await prisma.Order.delete({
+                where: {
+                    id: parseInt(id),
+                }
+            });
+            res.status(200).json({ message: 'Order deleted successfully' });
+        } catch (err) {
+            if (err.code === 'P2025') {
+                return res.status(404).json({ message: "Order not found" });
+            }
+            res.status(500).json({ message: 'An error occurred during order deletion' });
+        }
+    }
 
 }
 
