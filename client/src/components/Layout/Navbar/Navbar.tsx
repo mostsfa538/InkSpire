@@ -26,7 +26,7 @@ function Navbar() {
             </div>
             <div className="flex flex-1 items-center justify-end gap-4">
                 <div className="flex justify-end">
-                    {user && <Carts carts={user.carts} />}
+                    {user && <Carts />}
                 </div>
             {!user ? (
                 <div className="flex gap-4 text-nowrap max-md:gap-2 max-lg:text-xs">
