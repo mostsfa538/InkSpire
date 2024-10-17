@@ -6,7 +6,9 @@
 
 #root, body, html {
     width: 100%;
+    min-height: 100vh;
     height: 100%;
+    max-height: fit-content;
     background-color: theme('colors.primary.main');
     font-family: 'Lato', sans-serif;
 }

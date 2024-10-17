@@ -34,14 +34,30 @@ export default {
                     "0%, 100%": { opacity: 0 },
                     "10%, 80%": { opacity: 1 },
                 },
+                fadeIn: {
+                    "0%": { opacity: 0 },
+                    "100%": { opacity: 1 },
+                },
+                animateBackground: {
+                    to: { backgroundPosition: "-200% 0" },
+                },
+                blurIn: {
+                    "0%": { filter: "blur(10px)", opacity: 1 },
+                    "100%": { filter: "blur(0px)", opacity: 1 },
+                },
             },
             animation: {
                 fadeInOut: "fadeInOut 5.5s ease-in-out forwards",
+                animateBackground: "animateBackground 20s linear infinite",
+                blurIn: "blurIn 1s 2s ease-in-out forwards",
+                fadeIn: "fadeIn 1s ease-in-out forwards",
+                fadeInDelay: "fadeIn 1s 1s ease-in-out forwards",
             },
             backgroundImage: {
                 'sign-in-hero': "url('/signin-hero.jpg')",
                 'sign-up-hero': "url('/signup-hero.jpg')",
-            }
+                'flower-pattern': "url('/pattern-flower.png')",
+            },
         },
     },
     plugins: [],

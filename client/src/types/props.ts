@@ -1,9 +1,10 @@
+import { ReactNode } from "react";
 import { User } from "./data";
 
 export type AuthContextType = {
     user: User | null;
-    login: (user: User) => void;
-    signup: (user: User) => void;
+    login: (user: { email: string; password: string; }) => void;
+    signup: (user: { email: string; password: string; }) => void;
     logout: () => void;
     error: { status: number, msg: string } | null;
 };
@@ -14,9 +15,11 @@ export type AuthProviderProps = {
 
 export type InputComponentProps = { 
     onChange: (value: string) => void, 
-    label: string, 
+    label?: string, 
     type: string, 
     defaultValue: string 
+    styles?: string
+    placeHolder?: string
 }
 
 export type AuthFormProps = {
@@ -27,9 +30,18 @@ export type ButtonProps = {
     text: string,
     onClick: (e: React.FormEvent) => void
     disabled?: boolean
+    styles?: string
 };
 
 export type AlertProps = {
     type: 'error' | 'success' | 'info',
     message: string
+};
+
+export type CustomLinkProps = { 
+    children: ReactNode, 
+    to: string, 
+    styles?: string, 
+    button?: boolean,
+    onClick?: () => void
 };

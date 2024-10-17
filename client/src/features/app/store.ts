@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from '../counter/Counter'
+import UIReducer from '../UI/UI'
 
 
 
 export const store = configureStore({
     reducer: {
-        counter: counterReducer,
+        UI: UIReducer,
     },
 });
 
