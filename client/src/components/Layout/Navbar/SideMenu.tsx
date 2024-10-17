@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../features/app/store';
 import { toggleSideMenu } from '../../../features/UI/UI';
 
-import { BiSearch } from "react-icons/bi"
 import { IoIosMenu, IoMdClose } from 'react-icons/io';
+import Search from "../../UI/Search";
 
 
 function SideMenu() {
@@ -23,10 +23,8 @@ function SideMenu() {
                         <img className="w-10 h-10" src="/logo.png" alt="logo" />
                         <h1 className="text-lg">Inkspire</h1>
                     </div>
-                    {/* TODO: Implement search functionality */}
-                    <div className="flex bg-gray-200 items-center p-2 gap-2 rounded-md">
-                        <BiSearch />
-                        <input className="outline-none bg-gray-200 text-black" type="text" placeholder="Search" />
+                    <div className="flex bg-gray-200 items-center px-2 py-1 gap-2 rounded-md">
+                        <Search styling={{ input: "outline-none text-black p-1 bg-gray-200" }} />
                     </div>
                 </header>
                 <div className="flex flex-col gap-y-2 text-sm">
