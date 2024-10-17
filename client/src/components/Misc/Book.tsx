@@ -7,7 +7,7 @@ function Book({ book, style, direction }: { book: BookType, style?: string, dire
                 <img src={book.image} alt={book.title} className="w-full h-full"/>
             </div>
             <div>
-                <h4 className="text-sm font-bold text-secondary max-w-48 overflow-hidden text-ellipsis">{book.title}</h4>
+                <h4 className="text-sm font-bold text-secondary max-w-48 overflow-hidden text-ellipsis mx-auto">{book.title}</h4>
                 <p className="text-xs font-semibold">{book.author}</p>
                 <p className="text-xs max-md:text-xs">Price: ${book.price}</p>
             </div>
