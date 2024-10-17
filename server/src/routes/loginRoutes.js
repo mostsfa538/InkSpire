@@ -4,10 +4,7 @@ const loginValidator = require('../validators/loginValidator.js')
 const sessionState = require("../middlewares/sessionState.js")
 const handleValidationErrors = require('../middlewares/validationErrorHandler');
 
-router.get('/login',
-    sessionState,
-    loginContoller.getLogin
-)
+router.get('/login', loginContoller.getLogin)
 
 router.post('/login',
     loginValidator.emailValidator,

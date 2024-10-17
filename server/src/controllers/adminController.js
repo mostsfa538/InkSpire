@@ -2,6 +2,29 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient;
 
 class bookController {
+    static async createAdmin(req, res) {
+    const id = req.body.id;
+    try{
+        const admin = await prisma.user.update({
+            where: {
+                id: parseInt(id),
+            },
+            data: {
+                isAdmin: true
+            }
+        });
+        if (!admin) {
+            return res.status(401).json({ message: "Admin not found" });
+        }
+        res.status(200).json({ message: 'Admin created successfully' });
+    } catch (err) {
+        console.log(err);
+        if (err.code === 'P2025') {
+            return res.status(404).json({ message: "Admin not found" });
+        }
+        res.status(500).json({ message: 'An error occurred during admin creation' });
+    }
+}
     static async createBook(req, res) {
         const title = req.body.title;
         const author = req.body.author;
