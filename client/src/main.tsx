@@ -13,6 +13,7 @@ import { store } from './features/app/store'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import './index.css'
+import Catalog from './routes/Catalog.tsx'
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
     {
         path: '/signup',
         element: <SignUp />,
+    },
+    {
+        path: '/catalog',
+        element: <Catalog />,
     }
 ])
 

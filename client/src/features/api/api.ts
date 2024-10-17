@@ -9,9 +9,17 @@ export const api = createApi({
         getAllBooks: builder.query<BookType[], void>({
             query: () => 'user'
         }),
+        search: builder.query<BookType[], { id: string, searchTerm: string }>({
+            query: ({ id, searchTerm }) => ({
+                url: `user/${id}/search/${searchTerm}`,
+                method: 'GET',
+                credentials: 'include'
+            })
+        }),
     }),
 });
 
 export const { 
-    useGetAllBooksQuery
+    useGetAllBooksQuery,
+    useSearchQuery
 } = api;
