@@ -1,12 +1,12 @@
 import React, { createContext, useState, useEffect } from "react";
 
+import { SERVER_URL } from "../constants/values";
+
 import axios, { AxiosError } from "axios";
 
 import { AuthError, User } from "../types/data";
 import { AuthContextType, AuthProviderProps } from "../types/props";
 import { handleAuthError } from "../utils/errors";
-
-const SERVER_URL = import.meta.env.VITE_SERVER_URL as string;
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
