@@ -20,12 +20,6 @@ router.post(
     handleValidationErrors, adminController.createBook
 );
 
-router.get(
-    '/', 
-    checkAdmin, 
-    adminController.getBooks
-);
-
 router.get('/:id',
     adminBookValidator.validateID,
     checkAdmin,

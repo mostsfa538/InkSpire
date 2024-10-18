@@ -76,11 +76,10 @@
 
 ### Search by any Term
 
-- **URL**: `/:userId/search/:searchTerm`
+- **URL**: `/search/:searchTerm`
 - **Method**: `GET`
 - **Description**: Searches for books by any term.
 - **Request Params**:
-  - `userId` (path): ID of the user.
   - `searchTerm` (path): Search term to filter books.
 
 ### Upload a Book

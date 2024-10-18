@@ -12,16 +12,6 @@ const payingController = require('../controllers/payingController');
 
 const router = express.Router();
 
-
-router.get('/', userController.getBooks);
-
-router.get(
-    '/:id',
-    userValidator.validateBookId,
-    handleValidationErrors,
-    userController.getBook
-);
-
 router.post(
     'reviews/:userId/create',
     checkSession,
@@ -88,18 +78,10 @@ router.delete(
     favoriteController.deleteFavorite
 );
 
-router.get(
-    '/:userId/search/:searchTerm',
-    checkSession,
-    userValidator.validateUserId,
-    userValidator.validateSearch,
-    handleValidationErrors,
-    userController.searchByCategory
-);
 
 router.post(
     '/:userId/upload/',
-    // checkSession,
+    checkSession,
     userValidator.validateUserId,
     userValidator.validateUploadBook,
     handleValidationErrors,
