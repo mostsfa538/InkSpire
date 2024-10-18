@@ -16,8 +16,7 @@ function Catalog() {
     
     const fetchData = async () => {
         if (query) {
-            // The 'id' param is temporary and will be removed in the future
-            const res = await dispatch(api.endpoints.search.initiate({ id: "1", searchTerm: query }))
+            const res = await dispatch(api.endpoints.search.initiate({ searchTerm: query }))
             setData(res.data)
         } else {
             const res = await dispatch(api.endpoints.getAllBooks.initiate())
@@ -29,12 +28,6 @@ function Catalog() {
         fetchData();
         return () => setData(undefined)
     }, [query])
-
-    if (query) {
-        dispatch(api.endpoints.search.initiate({ id: "1", searchTerm: query }))
-    } else {
-        dispatch(api.endpoints.getAllBooks.initiate())
-    }
 
     return (
         <div className="flex flex-col h-full">
