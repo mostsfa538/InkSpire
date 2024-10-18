@@ -30,7 +30,7 @@ async function getUpdatedUser(user_id) {
             return {}
         return {...user, password: ""}
     } catch(error) {
-        return {error: "An error occurred while fetching the user."}
+        return {"error": "An error occurred while fetching the user"}
     }
 }
 
@@ -50,10 +50,24 @@ function getDates() {
     }
 }
 
+async function getAllCarts(userId) {
+    try {
+        const carts = prisma.cart.findMany({
+            where: {user_id: userId},
+            include: {items: {include: {book: true}}}
+        })
+        if (!carts)
+            return {}
+        return carts
+    } catch(error) {
+        return {"error": "an error occur while fetching user carts"}
+    }
+}
 
 module.exports = {
     checkBookAvailablity,
     checkIfBookExistsInCart,
     getUpdatedUser,
-    getDates
+    getDates,
+    getAllCarts
 }

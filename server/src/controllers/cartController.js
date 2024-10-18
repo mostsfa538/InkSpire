@@ -5,20 +5,23 @@ const utils = require("../utils/utils")
 class cartController {
 
     static async getCarts(req, res) {
-        const carts = await prisma.cart.findMany({
-            where: {user_id: req.session.user.id},
-            include: {items: {include: {book: true}}}
-        })
-        if (!carts){
+        try {
+            const carts = await utils.getAllCarts(parseInt(req.params.user_id))
+            if (carts.length === 0) {
+                return res.status(200).json({
+                    "message": "user has no carts yet",
+                    "carts": carts
+                })
+            } else if ("error" in carts) {
+                return res.status(500).json("an error occur while reading db")
+            }
             return res.status(200).json({
-                "message": "user has no carts yet",
-                "carts": carts
+                "message": "reading carts done successfully",
+                carts: carts
             })
+        } catch (error) {
+            return res.status(500).json("an error occur while reading db")
         }
-        return res.status(200).json({
-            "message": "reading carts done successfully",
-            carts: carts
-        })
     }
 
     static async addCart(req, res) {
@@ -31,8 +34,14 @@ class cartController {
             if (!cart) {
                 return res.status(500).json({"message": "can't create cart to user"})
             }
-            return res.status(200).json({"message": "cart created successfully"})
+            const user = await utils.getUpdatedUser(parseInt(req.params.user_id))
+            req.session.user = user
+            return res.status(200).json({
+                "message": "cart created successfully",
+                carts: await utils.getAllCarts(parseInt(req.params.user_id))
+            })
         } catch(error) {
+            console.log(error)
             return res.status(500).json({"message": "can't create a cart"})
         }
     }
@@ -45,13 +54,14 @@ class cartController {
                     id: parseInt(cart_id),
                     user_id: parseInt(user_id)
                 },
-                include: {
-                    items: true,
-                }
+                include: {items: {include: {book: true}}}
             })
             if (!cart)
                 return res.status(401).json({"message": "no matching exist between userId and cartId"})
-            return res.status(200).json({"cart": cart})
+            return res.status(200).json({
+                "message": "reading cart done successfully",
+                "cart": cart
+            })
         } catch (error) {
             return res.status(500).json({"message": "error while reading cart"})
         }
@@ -65,7 +75,6 @@ class cartController {
             })
             if (!cart)
                 return res.status(401).json({"message": "no cart exist with given id"})
-
             if (cart.Order) {
                 if (cart.Order.length !== 0) {
                     if (cart.Order.order_status === "pending" || cart.Order.order_status === "delivering") {
@@ -73,15 +82,17 @@ class cartController {
                     }
                 }
             }
-
             const deletedCart = await prisma.cart.delete({
                 where: {id: parseInt(req.params.cart_id)}
             })
-            console.log(deletedCart)
-            console.log(typeof deletedCart)
             if (!deletedCart)
                 return res.status(500).json({"message": "can't delete cart"})
-            return res.status(200).json({"message": "cart deleted successfully"})
+            const user = await utils.getUpdatedUser(parseInt(req.params.user_id))
+            req.session.user = user
+            return res.status(200).json({
+                "message": "cart deleted successfully",
+                carts: await utils.getAllCarts(parseInt(req.params.user_id))
+            })
         } catch (error) {
             return res.status(500).json({"message": "can't delete cart"})
         }
@@ -102,19 +113,19 @@ class cartController {
                     }
                 }
             }
-
             const items = await prisma.cartItem.deleteMany({
                 where: {cart_id: parseInt(req.params.cart_id)}
             })
             if (!items)
                 return res.status(401).json({"message": "cart is already empty"})
+            const user = await utils.getUpdatedUser(parseInt(req.params.user_id))
+            req.session.user = user
             return res.status(200).json({
                 "message": "emptied successfully",
-                user: await utils.getUpdatedUser(req.session.user.id)
+                user: await utils.getAllCarts(req.session.user.id)
             })
         } catch(error){
-            console.log(error)
-            return res.status(500).json({"message": "can't empty"})
+            return res.status(500).json({"message": "can't empty cart"})
         }
     }
 
@@ -125,7 +136,8 @@ class cartController {
                 where: {id: parseInt(cart_id)},
                 include: {Order: true, items: true}
             })
-            // no check if cart doesn't exist because we would create any way
+            // no check if cart doesn't exist
+            // because we would create any way
             if (cart) {
                 if (cart.Order) {
                     if (cart.Order.length !== 0) {
@@ -135,11 +147,9 @@ class cartController {
                     }
                 }
             }
-
             const book = await prisma.book.findFirst({
                 where: {id: parseInt(book_id)}
             })
-
             if(!book)
                 return res.status(401).json({"message": "no book exists with the given id"})
             if (!( utils.checkBookAvailablity(book, quantity))) {
@@ -148,10 +158,8 @@ class cartController {
                     "solve": "try to decrease quantity"
                 })
             }
-
             if (utils.checkIfBookExistsInCart(cart, book))
                 return res.status(401).json({"message": "book already exist in cart! try to update quantity instead"})
-
             const cartItem = await prisma.cartItem.create({
                 data: {
                     book: { connect: { id: parseInt(book_id) } },
@@ -172,15 +180,13 @@ class cartController {
             if (!cartItem)
                 return res.status(500).json({"message": "can't create cart item"})
             const user = await utils.getUpdatedUser(parseInt(user_id))
-            if(!user)
-                return res.status(500).json({"message": "can't get updated user"})
             req.session.user = user
+            const carts = await utils.getAllCarts(parseInt(user_id))
             return res.status(200).json({
                 "message": "item added to cart successfully",
-                "user": req.session.user
+                carts: carts
             })
         }catch(err){
-            console.log(err)
             return res.status(500).json({"message": "error has occured"})
         }
     }
@@ -203,6 +209,7 @@ class cartController {
                     }
                 }
             }
+            // little algorithm to avoid new request to database
             let deletedItmeIndex = -1;
             for (let i = 0; i < cart.items.length; i++){
                 if (cart.items[i].id === parseInt(req.params.cartItem_id)) {
@@ -218,7 +225,12 @@ class cartController {
             })
             if (!deletedItem)
                 return res.status(500).json({"message": "couldn't delete cartItem"})
-            return res.status(200).json({"message": "cartItem deleted successfully"})
+            const user = await utils.getUpdatedUser(parseInt(req.params.user_id))
+            req.session.user = user
+            return res.status(200).json({
+                "message": "cartItem deleted successfully",
+                carts: await utils.getAllCarts(parseInt(req.params.user_id))
+            })
         } catch(error) {
             return res.status(500).json({"message": "error occured while quering from database"})
         }
@@ -250,7 +262,7 @@ class cartController {
                 return res.status(401).json({"message": "no cart item exists with given id"})
             if (cartItem.cart_id !== parseInt(cart_id))
                 return res.status(401).json({"message": "cart doesn't have given cartItem"})
-            if (!(await utils.checkBookAvailablity(cartItem.book, parseInt(quantity))))
+            if (!(utils.checkBookAvailablity(cartItem.book, parseInt(quantity))))
                 return res.status(401).json("the book is not available with given quantity")
             const updatingItem = await prisma.cartItem.update({
                 where: {
@@ -263,12 +275,13 @@ class cartController {
             })
             if (!updatingItem)
                 return res.status(500).json({"message": "can't update item quantity"})
+            const user = await utils.getUpdatedUser(parseInt(user_id))
+            req.session.user = user
             return res.status(200).json({
                 "message": "book quantity updated successfully",
-                user: await utils.getUpdatedUser(parseInt(user_id))
+                carts: await utils.getAllCarts(parseInt(req.params.user_id))
             })
         } catch(error) {
-            console.log(error)
             return res.status(500).json({"message": "an error has occurred"})
         }
     }
