@@ -24,6 +24,7 @@ function Catalog() {
         }
     };
 
+
     useEffect(() => {
         fetchData();
         return () => setData(undefined)
@@ -35,7 +36,9 @@ function Catalog() {
             <div className="container mx-auto p-5">
                 <div className="grid grid-cols-4 gap-4 justify-items-center text-center max-sm:grid-cols-1 max-md:grid-cols-2 max-lg:grid-cols-3">
                     {data?.map((book) => (
-                        <Book key={book.title} book={book} style="h-80 w-60" direction="flex-col" />
+                        <div key={book.title}>
+                            <Book book={book} style="h-80 w-60" direction="flex-col" />
+                        </div>
                     ))}
                 </div>
             </div>

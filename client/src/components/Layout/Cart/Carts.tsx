@@ -19,9 +19,12 @@ function Carts() {
                 <div className={`bg-white py-4 rounded-xl gap-4 ${!displayCarts ? 'w-0 px-0' : 'px-4 w-96 max-w-full'} text-nowrap overflow-hidden transition-all ease-in-out duration-300`}>
                     <h3 className="text-lg font-semibold text-gray-300 underline">Carts</h3>
                     <div className="flex flex-col gap-2">
-                        {carts.map((cart) => (
-                            <Cart key={cart.id} cart={cart} />
-                        ))}
+                        {
+                            carts.length === 0 ? <p className="text-center text-xs">No carts available</p> :
+                            carts.map((cart) => (
+                                <Cart key={cart.id} cart={cart} />
+                            ))
+                        }
                     </div>
                 </div>
             </div>

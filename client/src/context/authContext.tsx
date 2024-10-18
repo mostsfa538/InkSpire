@@ -19,10 +19,16 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [error, setError] = useState<AuthError | null>(null);  // Error state for login/logout
     const dispatch = useDispatch<AppDispatch>()
 
+    const setUserUpCart = async (userId: string) => {
+        const carts = await dispatch(api.endpoints.getUserCarts.initiate(userId))
+        dispatch(setCarts(carts.data?.carts))
+    }
+
     const checkAuth = async () => {
         try {
             const response = await axios.get(`${SERVER_URL}/login`, { withCredentials: true });
             setUser(response.data.user);
+            setUserUpCart(response.data.user.id);
             setError(null);  // Clear any previous errors
         } catch (error) {
             const err = error as AxiosError;
@@ -34,9 +40,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const login = async (user: { email: string; password: string }) => {
         try {
             const response = await axios.post(`${SERVER_URL}/login`, user, { withCredentials: true });
-            const userId = response.data.user.id;
-            const carts = await dispatch(api.endpoints.getUserCarts.initiate(userId))
-            dispatch(setCarts(carts.data?.carts))
+            setUserUpCart(response.data.user.id);
             setUser(response.data.user);
             setError(null);  // Clear any previous errors
         } catch (error) {
