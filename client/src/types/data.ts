@@ -45,6 +45,7 @@ export type CartType = {
 export type CartItemType = {
     id: number,
     book_id: number,
+    cart_id: number,
     book: BookType,
     quantity: number,
     createdAt: string,
