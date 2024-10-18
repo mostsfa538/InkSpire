@@ -7,16 +7,24 @@ import axios, { AxiosError } from "axios";
 import { AuthError, User } from "../types/data";
 import { AuthContextType, AuthProviderProps } from "../types/props";
 import { handleAuthError } from "../utils/errors";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../features/app/store";
+import { api } from "../features/api/api";
+import { setCarts } from "../features/cart/cart";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<AuthError | null>(null);  // Error state for login/logout
+    const dispatch = useDispatch<AppDispatch>()
 
     const checkAuth = async () => {
         try {
             const response = await axios.get(`${SERVER_URL}/login`, { withCredentials: true });
+            const userId = response.data.user.id;
+            const carts = await dispatch(api.endpoints.getUserCarts.initiate(userId))
+            dispatch(setCarts(carts.data?.carts))
             setUser(response.data.user);
             setError(null);  // Clear any previous errors
         } catch (error) {
