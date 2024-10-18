@@ -22,9 +22,6 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const checkAuth = async () => {
         try {
             const response = await axios.get(`${SERVER_URL}/login`, { withCredentials: true });
-            const userId = response.data.user.id;
-            const carts = await dispatch(api.endpoints.getUserCarts.initiate(userId))
-            dispatch(setCarts(carts.data?.carts))
             setUser(response.data.user);
             setError(null);  // Clear any previous errors
         } catch (error) {
@@ -37,6 +34,9 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const login = async (user: { email: string; password: string }) => {
         try {
             const response = await axios.post(`${SERVER_URL}/login`, user, { withCredentials: true });
+            const userId = response.data.user.id;
+            const carts = await dispatch(api.endpoints.getUserCarts.initiate(userId))
+            dispatch(setCarts(carts.data?.carts))
             setUser(response.data.user);
             setError(null);  // Clear any previous errors
         } catch (error) {

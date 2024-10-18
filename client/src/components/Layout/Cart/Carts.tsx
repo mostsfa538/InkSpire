@@ -2,13 +2,15 @@ import Cart from "./Cart"
 import { BiShoppingBag } from 'react-icons/bi'
 
 import { useDispatch, useSelector } from "react-redux"
+
 import { toggleCart } from "../../../features/UI/UI";
-import { CartType } from "../../../types/data";
+import { RootState } from "../../../features/app/store";
 
 function Carts() {
-    const { carts } = useSelector((state: any) => state.cart);
-    const { displayCarts } = useSelector((state: any) => state.UI);
+    const { carts } = useSelector((state: RootState) => state.cart);
+    const { displayCarts } = useSelector((state: RootState) => state.UI);
     const dispatch = useDispatch();
+
 
     return (
         <div className="flex justify-end z-40">
@@ -17,7 +19,7 @@ function Carts() {
                 <div className={`bg-white py-4 rounded-xl gap-4 ${!displayCarts ? 'w-0 px-0' : 'px-4 w-96 max-w-full'} text-nowrap overflow-hidden transition-all ease-in-out duration-300`}>
                     <h3 className="text-lg font-semibold text-gray-300 underline">Carts</h3>
                     <div className="flex flex-col gap-2">
-                        {carts.map((cart: CartType) => (
+                        {carts.map((cart) => (
                             <Cart key={cart.id} cart={cart} />
                         ))}
                     </div>
