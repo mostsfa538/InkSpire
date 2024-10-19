@@ -34,16 +34,16 @@ router.put(
 )
 
 // deleting cart from existing order
-// router.delete(
-//     "/:user_id/order/:order_id/cart/:cart_id",
-//     checkSession,
-//     checkOrderState,
-//     cartOrderValidator.validateUserId,
-//     cartOrderValidator.validateOrderId,
-//     cartOrderValidator.validateCartId,
-//     handleValidationErrors,
-//     orderController.deleteCartFromOrder
-// )
+router.delete(
+    "/:user_id/order/:order_id/cart/:cart_id",
+    checkSession,
+    checkOrderState,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateOrderId,
+    cartOrderValidator.validateCartId,
+    handleValidationErrors,
+    orderController.deleteCartFromOrder
+)
 
 // adding new cart item to one of the order carts
 // router.put(

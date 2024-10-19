@@ -71,6 +71,7 @@ class orderController {
             });
             if (!newOrder)
                 return res.status(500).json({"message": "can't create new order"})
+
             req.session.user = await utils.getUpdatedUser(parseInt(req.params.user_id))
             const updatedOrders = await utils.getAllOrders(parseInt(req.params.user_id))
             if ("error" in updatedOrders)
@@ -80,7 +81,6 @@ class orderController {
                 "orders": updatedOrders
             })
         } catch(error) {
-            console.log(error)
             return res.status(500).json({"message": "can't create new order"})
         }
     }
@@ -123,6 +123,7 @@ class orderController {
                     deliveryDate: utils.getDates()["deliveringDate"],
                 }
             })
+            req.session.user = await utils.getUpdatedUser(parseInt(user_id))
             const userOrders = await utils.getAllOrders(parseInt(user_id))
             return res.status(200).json({
                 "message": "new cart added successfully to order",
@@ -134,10 +135,45 @@ class orderController {
         }
     }
 
-    
-    // static async deleteCartFromOrder(req, res) {
+    static async deleteCartFromOrder(req, res) {
+        const {user_id, order_id, cart_id} = req.params
+        try {
+            const cart = await prisma.cart.findFirst({
+                where: {id: parseInt(cart_id),
+                    Order: {
+                        id: parseInt(order_id)
+                    }
+                },
+                include: {items: {include: {book: true}}, Order: true}
+            })
+            if (!cart)
+                return res.status(400).json({"message": "can't found cart in order"})
+            const deletedCart = await prisma.order.update({
+                where: {id: parseInt(order_id)},
+                data: {
+                    carts:{
+                        disconnect:{
+                            id: parseInt(cart_id)
+                        }
+                    },
+                    pendingTime: utils.getDates()["pendingTime"],
+                    deliveryDate: utils.getDates()["deliveringDate"],
+                    order_status: "pending",
+                    total_price: new Decimal(cart.Order.total_price - utils.getCartTotlaPrice(cart))
+                }
+            })
+            req.session.user = await utils.getUpdatedUser(parseInt(user_id))
+            const orders = await utils.getAllOrders(parseInt(user_id))
 
-    // }
+            return res.status(200).json({
+                "message": "cart deleted successfully",
+                orders: orders
+            })
+        } catch(error) {
+            console.log(error)
+            return res.status(500).json({"message": "an error occur while deleting cart"})
+        }
+    }
 
     static async addItemToOrderCart(req, res) {
         const {user_id, cart_id, order_id, address, number, payement} = req.params

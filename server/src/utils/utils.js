@@ -75,11 +75,20 @@ async function getAllOrders(user_id) {
     }
 }
 
+function getCartTotlaPrice(cart) {
+    let total_price = 0
+    for (let i = 0; i < cart.items.length; i++) {
+        total_price += (cart.items[i].book.price * cart.items[i].quantity)
+    }
+    return total_price
+}
+
 module.exports = {
     checkBookAvailablity,
     checkIfBookExistsInCart,
     getUpdatedUser,
     getDates,
     getAllCarts,
-    getAllOrders
+    getAllOrders,
+    getCartTotlaPrice
 }
