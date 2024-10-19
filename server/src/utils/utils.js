@@ -9,6 +9,7 @@ function checkBookAvailablity(book, quantity) {
 }
 
 function checkIfBookExistsInCart (cart, book) {
+    console.log(cart)
     for (let j = 0; j < cart.items.length; j++)
         if (cart.items[j].book_id === parseInt(book.id))
             return true
@@ -52,15 +53,26 @@ function getDates() {
 
 async function getAllCarts(userId) {
     try {
+        // findMany returns empty list if no items found
         const carts = prisma.cart.findMany({
             where: {user_id: userId},
             include: {items: {include: {book: true}}}
         })
-        if (!carts)
-            return {}
         return carts
     } catch(error) {
         return {"error": "an error occur while fetching user carts"}
+    }
+}
+
+async function getAllOrders(user_id) {
+    try {
+        const orders = await prisma.order.findMany({
+            where: {user_id: user_id},
+            include: {carts: {include: {items: {include: {book: true}}}}}
+        })
+        return orders
+    } catch(err) {
+        return {"error": "an error occur while fetching user Orders"}
     }
 }
 
@@ -69,5 +81,6 @@ module.exports = {
     checkIfBookExistsInCart,
     getUpdatedUser,
     getDates,
-    getAllCarts
+    getAllCarts,
+    getAllOrders
 }

@@ -15,51 +15,31 @@ class userController {
         }
     }
 
-    static async getBook(req, res) {
-        const id = req.params.id;
-        try {
-            const book = await prisma.book.findFirst({
-                where: {
-                    id: parseInt(id),
-                }
-            });
-            if (!book) {
-                return res.status(401).json({ message: "Book not found" });
-            }
-            res.status(200).json(book);
-        } catch (err) {
-            res.status(500).json({ message: 'An error occurred during book retrieval' });
-        }
-    }
-
     static async searchByCategory(req, res) {
         const { searchTerm } = req.params;
         try {
             const books = await prisma.book.findMany({
                 where: {
                     OR: [
-                      {
+                    {
                         title: {
-                          contains: searchTerm
+                            contains: searchTerm
                         },
-                      },
-                      {
+                    },
+                    {
                         author: {
-                          contains: searchTerm
+                            contains: searchTerm
                         },
-                      },
-                      {
+                    },
+                    {
                         category: {
-                          contains: searchTerm
+                            contains: searchTerm
                         },
-                      },
+                    },
                     ],
-                  },
+                },
             });
             if (!books) {
-                return res.status(404).json({ message: "No books found" });
-            }
-            if (books.length === 0) {
                 return res.status(404).json({ message: "No books found" });
             }
             res.status(200).json(books);
@@ -70,7 +50,7 @@ class userController {
     }
 
     static async uploadBook(req, res) {
-        const { title, author, image, price, description, category } = req.body;
+        const { title, author, image, price, description } = req.body;
         const userId = req.params.userId;
         try {
             const book = await prisma.onHold.create({
@@ -80,7 +60,6 @@ class userController {
                     image: image,
                     price: price,
                     description: description,
-                    category: category,
                     status: "pending",
                     user: {
                         connect: {
@@ -128,11 +107,8 @@ class userController {
                     id: parseInt(bookId)
                 }
             });
-            res.status(200).json({message: 'Book deleted successfully'});
+            res.status(200).json(book);
         } catch (err) {
-            if (err.code === 'P2025') {
-                return res.status(404).json({ message: 'Book not found' });
-            }
             res.status(500).json({ message: 'An error occurred during delete' });
         }
     }
@@ -142,8 +118,8 @@ class userController {
         try {
             const books = await prisma.onHold.findMany({
                 where: {
-                    id: parseInt(userId),
-                },
+                    id: parseInt(userId)
+                }
             });
             if (!books) {
                 return res.status(404).json({ message: "No books found" });

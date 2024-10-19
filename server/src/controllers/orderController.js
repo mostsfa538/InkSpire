@@ -1,28 +1,94 @@
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient
 const { Decimal } = require('@prisma/client');
-const utils = require("../utils/utils")
+const utils = require("../utils/utils");
+const { Extensions } = require("@prisma/client/runtime/library");
 
 class orderController {
+
+    static async newOrder (req, res) {
+        try {
+            const {cartsIds} = req.body
+            const userCarts = await utils.getAllCarts(parseInt(req.params.user_id))
+            if (userCarts.length === 0)
+                return res.status(204).json({"message": "the given user has no carts yet!"})
+
+            let found = 0;
+            for (let i = 0; i < cartsIds.length; i++) {
+                found = 0
+                for (let j = 0; j < userCarts.length; j++) {
+                    if (userCarts[j].id === cartsIds[i]) {
+                        found = 1
+                        break
+                    }
+                }
+                if (found)
+                    continue
+                break
+            }
+            if (!found)
+                return res.status(401).json({"message": "one of the cart IDs doesn't belong to the given user"})
+
+            let totalPrice = 0
+            for (let i = 0; i < userCarts.length; i++) {
+                for (let j = 0; j < userCarts[i].items.length; j++){
+                    totalPrice += (userCarts[i].items[j].book.price * userCarts[i].items[j].quantity)
+                }
+            }
+            const orderCarts = userCarts.filter((aCart) => cartsIds.includes(aCart.id));
+            const newOrder = await prisma.order.create({
+                data: {
+                    carts: {
+                        connect: orderCarts.map(aCart => ({ id: parseInt(aCart.id) })),
+                    },
+                    user: {
+                        connect: { id: parseInt(req.params.user_id) },
+                    },
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    pendingTime: utils.getDates()["pendingTime"],
+                    deliveryDate: utils.getDates()["deliveringDate"],
+                    address: req.params.address,
+                    phone_number: req.params.number,
+                    order_status: "pending",
+                    payementMethod: req.params.payement,
+                    total_price: new Decimal(totalPrice),
+                },
+            });
+
+            if (!newOrder)
+                return res.status(500).json({"message": "can't create new order"})
+            req.session.user = await utils.getUpdatedUser(parseInt(req.params.user_id))
+            const updatedOrders = await utils.getAllOrders(parseInt(req.params.user_id))
+            if ("error" in updatedOrders)
+                return res.status(500).json("an error occur while fetching user orders")
+            return res.status(200).json({
+                "message": "order created successfully",
+                "orders": updatedOrders
+            })
+        } catch(error) {
+            console.log(error)
+            return res.status(500).json({"message": "can't create new order"})
+        }
+    }
 
     static async addOrder(req, res) {
         const {user_id, cart_id, order_id, address, number, payement} = req.params
         try {
-
             if (isNaN(number))
                 return res.status(401).json({"message": "invalide phone Number"})
-            if (payement !== 'cash' && payement !== "visa") {
-                console.log(payement)
-                console.log(typeof payement)
+            if (payement !== 'cash' && payement !== "visa" && payement!= 'paypal') {
                 return res.status(401).json({"message": "invalide payement method"})
             }
-
             let order = await prisma.order.findFirst({
                 where: { id: parseInt(order_id) },
                 include: { cart: { include: { items: { include: { book: true}}}}}
             })
-            if (order && (order.order_status === "delivering" || order.order_status === "pending"))
-                return res.status(401).json({"message": `order with the same id is already on ${order.order_status}`})
+            // if (!order) {
+            //     return res.status(401).json({
+            //         "message": "can't update order, order may not exist or already on the way"
+            //     })
+            // }
             let warningMessage = {}
             if (order && order.order_status === "completed") {
                 warningMessage = {
@@ -30,7 +96,7 @@ class orderController {
                     "solve": "you can cancel order within 1 hour if by mistake ordered again"
                 }
             }
-            // above ensure that there is no active order with the same id
+
             const cart = await prisma.cart.findFirst({
                 where: {
                     id: parseInt(cart_id),
@@ -43,7 +109,7 @@ class orderController {
             if (cart.items.length === 0)
                 return res.status(401).json({"message": "cart is empty! add some items first"})
 
-            const total_price = cart.items.reduce((sum, item) => sum + Number(item.book.price), 0)
+            const total_price = cart.items.reduce((sum, item) => sum + (Number(item.book.price) * Number(item.quantity)), 0)
 
             order = await prisma.order.create({
                 data: {
@@ -61,6 +127,8 @@ class orderController {
             })
             if (!order)
                 return res.status(500).json({"message": "can't create order"})
+            const user = await utils.getUpdatedUser(parseInt(user_id))
+            req.session.user = user
             return res.status(200).json({
                 "message": "order created successfully",
                 ...warningMessage,
@@ -68,7 +136,7 @@ class orderController {
             })
         } catch (error) {
             console.log(error)
-            return res.status(500).json("an error occurred")
+            return res.status(500).json({"error": "each order can contains only a single cart"})
         }
     }
 
@@ -82,12 +150,13 @@ class orderController {
             })
             if (orders.length === 0)
                 return res.status(200).json({"message": "user doesn't have any orders yet"})
+            const user = await utils.getUpdatedUser(parseInt(req.params.user_id))
+            req.session.user = user
             return res.status(200).json({
                 "message": "orders read successfully",
                 orders: orders
             })
         } catch (error) {
-            console.log(error)
             return res.status(500).json({"message": "user doesn't have any orders yet"})
         }
     }
@@ -104,36 +173,20 @@ class orderController {
             })
             if (!order)
                 return res.status(401).json({"message": "no order found with given id to the user"})
+            const user = await utils.getUpdatedUser(parseInt(user_id))
+            req.session.user = user
             return res.status(200).json({
                 "message": "order read successfully",
                 "order": order
             })
         } catch(error) {
-            console.log(error)
             return res.status(500).json("an error occurred")
         }
     }
 
-    static async UpdateOrder(req, res) {
-
+    static async addBookToOrder(req, res) {
         try {
             const {user_id, order_id, book_id, quantity} = req.params
-            const order = await prisma.order.findFirst({
-                where: {
-                    id: parseInt(order_id),
-                    order_status: "pending"
-                },
-                include: {cart: {include: {items: {include: {book: true}}}}, user: true}
-            })
-
-            if (!order) {
-                return res.status(401).json({
-                    "message": "can't update order, order may not exist or already on the way"
-                })
-            }
-            if (order.payementMethod === 'visa')
-                return res.status(401).json({"message": "only can update cash payement orders"})
-
             if (order.user.id !== parseInt(user_id))
                 return res.status(401).json({"message": "invalide userId"})
 
@@ -172,7 +225,7 @@ class orderController {
                             items: { connect: {id: cartItem.id}}
                         }
                     },
-                    total_price: new Decimal(Number(order.total_price) + Number(cartItem.book.price)),
+                    total_price: new Decimal((Number(order.total_price) + (Number(cartItem.book.price) * Number(cartItem.quantity)))),
                     order_status: "pending",
                     updatedAt: new Date().toISOString(),
                     pendingTime: utils.getDates()["pendingTime"],
@@ -181,50 +234,81 @@ class orderController {
             })
             if (!updateOrder)
                 return res.status(401).json("can't update order")
+            const user = await utils.getUpdatedUser(parseInt(user_id))
+            req.session.user = user
             return res.status(200).json({
                 "message": "order updated successfully",
                 "order": order
             })
-
         } catch(error) {
-            console.log(error)
             return res.status(500).json("an error occurred")
         }
     }
+    static async updateOrderItemQuantity(req, res) {
+        try {
+            const {user_id, order_id, cartItem_id, quantity} = req.params
+            const order = await prisma.order.findFirst({
+                where: {id: parseInt(order_id)},
+                include: {cart: {include: {items: {include: {book: true}}}}}
+            })
+            if (!order)
+                return res.status(400).json({"message": "can't get order with given id"})
+            if (order.cart_id !== parseInt(cart_id))
+                return res.status(401).json({"message": "no match between order and cartId"})
+            let cartItemIndex = -1
+            for (let i = 0 ; i < order.cart.items.length; i++) {
+                if (parseInt(cartItem_id) === order.cart.items[i].id) {
+                    cartItemIndex = i
+                    break
+                }
+            }
+            if (cartItemIndex === -1)
+                return res.status(400).json({"message": "order cart doesn't have cartItem with given id"})
+            if (!utils.checkBookAvailablity(order.cart.items[cartItemIndex].book, parseInt(quantity)))
+                return res.status(400).json({"message": "too much quantity for the given book"})
+            order.total_price -= order.cart.items[cartItemIndex].price * order.cart.items[cartItemIndex].quantity
+            const newQuantity = Math.abs(order.cart.items[cartItemIndex].quantity - parseInt(quantity))
+            const updateOrder = await prisma.order.update({
+                where: {id: parseInt(order_id)},
+                include: {cart: {include: {items: {include: {book: true}}}}},
+                data: {
+                    cart: {
+                        upadate: {
+                            items: {
+                                update: {
+                                    where: {id: parseInt(cartItem_id)},
+                                    data: {
+                                        quantity: parseInt(quantity)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                total_price: new Decimal(Number(order.total_price) + Number(order.cart.items[cartItemIndex].price * newQuantity)),
+                order_status: "pending",
+                updatedAt: new Date().toISOString(),
+                pendingTime: utils.getDates()["pendingTime"],
+                deliveryDate: utils.getDates()["deliveringDate"]
+            })
+            if (!updateOrder)
+                return res.status(500).json({"message": "can't update order item quantity"})
+            return res.status(200).json({
+                "message": "order updated successfully",
+                order: updateOrder
+            })
+        } catch(error) {
+            return res.statue(500).json({"message": "an error occurred while updating order item quantity"})
+        }
+    }
+}
 
-    // update order quantity
-// if cancelled state remove order
-
-    // needs createAt logic
-    // can update only while in bendig stage within one day of order
-    // static async updateOrder(req, res) {
-    //     const {user_id, order_id} = req. params
-    //     try {
-    //         const order = prisma.order.findFirst({
-    //             where: {
-    //                 id: parseInt(order_id),
-    //                 user_id: parseInt(user_id),
-    //                 // order_status: "pendign "
-    //             }
-    //         })
-    //         if (!order) {
-    //             return res.status(401).json({"message": "no order exist with given id to user"})
-    //         }
-    //         if (order.order_status !== "pending")
-    //             return res.status(401).json({"message": "can't update order, order is already on the way :)"})
-    //         // cart can't be updated after order
-    //         // change order state to Null untill update
-
-    //     } catch (error) {
-
-    //     }
-    // }
     // needs createAt logic
     // can cancel only while in bendig stage within one day of order
+    // if cancelled state remove order
     // static async cancelOrder(req, res) {
 
     // }
-}
     // static async afterOrder_DB_update() {
 
     // }

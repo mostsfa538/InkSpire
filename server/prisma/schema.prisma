@@ -46,7 +46,8 @@ model Cart {
   user    User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id Int
   items   CartItem[]
-  Order   Order ?
+  order_id Int ?
+  Order  Order ? @relation(fields: [order_id], references: [id])
   name String @db.VarChar(50) @default("cartName")
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -67,8 +68,7 @@ model Order {
   id           Int         @id @default(autoincrement())
   user         User        @relation(fields: [user_id], references: [id])
   user_id      Int
-  cart         Cart        @relation(fields: [cart_id], references: [id])
-  cart_id      Int         @unique
+  carts        Cart[]     
   total_price  Decimal     @db.Decimal(10, 2)
   address      String
   phone_number String
@@ -128,5 +128,6 @@ enum HoldStatus {
 enum payement {
   cash
   visa
+  paypal
 }
 

@@ -1,2 +1,3 @@
-const arr = []
-console.log(ar)
+const num = "44"
+
+console.log(!isNaN(num))

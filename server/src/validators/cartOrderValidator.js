@@ -1,4 +1,4 @@
-const { param } = require('express-validator')
+const {body, param} = require('express-validator')
 
 const validateUserId = [
     param('user_id').isInt({gt: 0}).withMessage("userId must be integer and greater than zero")
@@ -19,14 +19,34 @@ const validateOrderId = [
     param('order_id').isInt({gt: 0}).withMessage("orderId must be an integer and greater than zero")
 ]
 const validateOrderAdress = [
-    param('address').isString().isLength({min: 20})
+    param('address').isString().withMessage("address must be a string")
+    .isLength({min: 20}).withMessage("please add more details to your address")
 ]
 const validateOrderPhoneNumber = [
-    param('number').isString().isLength({min: 5, max: 12})
+    param('number').isString()
+    .isLength({min: 5, max: 12}).withMessage("phone number can't be less than 5 number or more than 12 number")
+    .custom((number) => {
+        if (isNaN(parseInt(number)))
+            throw new Error("phone number must contain digits only")
+        return true
+    })
 ]
 const validatePayementMethod = [
     param('payement').isString().withMessage("payement method must be a string")
 ]
+const validateCartsIdsLists= [
+    body('cartsIds')
+    .not().isEmpty().withMessage("cartsIds can't be empty list")
+    .isArray({ min: 1 })
+    .withMessage('items must be an array')
+    .custom((arr) => {
+        // Ensure each element is an array
+        if (arr.every(item => isNaN(parseInt(item)))) {
+            throw new Error('each element of items must be a number');
+        }
+        return true;
+    })
+];
 module.exports = {
     validateUserId,
     validateCartId,
@@ -36,5 +56,6 @@ module.exports = {
     validateOrderId,
     validateOrderAdress,
     validateOrderPhoneNumber,
-    validatePayementMethod
+    validatePayementMethod,
+    validateCartsIdsLists
 }

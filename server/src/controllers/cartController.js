@@ -158,8 +158,10 @@ class cartController {
                     "solve": "try to decrease quantity"
                 })
             }
-            if (utils.checkIfBookExistsInCart(cart, book))
-                return res.status(401).json({"message": "book already exist in cart! try to update quantity instead"})
+            if (cart) {
+                if (utils.checkIfBookExistsInCart(cart, book))
+                    return res.status(401).json({"message": "book already exist in cart! try to update quantity instead"})
+            }
             const cartItem = await prisma.cartItem.create({
                 data: {
                     book: { connect: { id: parseInt(book_id) } },
@@ -187,6 +189,7 @@ class cartController {
                 carts: carts
             })
         }catch(err){
+            console.log(err)
             return res.status(500).json({"message": "error has occured"})
         }
     }
