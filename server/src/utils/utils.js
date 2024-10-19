@@ -9,7 +9,6 @@ function checkBookAvailablity(book, quantity) {
 }
 
 function checkIfBookExistsInCart (cart, book) {
-    console.log(cart)
     for (let j = 0; j < cart.items.length; j++)
         if (cart.items[j].book_id === parseInt(book.id))
             return true

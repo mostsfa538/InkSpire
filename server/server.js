@@ -5,7 +5,6 @@ const signupRoute = require('./src/routes/signupRoutes.js')
 const cartRoutes = require("./src/routes/cartRoutes.js")
 const orderRoutes = require("./src/routes/orderRoutes.js")
 const noAuth = require('./src/routes/noAuthRoutes.js');
-
 const session = require('./src/middlewares/session.js');
 const cors = require('cors');
 const dotenv = require('dotenv');
