@@ -2,17 +2,22 @@ const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient
 const { Decimal } = require('@prisma/client');
 const utils = require("../utils/utils");
-const { Extensions } = require("@prisma/client/runtime/library");
 
 class orderController {
 
     static async newOrder (req, res) {
         try {
+
             const {cartsIds} = req.body
             const userCarts = await utils.getAllCarts(parseInt(req.params.user_id))
+
             if (userCarts.length === 0)
                 return res.status(204).json({"message": "the given user has no carts yet!"})
-
+            const hasItems = userCarts.some((aCart)=> {
+                return aCart.items.length > 0
+            })
+            if (!hasItems)
+                return res.status(400).json({"message": "at least one cart of given cart must have items"})
             let found = 0;
             for (let i = 0; i < cartsIds.length; i++) {
                 found = 0
@@ -29,13 +34,22 @@ class orderController {
             if (!found)
                 return res.status(401).json({"message": "one of the cart IDs doesn't belong to the given user"})
 
+            const orderCarts = userCarts.filter((aCart) => cartsIds.includes(aCart.id));
+            
+            const hasInvalidCart = orderCarts.some((aCart) => {
+                return aCart.Order && (aCart.Order.order_status !== "completed" && aCart.Order.order_status != "canceled")
+            })
+
+            if (hasInvalidCart)
+                return res.status(400).json({"message": "one or more of the given cart is already in order"})
+
             let totalPrice = 0
-            for (let i = 0; i < userCarts.length; i++) {
-                for (let j = 0; j < userCarts[i].items.length; j++){
-                    totalPrice += (userCarts[i].items[j].book.price * userCarts[i].items[j].quantity)
+            for (let i = 0; i < orderCarts.length; i++) {
+                for (let j = 0; j < orderCarts[i].items.length; j++){
+                    totalPrice += (orderCarts[i].items[j].book.price * orderCarts[i].items[j].quantity)
                 }
             }
-            const orderCarts = userCarts.filter((aCart) => cartsIds.includes(aCart.id));
+            
             const newOrder = await prisma.order.create({
                 data: {
                     carts: {
@@ -55,7 +69,6 @@ class orderController {
                     total_price: new Decimal(totalPrice),
                 },
             });
-
             if (!newOrder)
                 return res.status(500).json({"message": "can't create new order"})
             req.session.user = await utils.getUpdatedUser(parseInt(req.params.user_id))
@@ -72,11 +85,65 @@ class orderController {
         }
     }
 
-    static async addOrder(req, res) {
+    static async addCartToOrder(req, res) {
+        try {
+            const {user_id, order_id, cart_id} = req.params
+            const order = await prisma.order.findFirst({
+                where: {id: parseInt(order_id), user_id: parseInt(user_id)}
+            })
+            if (!order)
+                return res.status(400).json({"message": "no order found with given id to given user"})
+
+            const cart = await prisma.cart.findFirst({
+                where: {id: parseInt(cart_id), user_id: parseInt(user_id)},
+                include: {items: {include: {book: true}}, Order: true}
+            })
+            if (!cart)
+                return res.status(400).json({"message": "user cart not found"})
+
+            if (cart.Order && (cart.Order_status !== "completed" && cart.Order_status != "canceled"))
+                return res.status(400).json({"message": "given cart is already in order"})
+
+            const totalPrice = new Decimal(order.total_price).plus(
+                cart.items.reduce((acc, item) => {
+                  return acc + item.book.price * item.quantity;
+                }, 0)
+            );
+
+            const updated = await prisma.order.update({
+                where: {id: parseInt(order_id)},
+                data: {
+                    carts: {
+                        connect: {id: parseInt(cart_id)}
+                    },
+                    updatedAt: new Date().toISOString(),
+                    total_price: totalPrice,
+                    order_status: "pending" ,
+                    pendingTime: utils.getDates()["pendingTime"],
+                    deliveryDate: utils.getDates()["deliveringDate"],
+                }
+            })
+            const userOrders = await utils.getAllOrders(parseInt(user_id))
+            return res.status(200).json({
+                "message": "new cart added successfully to order",
+                orders: userOrders
+            })
+        } catch(error) {
+            console.log(error)
+            return res.status(500).json({"message": "an error occour while fetching db"})
+        }
+    }
+
+    
+    // static async deleteCartFromOrder(req, res) {
+
+    // }
+
+    static async addItemToOrderCart(req, res) {
         const {user_id, cart_id, order_id, address, number, payement} = req.params
         try {
-            if (isNaN(number))
-                return res.status(401).json({"message": "invalide phone Number"})
+            // if (isNaN(number))
+            //     return res.status(401).json({"message": "invalide phone Number"})
             if (payement !== 'cash' && payement !== "visa" && payement!= 'paypal') {
                 return res.status(401).json({"message": "invalide payement method"})
             }

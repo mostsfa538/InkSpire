@@ -13,8 +13,8 @@ async function orderState(req, res, next) {
         if (order) {
             if (order.payementMethod === 'visa')
                 return res.status(401).json({"message": "only can update cash payement orders"})
-            if (order.order_status === "delivering" || order.order_status === "pending")
-                return res.status(401).json({"message": `order with the same id is already on ${order.order_status}`})
+            if (order.order_status === "delivering" /*|| order.order_status === "pending"*/)
+                return res.status(401).json({"message": `order with the same id is already on ${order.order_status} state`})
         }
         next()
     } catch(error) {

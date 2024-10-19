@@ -55,7 +55,7 @@ async function getAllCarts(userId) {
         // findMany returns empty list if no items found
         const carts = prisma.cart.findMany({
             where: {user_id: userId},
-            include: {items: {include: {book: true}}}
+            include: {items: {include: {book: true}}, Order: true}
         })
         return carts
     } catch(error) {
