@@ -6,6 +6,7 @@ export const UISlice = createSlice({
         displaySideMenu: false,
         displayCarts: false,
         displayCartItems: false,
+        displayAddToCart: false,
     },
     reducers: {
         toggleSideMenu: (state) => {
@@ -19,9 +20,12 @@ export const UISlice = createSlice({
         toggleCartItems: (state) => {
             state.displayCartItems = !state.displayCartItems
         },
+        toggleAddToCart: (state, action) => {
+            state.displayAddToCart = action.payload
+        },
     },
 })
 
-export const { toggleSideMenu, toggleCart, toggleCartItems } = UISlice.actions
+export const { toggleSideMenu, toggleCart, toggleCartItems, toggleAddToCart } = UISlice.actions
 
 export default UISlice.reducer

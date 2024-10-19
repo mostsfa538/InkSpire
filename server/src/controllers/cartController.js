@@ -28,7 +28,8 @@ class cartController {
         try {
             const cart = await prisma.cart.create({
                 data:{
-                    user: {connect: {id: parseInt(req.params.user_id)}}
+                    user: {connect: {id: parseInt(req.params.user_id)}},
+                    name: req.params.cart_name
                 }
             })
             if (!cart) {
@@ -43,6 +44,26 @@ class cartController {
         } catch(error) {
             console.log(error)
             return res.status(500).json({"message": "can't create a cart"})
+        }
+    }
+
+    static async updateCartName(req, res) {
+        try {
+            const cart = await prisma.cart.update({
+                where: {id: parseInt(req.params.cart_id)},
+                data: {name: req.params.cart_name}
+            })
+            if (!cart) {
+                return res.status(500).json({"message": "can't update cart name"})
+            }
+            const user = await utils.getUpdatedUser(parseInt(req.params.user_id))
+            req.session.user = user
+            return res.status(200).json({
+                "message": "cart name updated successfully",
+                carts: await utils.getAllCarts(parseInt(req.params.user_id))
+            })
+        } catch(error) {
+            return res.status(500).json({"message": "can't update cart name"})
         }
     }
 
@@ -122,7 +143,7 @@ class cartController {
             req.session.user = user
             return res.status(200).json({
                 "message": "emptied successfully",
-                user: await utils.getAllCarts(req.session.user.id)
+                carts: await utils.getAllCarts(req.session.user.id)
             })
         } catch(error){
             return res.status(500).json({"message": "can't empty cart"})
@@ -160,7 +181,7 @@ class cartController {
             }
             if (cart) {
                 if (utils.checkIfBookExistsInCart(cart, book))
-                    return res.status(401).json({"message": "book already exist in cart! try to update quantity instead"})
+                    return res.status(409).json({"message": "book already exist in cart! try to update quantity instead"})
             }
             const cartItem = await prisma.cartItem.create({
                 data: {

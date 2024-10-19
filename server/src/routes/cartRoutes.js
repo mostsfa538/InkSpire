@@ -7,11 +7,21 @@ const router = require('express').Router()
 
 // adding new cart
 router.post(
-    "/:user_id/carts/add",
+    "/:user_id/carts/:cart_name/add",
     checkSession,
     cartOrderValidator.validateUserId,
     handleValidationErrors,
     cartController.addCart
+)
+
+// updating cart name
+router.put(
+    "/:user_id/carts/:cart_id/name/:cart_name",
+    checkSession,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateCartId,
+    handleValidationErrors,
+    cartController.updateCartName
 )
 
 // getting all user carts
