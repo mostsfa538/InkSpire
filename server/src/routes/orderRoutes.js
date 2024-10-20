@@ -60,7 +60,7 @@ router.delete(
 
 // adding item to order cart (while in pending) 
 router.put(
-    "/:user_id/order/:order_id/book/:book_id/:quantity",
+    "/:user_id/order/:order_id/cart/:cart_id/book/:book_id/:quantity",
     checkSession,
     checkOrderState,
     cartOrderValidator.validateUserId,
