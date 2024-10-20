@@ -311,7 +311,68 @@ class orderController {
         }
     }
 
-    
+    static async deleteCartItemFromOrderCart(req, res) {
+        try {
+            const {user_id, order_id, cart_id, cartItem_id} = req.params
+            const item = await prisma.cartItem.findFirst({
+                where: {id: parseInt(cartItem_id),
+                    cart:{
+                        id: parseInt(cart_id),
+                        user_id: parseInt(user_id),
+                        Order: {
+                            user_id: parseInt(user_id)
+                        }
+                    }
+                },
+                include: {cart: {include: {Order: true}}, book: true}
+            })
+            if (!item)
+                return res.status(400).json({"message": "no given item exist in given cart for given order"})
+            const newPrice = item.cart.Order.total_price - (item.book.price * item.quantity)
+            const updateOrder = await prisma.order.update({
+                where: {id: parseInt(order_id)},
+                data: {
+                    updatedAt: new Date().toISOString(),
+                    pendingTime: utils.getDates()["pendingTime"],
+                    deliveryDate: utils.getDates()["deliveringDate"],
+                    total_price: new Decimal(newPrice),
+                    order_status: "pending",
+                    carts: {
+                        update: {
+                            where: {id: parseInt(cart_id)},
+                            data: {
+                                items: {
+                                    delete: {id: parseInt(cartItem_id)}
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            if (!updateOrder)
+                return res.status(400).json({"message": "can't delete from order"})
+            let order;
+            if (newPrice === 0) {
+                order = await prisma.order.delete({
+                    where: {id: parseInt(order_id)}
+                })
+                if (!order)
+                    return res.status(400).json({"message": "should delete order but error occur"})
+            }
+            let msg = {}
+            if (order)
+                msg = {"warnign": "you have deleted all of your orders items, order is deleted"}
+            req.session.user = utils.getUpdatedUser(parseInt(user_id))
+            return res.status(200).json({
+                "message": "item deleted from order cart successfully",
+                ...msg,
+                order: await utils.getAllOrders(parseInt(user_id))
+            })
+        } catch(error) {
+            console.log(error)
+            return res.status(500).json({"message": "an error occure while deleting from order"})
+        }
+    }
     // static async addItemToOrderCart(req, res) {
     //     const {user_id, cart_id, order_id, address, number, payement} = req.params
     //     try {
@@ -386,12 +447,11 @@ class orderController {
                 where: {
                     user_id: parseInt(req.params.user_id)
                 },
-                include: {cart: {include: {items: {include: {book: true}}}}}
+                include: {carts: {include: {items: {include: {book: true}}}}}
             })
             if (orders.length === 0)
                 return res.status(200).json({"message": "user doesn't have any orders yet"})
-            const user = await utils.getUpdatedUser(parseInt(req.params.user_id))
-            req.session.user = user
+            req.session.user = await utils.getUpdatedUser(parseInt(req.params.user_id))
             return res.status(200).json({
                 "message": "orders read successfully",
                 orders: orders

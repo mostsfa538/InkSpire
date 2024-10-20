@@ -71,6 +71,19 @@ router.put(
     orderController.updateOrderCartItemQuantity
 )
 
+// removing item from order cart(while in pending) DLETE
+router.delete(
+    "/:user_id/order/:order_id/cart/:cart_id/cartItem/:cartItem_id",
+    checkSession,
+    checkOrderState,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateOrderId,
+    cartOrderValidator.validateCartId,
+    cartOrderValidator.validateCartItemId,
+    handleValidationErrors,
+    orderController.deleteCartItemFromOrderCart
+)
+
 //////////////////////////////////////////////
 // adding new cart item to one of the order carts
 // router.put(
@@ -87,13 +100,13 @@ router.put(
 /////////////////////////////////////////////////
 
 // getting all user orders
-// router.get(
-//     "/:user_id/orders",
-//     checkSession,
-//     cartOrderValidator.validateUserId,
-//     handleValidationErrors,
-//     orderController.getOrders
-// )
+router.get(
+    "/:user_id/orders",
+    checkSession,
+    cartOrderValidator.validateUserId,
+    handleValidationErrors,
+    orderController.getOrders
+)
 
 // getting order by id
 // router.get(
@@ -102,11 +115,6 @@ router.put(
 //     cartOrderValidator.validateOrderId,
 //     handleValidationErrors,
 //     orderController.getOrderById
-// )
-
-// removing item from order cart(while in pending) DLETE
-// router.delete(
-//     "/:user_id/order/:order_id/cartItem/:cartItem_id"
 // )
 
 // deleting order
