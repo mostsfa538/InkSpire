@@ -112,8 +112,15 @@ router.delete(
 )
 
 // deleting order
-// router.delete(
-//     "/:user_id/order/:order_id"
-// )
+// e:x http://localhost:3000/api/user/1/order/1
+router.delete(
+    "/:user_id/order/:order_id",
+    checkSession,
+    checkOrderState,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateOrderId,
+    handleValidationErrors,
+    orderController.cancelOrder
+)
 
 module.exports = router

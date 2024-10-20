@@ -114,7 +114,6 @@ model Favorite {
 
 enum OrderStatus {
   pending
-  cancel
   delivering
   completed
 }

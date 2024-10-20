@@ -415,9 +415,25 @@ class orderController {
         }
     }
     ////////////////////////////////////////////
+
+    static async cancelOrder(req, res) {
+        try {
+            const order = await prisma.order.delete({
+                where: {id: parseInt(req.params.order_id)}
+            })
+            if (!order)
+                return res.status(400).json({"message": "no order found with given id"})
+            if (order.order_status === "completed")
+                return res.status(400).json({"message": "can't delete completed order"})
+            req.session.user = await utils.getUpdatedUser(parseInt(req.params.user_id))
+            return res.status(200).json({
+                "message": "order cancelled successfully",
+                orders: await utils.getAllOrders(parseInt(req.params.user_id))
+            })
+        } catch(error) {
+            console.log(error)
+            return res.status(500).json({"message": "an error occur while cancelling the order"})
+        }
+    }
 }
-
-    // static async cancelOrder(req, res) {
-
-    // }
 module.exports = orderController
