@@ -4,11 +4,14 @@ import Carts from '../Cart/Carts';
 import NavLinks from './NavLinks';
 import SideMenu from './SideMenu';
 import CustomLink from '../../UI/CustomLink';
+import Orders from '../Order/Orders';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../features/app/store';
 
 
 function Navbar() {
     const { user, logout } = useAuth();
-
+    const { displayViewOrder } = useSelector((state: RootState) => state.UI);
     return (
         <nav className="relative flex w-full py-2 px-8 max-md:px-4 z-50">
             <div className="flex-1 flex items-center">
@@ -38,6 +41,7 @@ function Navbar() {
                 </div>
             }
             </div>
+            {displayViewOrder.display && <Orders type={displayViewOrder.type} />}
         </nav>
     )
 }

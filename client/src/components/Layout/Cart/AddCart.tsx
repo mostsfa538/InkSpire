@@ -72,7 +72,7 @@ function AddCart({ book }: { book: BookType }) {
             onClick={() => {
                 setDisplayNewCart(true)
             }}
-            className="bg-gradient-to-b from-transparent to-black p-2 text-sm flex items-center rounded-md justify-center gap-2">
+            className="bg-gradient-to-b from-transparent to-black p-2 text-sm flex items-center rounded-md justify-center gap-2 transition-all ease-in-out hover:bg-black">
                 <PiPlus />Add Cart
             </button>
         </div>

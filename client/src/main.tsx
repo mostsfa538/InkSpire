@@ -14,6 +14,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import './index.css'
 import Catalog from './routes/Catalog.tsx'
+import Orders from './routes/Orders.tsx'
 
 const router = createBrowserRouter([
     {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
     {
         path: '/catalog',
         element: <Catalog />,
+    },
+    {
+        path: '/orders',
+        element: <Orders />,
     }
 ])
 

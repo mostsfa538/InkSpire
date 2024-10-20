@@ -14,7 +14,7 @@ class orderController {
                 include: {carts: {include: {items: {include: {book: true}}}}}
             })
             if (orders.length === 0)
-                return res.status(200).json({"message": "user doesn't have any orders yet"})
+                return res.status(200).json({"message": "user doesn't have any orders yet", orders: []})
             req.session.user = await utils.getUpdatedUser(parseInt(req.params.user_id))
             return res.status(200).json({
                 "message": "orders read successfully",

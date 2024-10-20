@@ -36,6 +36,8 @@ export type BookType = {
 export type CartType = {
     id: number,
     name: string,
+    order_id?: number | null,
+    Order: OrderType | null,
     createdAt: string,
     updatedAt: string,
     user_id: number,
@@ -50,4 +52,19 @@ export type CartItemType = {
     quantity: number,
     createdAt: string,
     updatedAt: string,
+}
+
+export type OrderType = {
+    id?: number,
+    user_id?: number,
+    carts?: CartType[],
+    total_price?: number,
+    createdAt?: string,
+    updatedAt?: string,
+    address?: string,
+    phone_number?: string,
+    order_status?: string,
+    pendingTime?: string,
+    deliveryDate?: string,
+    payementMethod?: string,
 }
