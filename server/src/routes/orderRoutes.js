@@ -7,6 +7,25 @@ const checkOrderState = require('../middlewares/orderState')
 const orderController = require("../controllers/orderController")
 
 
+// getting all user orders
+router.get(
+    "/:user_id/orders",
+    checkSession,
+    cartOrderValidator.validateUserId,
+    handleValidationErrors,
+    orderController.getOrders
+)
+
+// getting order by id
+router.get(
+    "/:user_id/order/:order_id",
+    checkSession,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateOrderId,
+    handleValidationErrors,
+    orderController.getOrderById
+)
+
 // adding new order from scratch
 router.post(
     // expected list of cartIds in req.body
@@ -83,39 +102,6 @@ router.delete(
     handleValidationErrors,
     orderController.deleteCartItemFromOrderCart
 )
-
-//////////////////////////////////////////////
-// adding new cart item to one of the order carts
-// router.put(
-//     "/:user_id/order/:order_id/cart/:cart_id/cartItem/:cartItem_id",
-//     checkSession,
-//     checkOrderState,
-//     cartOrderValidator.validateUserId,
-//     cartOrderValidator.validateOrderId,
-//     cartOrderValidator.validateCartId,
-//     cartOrderValidator.validateCartItemId,
-//     handleValidationErrors,
-//     orderController.addItemToOrderCart
-// )
-/////////////////////////////////////////////////
-
-// getting all user orders
-router.get(
-    "/:user_id/orders",
-    checkSession,
-    cartOrderValidator.validateUserId,
-    handleValidationErrors,
-    orderController.getOrders
-)
-
-// getting order by id
-// router.get(
-//     "/:user_id/order/:order_id",
-//     cartOrderValidator.validateUserId,
-//     cartOrderValidator.validateOrderId,
-//     handleValidationErrors,
-//     orderController.getOrderById
-// )
 
 // deleting order
 // router.delete(
