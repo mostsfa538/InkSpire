@@ -369,7 +369,6 @@ class orderController {
                 order: await utils.getAllOrders(parseInt(user_id))
             })
         } catch(error) {
-            console.log(error)
             return res.status(500).json({"message": "an error occure while deleting from order"})
         }
     }
