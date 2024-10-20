@@ -20,6 +20,7 @@ async function updatePendingOrders () {
             })
             if (!updateOrderState)
                 console.error("can't update orderStatus")
+            // will only decrease item quantity when order state becomes deleviring
             for (let i = 0; i < order.cart.items.length; i++){
                 const decrementBookQuantity = await prisma.book.update({
                     where: {id: order.cart.items[i].book.id},

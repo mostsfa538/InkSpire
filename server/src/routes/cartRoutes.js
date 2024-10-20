@@ -6,6 +6,7 @@ const handleValidationErrors = require('../middlewares/validationErrorHandler')
 const router = require('express').Router()
 
 // adding new cart
+// ex: http://localhost:3000/api/user/1/carts/myFirstCart/add
 router.post(
     "/:user_id/carts/:cart_name/add",
     checkSession,
@@ -15,6 +16,7 @@ router.post(
 )
 
 // updating cart name
+// e:x http://localhost:3000/api/user/1/carts/20/name/NewCartName
 router.put(
     "/:user_id/carts/:cart_id/name/:cart_name",
     checkSession,
@@ -34,6 +36,7 @@ router.get(
 )
 
 // getting only one cart with id
+// e:x http://localhost:3000/api/user/1/carts 
 router.get(
     '/:user_id/carts/:cart_id',
     checkSession,
@@ -44,6 +47,7 @@ router.get(
 )
 
 // only emptying a cart without deleting it
+// e:x http://localhost:3000/api/user/1/cart/20/empty
 router.put(
     "/:user_id/cart/:cart_id/empty",
     checkSession,
@@ -54,6 +58,7 @@ router.put(
 )
 
 // deleting an entire cart
+// http://localhost:3000/api/user/1/carts/21
 router.delete(
     "/:user_id/carts/:cart_id",
     checkSession,
@@ -65,6 +70,7 @@ router.delete(
 
 
 // adding cartItem to a specific cart
+// e:x http://localhost:3000/api/user/1/carts/20/book/1/1
 router.post(
     '/:user_id/carts/:cart_id/book/:book_id/:quantity',
     checkSession,
@@ -77,6 +83,7 @@ router.post(
 )
 
 // updating cartItem quantity
+// e:x http://localhost:3000/api/user/1/cart/21/cartItem/44/2
 router.put(
     "/:user_id/cart/:cart_id/cartItem/:cartItem_id/:quantity",
     checkSession,
@@ -89,6 +96,7 @@ router.put(
 )
 
 // deleting cartItem from specific cart
+// e:x http://localhost:3000/api/user/1/cart/21/cartItem/44
 router.delete(
     '/:user_id/cart/:cart_id/cartItem/:cartItem_id/',
     checkSession,

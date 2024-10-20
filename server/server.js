@@ -5,10 +5,10 @@ const signupRoute = require('./src/routes/signupRoutes.js')
 const cartRoutes = require("./src/routes/cartRoutes.js")
 const orderRoutes = require("./src/routes/orderRoutes.js")
 const noAuth = require('./src/routes/noAuthRoutes.js');
-
 const session = require('./src/middlewares/session.js');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const scheduleOrderStateChange = require("./src/cronJobs/checkOrderPendingState.js")
 
 const userRoute = require('./src/routes/userRoutes.js');
 const app = express();
@@ -32,5 +32,7 @@ app.use('/', noAuth);
 
 app.use('/api/user', cartRoutes);
 app.use('/api/user', orderRoutes);
+
+// scheduleOrderStateChange()
 
 app.listen(3000);

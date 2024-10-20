@@ -52,22 +52,87 @@ function getDates() {
 
 async function getAllCarts(userId) {
     try {
+        // findMany returns empty list if no items found
         const carts = prisma.cart.findMany({
             where: {user_id: userId},
-            include: {items: {include: {book: true}}}
+            include: {items: {include: {book: true}}, Order: true}
         })
-        if (!carts)
-            return {}
         return carts
     } catch(error) {
         return {"error": "an error occur while fetching user carts"}
     }
 }
 
+async function getAllOrders(user_id) {
+    try {
+        const orders = await prisma.order.findMany({
+            where: {user_id: user_id},
+            include: {carts: {include: {items: {include: {book: true}}}}}
+        })
+        return orders
+    } catch(err) {
+        return {"error": "an error occur while fetching user Orders"}
+    }
+}
+
+function getCartTotlaPrice(cart) {
+    let total_price = 0
+    for (let i = 0; i < cart.items.length; i++) {
+        total_price += (cart.items[i].book.price * cart.items[i].quantity)
+    }
+    return total_price
+}
+
+async function getAllUserItems(user_id, book_id) {
+    try {
+        const AllUseritems = await prisma.cartItem.findFirst({
+            where: {
+                cart: {
+                    user: {
+                        id: user_id
+                    }
+                },
+                book:{
+                    id: book_id
+                }
+            }
+        })
+        return AllUseritems
+    } catch(error) {
+        console.log(error)
+        return {"error": "error occur while checking if book is in another cart"}
+    }
+}
+
+async function getAllUserOrdersItems(user_id, book_id) {
+    try {
+        const AllUserOrdersitems = await prisma.cartItem.findFirst({
+            where: {
+                cart: {
+                    user: {
+                        id: user_id
+                    },
+                    Order: {isNot: null}
+                },
+                book:{
+                    id: book_id
+                }
+            }
+        })
+        return AllUserOrdersitems
+    } catch(error) {
+        console.log(error)
+        return {"error": "error occur while checking if book is in another cart"}
+    }
+}
 module.exports = {
     checkBookAvailablity,
     checkIfBookExistsInCart,
     getUpdatedUser,
     getDates,
-    getAllCarts
+    getAllCarts,
+    getAllOrders,
+    getCartTotlaPrice,
+    getAllUserItems,
+    getAllUserOrdersItems
 }

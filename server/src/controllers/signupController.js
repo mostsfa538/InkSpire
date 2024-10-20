@@ -24,7 +24,7 @@ class singupController {
             await prisma.user.create({
                 data: newUser,
                 include: {
-                    carts: {include: {items: true}},
+                    carts: {include: {items: {include: {book: true}}}},
                     orders: true,
                     reviews: true,
                     OnHolds: true,

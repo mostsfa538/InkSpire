@@ -35,14 +35,12 @@ class cartController {
             if (!cart) {
                 return res.status(500).json({"message": "can't create cart to user"})
             }
-            const user = await utils.getUpdatedUser(parseInt(req.params.user_id))
-            req.session.user = user
+            req.session.user = await utils.getUpdatedUser(parseInt(req.params.user_id))
             return res.status(200).json({
                 "message": "cart created successfully",
                 carts: await utils.getAllCarts(parseInt(req.params.user_id))
             })
         } catch(error) {
-            console.log(error)
             return res.status(500).json({"message": "can't create a cart"})
         }
     }
@@ -179,8 +177,20 @@ class cartController {
                     "solve": "try to decrease quantity"
                 })
             }
-            if (utils.checkIfBookExistsInCart(cart, book))
-                return res.status(409).json({"message": "book already exist in cart! try to update quantity instead"})
+            if (cart) {
+                if (utils.checkIfBookExistsInCart(cart, book))
+                    return res.status(409).json({"message": "book already exist in cart! try to update quantity instead"})
+            }
+            const items = await utils.getAllUserItems(parseInt(user_id), parseInt(book_id))
+            if (items && "error" in items)
+                return res.status(500).json({"message": "error occur while retreiving all user Items"})
+            let message = {}
+            if (items) {
+                message = {
+                    "warning": "same book exist in another cart",
+                    "solve": "remove if by mistake, or leave it"
+                }
+            }
             const cartItem = await prisma.cartItem.create({
                 data: {
                     book: { connect: { id: parseInt(book_id) } },
@@ -205,9 +215,11 @@ class cartController {
             const carts = await utils.getAllCarts(parseInt(user_id))
             return res.status(200).json({
                 "message": "item added to cart successfully",
+                ...message,
                 carts: carts
             })
         }catch(err){
+            console.log(err)
             return res.status(500).json({"message": "error has occured"})
         }
     }
