@@ -35,14 +35,12 @@ class cartController {
             if (!cart) {
                 return res.status(500).json({"message": "can't create cart to user"})
             }
-            const user = await utils.getUpdatedUser(parseInt(req.params.user_id))
-            req.session.user = user
+            req.session.user = await utils.getUpdatedUser(parseInt(req.params.user_id))
             return res.status(200).json({
                 "message": "cart created successfully",
                 carts: await utils.getAllCarts(parseInt(req.params.user_id))
             })
         } catch(error) {
-            console.log(error)
             return res.status(500).json({"message": "can't create a cart"})
         }
     }
@@ -186,7 +184,7 @@ class cartController {
             const items = await utils.getAllUserItems(parseInt(user_id), parseInt(book_id))
             if (items && "error" in items)
                 return res.status(500).json({"message": "error occur while retreiving all user Items"})
-            const message = {}
+            let message = {}
             if (items) {
                 message = {
                     "warning": "same book exist in another cart",

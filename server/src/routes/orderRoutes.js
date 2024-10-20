@@ -8,6 +8,7 @@ const orderController = require("../controllers/orderController")
 
 
 // getting all user orders
+// e:x http://localhost:3000/api/user/1/orders
 router.get(
     "/:user_id/orders",
     checkSession,
@@ -17,6 +18,7 @@ router.get(
 )
 
 // getting order by id
+// e:x http://localhost:3000/api/user/1/order/53
 router.get(
     "/:user_id/order/:order_id",
     checkSession,
@@ -27,6 +29,7 @@ router.get(
 )
 
 // adding new order from scratch
+// e:x http://localhost:3000/api/user/1/order/carts/smouha alnasr-street street-11/01154199659/cash
 router.post(
     // expected list of cartIds in req.body
     "/:user_id/order/carts/:address/:number/:payement",
@@ -41,6 +44,7 @@ router.post(
 )
 
 // adding new cart to existing order
+// e:x http://localhost:3000/api/user/1/order/53/cart/23
 router.put(
     "/:user_id/order/:order_id/cart/:cart_id",
     checkSession,
@@ -53,6 +57,7 @@ router.put(
 )
 
 // deleting cart from existing order
+// e:x http://localhost:3000/api/user/1/order/53/cart/23
 router.delete(
     "/:user_id/order/:order_id/cart/:cart_id",
     checkSession,
@@ -65,6 +70,7 @@ router.delete(
 )
 
 // adding item to order cart (while in pending) 
+// e:x http://localhost:3000/api/user/1/order/53/cart/21/book/3/1
 router.put(
     "/:user_id/order/:order_id/cart/:cart_id/book/:book_id/:quantity",
     checkSession,
@@ -78,6 +84,7 @@ router.put(
 )
 
 // update quantity of order item
+// e:x http://localhost:3000/api/user/1/order/53/cart/21/cartItem/41/2
 router.put(
     "/:user_id/order/:order_id/cart/:cart_id/cartItem/:cartItem_id/:quantity",
     checkSession,
@@ -91,6 +98,7 @@ router.put(
 )
 
 // removing item from order cart(while in pending) DLETE
+// e:x http://localhost:3000/api/user/1/order/53/cart/21/cartItem/41
 router.delete(
     "/:user_id/order/:order_id/cart/:cart_id/cartItem/:cartItem_id",
     checkSession,

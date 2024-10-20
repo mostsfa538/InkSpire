@@ -234,6 +234,16 @@ class orderController {
                     "solve": "try to update the quantity instead"
                 })
             }
+            const items = await utils.getAllUserOrdersItems(parseInt(user_id), parseInt(book_id))
+            if (items && "error" in items)
+                return res.status(500).json({"message": "error occur while retreiving all user OrdersItems"})
+            let message = {}
+            if (items) {
+                message = {
+                    "warning": "same books already exist in another order",
+                    "solve": "remove if by mistake, or leave it"
+                }
+            }
             const cartItem = await prisma.cartItem.create({
                 data: {
                     book: {connect: {id: book.id}},
@@ -263,6 +273,7 @@ class orderController {
             req.session.user = await utils.getUpdatedUser(parseInt(user_id))
             return res.status(200).json({
                 "message": "order updated successfully",
+                ...message,
                 "orders": await utils.getAllOrders(parseInt(user_id))
             })
         } catch(error) {

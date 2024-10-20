@@ -5,11 +5,6 @@ async function orderState(req, res, next) {
         const order = await prisma.order.findFirst({
             where: {id: parseInt(req.params.order_id)}
         })
-        // if (!order) {
-        //     return res.status(401).json({
-        //         "message": "can't get order, order may not exist or already on the way"
-        //     })
-        // }
         if (order) {
             if (order.payementMethod === 'visa' || order.payementMethod === 'paypal')
                 return res.status(401).json({"message": "only can update cash payement orders"})
