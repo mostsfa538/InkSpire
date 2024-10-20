@@ -108,6 +108,7 @@ router.delete(
     '/:userId/delete/:id',
     checkSession,
     userValidator.validateUserId,
+    userValidator.validateBookId,
     userController.deleteBook
 );
 
@@ -119,18 +120,10 @@ router.post(
 );
 
 router.post(
-    '/:userId/create-order',
-    checkSession, 
+    '/:userId/:cartId/create-order',
+    checkSession,
+    userValidator.validateCartId,
+    userValidator.validateUserId,
     payingController.createOrder);
-
-router.get(
-    '/:userId/complete-order',
-    checkSession,
-    payingController.completeOrder);
-
-router.get(
-    '/:userId/cancel-order',
-    checkSession,
-    payingController.cancelOrder);
 
 module.exports = router;
