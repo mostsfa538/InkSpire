@@ -302,7 +302,7 @@
 ### get one cart by id
 
 - **URL**: `/:user_id/carts/:cart_id`
-- **Method**: `POST`.
+- **Method**: `GET`.
 - **Request Params**:
   - `user_id`: session user id
   - `cart_id`: cart id to be retreived
@@ -351,3 +351,88 @@
   - `user_id`: session user id
   - `cart_id`: cart in which item lives
   - `cartItem_id`: the cart item to update its quanttiy
+
+## Order
+
+### get all user orders
+
+- **URL**: `/:user_id/orders`
+- **Method**: `GET`.
+- **Request Params**:
+  - `user_id`: session user id
+
+### get order by id
+
+- **URL**: `/:user_id/order/:order_id`
+- **Method**: `GET`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `order_id`: order to be retrieved
+
+### add new order
+
+- **URL**: `/:user_id/order/carts/:address/:number/:payement`
+- **Method**: `POST`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `address`: order address
+  - `number`: phone number
+  - `payement`: (cash, visa, paypal)
+
+### add new cart to order
+
+- **URL**: `/:user_id/order/:order_id/cart/:cart_id`
+- **Method**: `PUT`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `order_id`: order to add cart to 
+  - `cart_id`: cart id to add to order
+
+### delete cart from order
+
+- **URL**: `/:user_id/order/:order_id/cart/:cart_id`
+- **Method**: `DELETE`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `order_id`: order to add cart to 
+  - `cart_id`: cart id to add to order
+
+### add item to order
+
+- **URL**: `/:user_id/order/:order_id/cart/:cart_id/book/:book_id/:quantity`
+- **Method**: `PUT`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `order_id`: order to add cart to 
+  - `cart_id`: cart id to add to order
+  - `book_id`: book to add to order
+  - `quantity`: quantity of book
+
+### update order item quantity
+
+- **URL**: `/:user_id/order/:order_id/cart/:cart_id/cartItem/:cartItem_id/:quantity`
+- **Method**: `PUT`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `order_id`: order to add cart to 
+  - `cart_id`: cart id to add to order
+  - `cartItem_id`: book to update
+  - `quantity`: new quantity of book
+
+### delete item from order
+
+- **URL**: `/:user_id/order/:order_id/cart/:cart_id/cartItem/:cartItem_id`
+- **Method**: `DELETE`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `order_id`: order to add cart to 
+  - `cart_id`: cart id to add to order
+  - `cartItem_id`: book to update
+
+### cancel order
+
+- **URL**: `/:user_id/order/:order_id`
+- **Method**: `DELETE`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `order_id`: order to add cart to 
