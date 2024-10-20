@@ -1,6 +1,37 @@
 # API Documentation
 
+## signup
+
+### get signup page
+
+- **URL**: `/signup`
+- **Method**: `GET`
+- **Description**: get signup page
+- **Request Params**: None
+
+### post to signup
+
+- **URL**: `/signup`
+- **Method**: `POST`
+- **Description**: creating new user
+- **Request Params**: None
+
+## login
+
+### get login
+- **URL**: `/login`
+- **Method**: `GET`
+- **Description**: get login page
+- **Request Params**: None
+
+### post to login
+- **URL**: `/login`
+- **Method**: `POST`
+- **Description**: login to user account
+- **Request Params**: None
+
 ## users api/user
+
 ## Reviews
 
 ### Create a Review
@@ -237,6 +268,86 @@
 
 ### Get book
 - **URL**: `/:id`
-- **Method**: Get book with id.
+- **Method**: `GET`
+- **Description**: Get book with id.
 - **Request Params**:
   - `id` (path): ID of the book.
+
+## cart
+
+### add new cart
+
+- **URL**: `/:user_id/carts/:cart_name/add`
+- **Method**: `POST`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `cart_name`: user give cartName to each cart
+
+### updating cart name
+
+- **URL**: `/:user_id/carts/:cart_id/name/:cart_name`
+- **Method**: `PUT`.
+- **Request Params**:
+  - `user_id`: session user 
+  - `cart_id`: the cart id to change its name
+  - `cart_name`: user give cartName to each cart
+
+### get all user carts
+
+- **URL**: `/:user_id/carts/`
+- **Method**: `GET`.
+- **Request Params**:
+  - `user_id`: session user id
+
+### get one cart by id
+
+- **URL**: `/:user_id/carts/:cart_id`
+- **Method**: `POST`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `cart_id`: cart id to be retreived
+
+### empty cart
+
+- **URL**: `/:user_id/cart/:cart_id/empty`
+- **Method**: `PUT`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `cart_id`: cart id to be emptied
+
+### delete cart
+
+- **URL**: `/:user_id/carts/:cart_id`
+- **Method**: `DELETE`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `cart_id`: cart id to be emptied
+
+### add item to cart
+
+- **URL**: `/:user_id/carts/:cart_id/book/:book_id/:quantity`
+- **Method**: `POST`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `cart_id`: cart to add the item to
+  - `book_id`: the book to create item from
+  - `quantity`: quantity of book wanted
+
+### update cart item quantity
+
+- **URL**: `/:user_id/cart/:cart_id/cartItem/:cartItem_id/:quantity`
+- **Method**: `PUT`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `cart_id`: cart in which item lives
+  - `cartItem_id`: the cart item to update its quanttiy
+  - `quantity`: new quantity
+
+### delete cart item from cart
+
+- **URL**: `/:user_id/cart/:cart_id/cartItem/:cartItem_id/`
+- **Method**: `DELETE`.
+- **Request Params**:
+  - `user_id`: session user id
+  - `cart_id`: cart in which item lives
+  - `cartItem_id`: the cart item to update its quanttiy
