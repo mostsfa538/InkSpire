@@ -16,7 +16,7 @@ class loginContoller {
             const user = await prisma.user.findFirst({
                 where: { email },
                 include: {
-                    carts: {include: {items: true}},
+                    carts: {include: {items: {include: {book: true}}}},
                     orders: true,
                     reviews: true,
                     OnHolds: true,
