@@ -126,4 +126,16 @@ router.post(
     userValidator.validateUserId,
     payingController.createOrder);
 
+router.post(
+    '/',
+    checkSession,
+    payingController.captureOrder
+);
+
+router.get(
+    '/',
+    checkSession,
+    payingController.cancelOrder
+);
+
 module.exports = router;
