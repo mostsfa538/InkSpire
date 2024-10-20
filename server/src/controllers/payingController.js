@@ -20,30 +20,48 @@ async function getAccessToken() {
 exports.createOrder = async (req, res) => {
     const accessToken = await getAccessToken();
     const userId = req.params.userId;
+    const cartId = req.params.cartId;
+
     try {
-        const cart = await prisma.cartItem.findMany({
+        const cart = await prisma.cart.findUnique({
             where: {
-                cart: {
-                    user_id: parseInt(userId),
-                },
+                user_id: parseInt(userId),
+                id: parseInt(cartId),
             },
-            select: {
-                book: {
-                    select: {
-                        title: true,
-                        price: true,
+            include: {
+                items: {
+                    include: {
+                        book: true,
                     },
                 },
-                quantity: true,
             },
         });
 
-        if (!cart.length) {
+        if (!cart || !cart.items.length) {
             return res.status(400).json({ error: 'Cart is empty' });
         }
 
-        const items = cart;
-        const totalAmount = cart.reduce((acc, { book, quantity }) => acc + book.price * quantity, 0).toFixed(2);
+        const totalAmount = cart.items.reduce((acc, { book, quantity }) => acc + book.price * quantity, 0).toFixed(2);
+
+        let order = await prisma.order.findUnique({
+            where: {
+                cart_id: parseInt(cartId),
+            },
+        });
+
+        if (!order) {
+            order = await prisma.order.create({
+                data: {
+                    user_id: parseInt(userId),
+                    cart_id: parseInt(cartId),
+                    total_price: totalAmount,
+                    address: req.body.address || "test address",
+                    phone_number: req.body.phone_number || "011",
+                    order_status: 'pending',
+                    payementMethod: req.body.payementMethod || 'visa',
+                },
+            });
+        }
 
         const response = await axios({
             method: 'post',
@@ -56,11 +74,11 @@ exports.createOrder = async (req, res) => {
                 intent: 'CAPTURE',
                 purchase_units: [
                     {
-                        items: items.map(({ book, quantity }) => ({
+                        items: cart.items.map(({ book, quantity }) => ({
                             name: book.title,
                             unit_amount: {
                                 currency_code: 'USD',
-                                value: book.price,
+                                value: book.price.toString(),
                             },
                             quantity: quantity.toString(),
                         })),
@@ -77,8 +95,8 @@ exports.createOrder = async (req, res) => {
                     },
                 ],
                 application_context: {
-                    return_url: `${process.env.BASE_URL}/api/user/${req.params.userId}/complete-order`,
-                    cancel_url: `${process.env.BASE_URL}/api/user/${req.params.userId}/cancel-order`,
+                    return_url: `${process.env.BASE_URL}/`,
+                    cancel_url: `${process.env.BASE_URL}/`,
                     shipping_preference: "NO_SHIPPING",
                     user_action: "PAY_NOW",
                     brand_name: "InkSpire",
@@ -86,13 +104,13 @@ exports.createOrder = async (req, res) => {
             },
         });
 
-
         res.status(200).json(response.data.links.find((link) => link.rel === 'approve').href);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
 
 exports.captureOrder = async (orderId) => {
     const accessToken = await getAccessToken();
