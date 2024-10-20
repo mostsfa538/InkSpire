@@ -45,19 +45,6 @@ router.delete(
     orderController.deleteCartFromOrder
 )
 
-// adding new cart item to one of the order carts
-// router.put(
-//     "/:user_id/order/:order_id/cart/:cart_id/cartItem/:cartItem_id",
-//     checkSession,
-//     checkOrderState,
-//     cartOrderValidator.validateUserId,
-//     cartOrderValidator.validateOrderId,
-//     cartOrderValidator.validateCartId,
-//     cartOrderValidator.validateCartItemId,
-//     handleValidationErrors,
-//     orderController.addItemToOrderCart
-// )
-
 // adding item to order cart (while in pending) 
 router.put(
     "/:user_id/order/:order_id/cart/:cart_id/book/:book_id/:quantity",
@@ -71,19 +58,33 @@ router.put(
     orderController.addItemToOrderCart
 )
 
-
 // update quantity of order item
+router.put(
+    "/:user_id/order/:order_id/cart/:cart_id/cartItem/:cartItem_id/:quantity",
+    checkSession,
+    checkOrderState,
+    cartOrderValidator.validateUserId,
+    cartOrderValidator.validateOrderId,
+    cartOrderValidator.validateCartItemId,
+    cartOrderValidator.validateQuantity,
+    handleValidationErrors,
+    orderController.updateOrderCartItemQuantity
+)
+
+//////////////////////////////////////////////
+// adding new cart item to one of the order carts
 // router.put(
-//     "/:user_id/order/:order_id/cart_item/cartItem_id/quantity",
+//     "/:user_id/order/:order_id/cart/:cart_id/cartItem/:cartItem_id",
 //     checkSession,
 //     checkOrderState,
 //     cartOrderValidator.validateUserId,
 //     cartOrderValidator.validateOrderId,
+//     cartOrderValidator.validateCartId,
 //     cartOrderValidator.validateCartItemId,
-//     cartOrderValidator.validateQuantity,
 //     handleValidationErrors,
-//     orderController.updateOrderItemQuantity
+//     orderController.addItemToOrderCart
 // )
+/////////////////////////////////////////////////
 
 // getting all user orders
 // router.get(

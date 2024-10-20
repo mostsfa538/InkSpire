@@ -21,7 +21,7 @@ exports.createOrder = async (req, res) => {
     const accessToken = await getAccessToken();
     const userId = req.params.userId;
     try {
-        const cart = await prisma.CartItem.findMany({
+        const cart = await prisma.cartItem.findMany({
             where: {
                 cart: {
                     user_id: parseInt(userId),

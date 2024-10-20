@@ -83,6 +83,26 @@ function getCartTotlaPrice(cart) {
     return total_price
 }
 
+async function getAllUserItems(user_id, book_id) {
+    try {
+        const AllUseritems = await prisma.cartItem.findFirst({
+            where: {
+                cart: {
+                    user: {
+                        id: user_id
+                    }
+                },
+                book:{
+                    id: book_id
+                }
+            }
+        })
+        return AllUseritems
+    } catch(error) {
+        console.log(error)
+        return {"error": "error occur while checking if book is in another cart"}
+    }
+}
 module.exports = {
     checkBookAvailablity,
     checkIfBookExistsInCart,
@@ -90,5 +110,6 @@ module.exports = {
     getDates,
     getAllCarts,
     getAllOrders,
-    getCartTotlaPrice
+    getCartTotlaPrice,
+    getAllUserItems
 }
