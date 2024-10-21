@@ -5,10 +5,10 @@ import { PiEmpty } from "react-icons/pi"
 import { TbTrash } from "react-icons/tb"
 import { useDispatch } from "react-redux"
 import useAuth from "../../../hooks/useAuth"
-import { deleteCart, emptyCart, updateCartName } from "../../../features/cart/cart"
+import { deleteCart, emptyCart, setCartToOrder, updateCartName } from "../../../features/cart/cart"
 import { AppDispatch } from "../../../features/app/store"
 import { setOrderDisplayType, toggleViewOrder } from "../../../features/UI/UI"
-import { getOrderByID, setOrderToView } from "../../../features/orders/orders"
+import { getOrderByID } from "../../../features/orders/orders"
 
 function Cart({ cart, showControls = true }: { cart: CartType, showControls?: boolean }) {
     const { user } = useAuth();
@@ -26,13 +26,15 @@ function Cart({ cart, showControls = true }: { cart: CartType, showControls?: bo
 
     const handleAddOrder = async (userId: string, cart: CartType) => {
         if (cart.order_id !== null) {
-            dispatch(setOrderToView(cart.Order!));
-            dispatch(setOrderDisplayType('view'));
-            dispatch(getOrderByID({ userId, orderId: cart.order_id! }));
+            dispatch(getOrderByID({ userId, orderId: cart.order_id! })).then(() => {
+                dispatch(setOrderDisplayType('view'));
+                dispatch(toggleViewOrder(true));
+            });
         } else {
+            dispatch(setCartToOrder(cart));
             dispatch(setOrderDisplayType('add'));
+            dispatch(toggleViewOrder(true));
         }
-        dispatch(toggleViewOrder(true));
     }
 
     return (
@@ -57,15 +59,13 @@ function Cart({ cart, showControls = true }: { cart: CartType, showControls?: bo
                         <button className="text-gray-400" onClick={() => handleEmptyCart(user?.id!, cart.id)}><PiEmpty /></button>
                         <button className="bg-error-background text-error-text" onClick={() => handleDeleteCart(user?.id!, cart.id)}><TbTrash /></button>
                         <button className="bg-black text-white text-xs" onClick={() => handleAddOrder(user?.id!, cart)}>
-                            {
-                                cart.order_id ? 'View Order' : 'Add Order'
-                            }
+                            Add Order
                         </button>
                     </span>
                 }
             </div>
             <div className={`bg-gray-200 px-2 rounded-md ${!displayCartItems ? 'h-0 py-0' : 'h-96 py-2'} max-h-fit overflow-hidden transition-all ease-in-out duration-500`}>
-                <div className="flex flex-col gap-2 p-2 overflow-y-auto overflow-x-hidden max-h-40 scroll-">
+                <div className={`flex ${showControls ? 'flex-col' : 'flex-row'} gap-2 p-2 overflow-y-auto overflow-x-hidden max-h-40`}>
                     {
                         cart.items.length === 0 ? <p className="text-center text-xs">No items in cart</p> : 
                         cart.items.map((item) => (

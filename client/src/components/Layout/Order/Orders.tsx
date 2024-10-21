@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleViewOrder } from "../../../features/UI/UI";
 import AddOrder from "./AddOrder";
 import Order from "./Order";
-import { useEffect } from "react";
 
 
 function Orders({ type = 'view' }: { type: 'view' | 'add' }) {
@@ -12,7 +11,7 @@ function Orders({ type = 'view' }: { type: 'view' | 'add' }) {
     const dispatch = useDispatch<AppDispatch>();
 
     return (
-        <div className="absolute felx flex-col gap-2 bg-white left-1/4 w-1/2 rounded-md top-full p-2 max-lg:left-[20%] max-lg:w-2/3">
+        <div className="felx flex-col gap-2 bg-white rounded-md p-2 font-semibold max-lg:text-sm">
             <div className="w-full flex">
                 <span className="flex-1"></span>
                 <h1 className="flex-1 text-center font-bold text-lg">Orders</h1>
@@ -23,7 +22,7 @@ function Orders({ type = 'view' }: { type: 'view' | 'add' }) {
                 </span>
             </div>
             {
-                type === 'view' ? <Order order={orderToView!} /> : <AddOrder orders={orders}/>
+                type === 'view' ? <Order orders={orderToView ? [orderToView] : orders} /> : <AddOrder orders={orders} />
             }
         </div>
     )

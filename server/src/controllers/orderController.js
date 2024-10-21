@@ -27,21 +27,19 @@ class orderController {
     ////////////////////////////////////////////////////
     static async getOrderById(req, res) {
         try {
-            const {user_id, order_id} = req.params
             const order = await prisma.order.findFirst({
                 where: {
-                    id: parseInt(order_id),
-                    user_id: parseInt(user_id)
+                    id: parseInt(req.params.order_id),
+                    user_id: parseInt(req.params.user_id)
                 },
                 include: {carts: {include: {items: {include: {book: true}}}}}
             })
             if (!order)
-                return res.status(401).json({"message": "no order found with given id to the user"})
-            req.session.user = await utils.getUpdatedUser(parseInt(user_id))
-            const orders = await utils.getAllOrders(parseInt(parseInt(user_id)))
+                return res.status(400).json({"message": "no order found with given id"})
+            req.session.user = await utils.getUpdatedUser(parseInt(req.params.user_id))
             return res.status(200).json({
                 "message": "order read successfully",
-                "orders": orders
+                order: order
             })
         } catch(error) {
             return res.status(500).json({"message": "an error occurred while getting order by id"})

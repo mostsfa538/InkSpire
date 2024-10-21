@@ -41,7 +41,11 @@ function Navbar() {
                 </div>
             }
             </div>
-            {displayViewOrder.display && <Orders type={displayViewOrder.type} />}
+            {displayViewOrder.display && (
+                <div className='absolute left-1/4 w-1/2 top-full p-4 max-md:w-full max-md:left-0'>
+                    <Orders type={displayViewOrder.type} />
+                </div>
+            )}
         </nav>
     )
 }

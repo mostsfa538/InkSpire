@@ -6,10 +6,12 @@ import { SERVER_URL } from "../../constants/values";
 const baseURL = `${SERVER_URL}/api/user`
 
 type CartState = {
+    cartToOrder: CartType | undefined;
     carts: CartType[];
 }
 
 const initialState = {
+    cartToOrder: undefined,
     carts: [],
 } as CartState;
 
@@ -62,6 +64,9 @@ const cartSlice = createSlice({
         setCarts: (state, action) => {
             state.carts = action.payload;
         },
+        setCartToOrder: (state, action) => {
+            state.cartToOrder = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(deleteCartItem.fulfilled, (state, action) => {
@@ -90,6 +95,6 @@ const cartSlice = createSlice({
     }
 });
 
-export const { setCarts } = cartSlice.actions;
+export const { setCarts, setCartToOrder } = cartSlice.actions;
 
 export default cartSlice.reducer;

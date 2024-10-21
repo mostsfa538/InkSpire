@@ -28,10 +28,13 @@ function AddCart({ book }: { book: BookType }) {
     }
 
     const handleAddCartItem = async (userId: string, cartId: number, bookId: number, quantity: number) => {
+        const cart = (await dispatch(getCartById({ userId, cartId }))).payload.cart as CartType;
+        if (cart.order_id !== null) return;
+        
         const res = await dispatch(addCartItem({ userId, cartId, bookId, quantity }))
 
+
         if (res.meta.requestStatus === 'rejected') {
-            const cart = (await dispatch(getCartById({ userId, cartId }))).payload.cart
             const item = getCartItem(cart, bookId)
             dispatch(updateCartItemQuantity({ userId, cartId, itemId: item!.id, quantity: item!.quantity + 1 }));
         }
@@ -45,7 +48,8 @@ function AddCart({ book }: { book: BookType }) {
                 <div className="flex flex-col gap-1">
                     <p>Choose cart to add to</p>
                     {carts.map((cart: CartType) => (
-                        <h3 key={cart.id} onClick={() => handleAddCartItem(
+                        <h3 key={cart.id} 
+                        onClick={() => handleAddCartItem(
                             user?.id!,
                             cart.id,
                             book.id,

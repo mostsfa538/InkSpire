@@ -3,7 +3,7 @@ import { BiShoppingBag } from 'react-icons/bi'
 
 import { useDispatch, useSelector } from "react-redux"
 
-import { toggleCart } from "../../../features/UI/UI";
+import { toggleCart, toggleViewOrder } from "../../../features/UI/UI";
 import { RootState } from "../../../features/app/store";
 import { Link } from "react-router-dom";
 
@@ -22,14 +22,26 @@ function Carts() {
                         <h3 className="text-lg font-semibold text-gray-300 underline">Carts</h3>
                         <Link to="/orders" className="text-xs font-bold text-white text-primary bg-black p-1">Checkout</Link>
                     </div>
-                    <div className="flex flex-col gap-2">
                         {
                             carts.length === 0 ? <p className="text-center text-xs">No carts available</p> :
-                            carts.map((cart) => (
-                                <Cart key={cart.id} cart={cart} />
-                            ))
+                            (
+                                <div className="flex flex-col gap-2">
+                                    {
+                                        carts.map((cart) => {
+                                                if (cart.order_id === null) return <Cart key={cart.id} cart={cart} />
+                                            } 
+                                        )
+                                    }
+                                    <div className="flex justify-center text-xs">
+                                        <button
+                                        onClick={() => dispatch(toggleViewOrder(true))} 
+                                        className="p-2 bg-black font-bold text-white">
+                                            View Ordered Carts
+                                        </button>
+                                    </div>
+                                </div>
+                            )
                         }
-                    </div>
                 </div>
             </div>
         </div>
