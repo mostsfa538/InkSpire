@@ -22,7 +22,7 @@ An online book store with a different perspective!
 
 ## Use Case Architecture:
 
-​	The bellow Architecture show how different actors can deal with [InkSpire]() Website Application. It selects roles of each one who control Website mechanisms & features for best practices of use.
+​	The bellow Architecture show how different actors can deal with [InkSpire]() Website Application. It selects roles of each one who controls Website mechanisms & features for best practices of use.
 
 <img src=".\useCase_Architecture.png" style="height:auto; width:auto; margin:0;">
 
