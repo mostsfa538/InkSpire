@@ -1,9 +1,9 @@
-# InkSpier
+# InkSpire
 
 <img src="./Main_Logo.png" style="height:300px; width:400px; margin:0; ">
 An online book store with a different perspective!
 
-​			It brings together authors who can publish their books at the same time that book enthusiasts come to find the best new and distinctive releases in one place.
+​	It brings together authors who can publish their books at the same time that book enthusiasts come to find the best new and distinctive releases in one place.
 
 
 ### Created By:
@@ -22,7 +22,7 @@ An online book store with a different perspective!
 
 ## Use Case Architecture:
 
-​			The bellow Architecture show how different actors can deal with [InkSpire]() Website Application, and select roles of each one that control mechanisms for best practices of use.
+​	The bellow Architecture show how different actors can deal with [InkSpire]() Website Application. It selects roles of each one who control Website mechanisms & features for best practices of use.
 
 <img src=".\useCase_Architecture.png" style="height:auto; width:auto; margin:0;">
 
