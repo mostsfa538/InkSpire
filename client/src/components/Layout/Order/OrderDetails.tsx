@@ -8,10 +8,12 @@ import { RiVisaFill } from "react-icons/ri";
 import { addCartToOrder, deleteOrder, removeCartFromOrder } from "../../../features/orders/orders";
 import { CgClose } from "react-icons/cg";
 import { TbTrash } from "react-icons/tb";
+import Cart from "../Cart/Cart";
+import { updateCart } from "../../../features/cart/cart";
 
 function OrderDetails({ order }: { order: OrderType }) {
     const { displayViewOrder } = useSelector((state: RootState) => state.UI);
-    const { cartToOrder } = useSelector((state: RootState) => state.cart);
+    const { carts, cartToOrder } = useSelector((state: RootState) => state.cart);
 
     const [displayOrder, setDisplayOrder] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
@@ -29,12 +31,39 @@ function OrderDetails({ order }: { order: OrderType }) {
         }
     }
 
+    const handleAddCartToOrder = async (userId: number, cartId: number, orderId: number) => {
+        dispatch(addCartToOrder({ userId, cartId, orderId }))
+        const cart = carts.find(cart => cart.id === cartId);
+
+        // add order_id to cart
+        if (cart) {
+            const updatedCart = { ...cart, order_id: orderId };
+            dispatch(updateCart(updatedCart));
+        }
+    }
+
     const handleDeleteOrder = async (userId: number, orderId: number) => {
         dispatch(deleteOrder({ userId, orderId }));
+        const orderCarts = order.carts;
+
+        // remove order_id from carts in order
+        if (orderCarts) {
+            orderCarts.forEach(cart => {
+                const updatedCart = { ...cart, order_id: null };
+                dispatch(updateCart(updatedCart));
+            })
+        }
     }
 
     const handleRemoveCartFromOrder = async (userId: number, cartId: number, orderId: number) => {
-        dispatch(removeCartFromOrder({ userId, cartId, orderId }));
+        dispatch(removeCartFromOrder({ userId, cartId, orderId }))
+
+        // remove order_id from cart
+        const cart = carts.find(cart => cart.id === cartId);
+        if (cart) {
+            const updatedCart = { ...cart, order_id: null };
+            dispatch(updateCart(updatedCart));
+        }
     }
 
     return (
@@ -57,19 +86,17 @@ function OrderDetails({ order }: { order: OrderType }) {
                 {displayViewOrder.type === 'add' &&
                     <button 
                     disabled={
-                        order.order_status === 'delivered' || 
-                        order.payementMethod !== 'cash' ||
+                        order.order_status === 'delivering' || order.order_status === 'completed' ||
                         order.carts?.map(cart => cart.id).includes(cartToOrder!.id)
                     }
-                    onClick={() => dispatch(addCartToOrder({ userId: order.user_id!, cartId: cartToOrder!.id, orderId: order.id! })) }
+                    onClick={() =>  handleAddCartToOrder(order.user_id!, cartToOrder!.id, order.id!)}
                     className={`px-4 py-1 rounded-md bg-success-background text-success-text font-light disabled:opacity-50`}>
                         Add
                     </button>
                 }
                 <button 
                     disabled={
-                        order.order_status === 'delivered' || 
-                        order.payementMethod !== 'cash'
+                        order.order_status === 'delivering' || order.order_status === 'completed'
                     }
                 onClick={() => handleDeleteOrder(order.user_id!, order.id!)}
                 className="rounded-full p-2 bg-error-background text-error-text disabled:opacity-50">
@@ -104,8 +131,10 @@ function OrderDetails({ order }: { order: OrderType }) {
                         {
                         order.carts?.map((cart) => (
                         <span key={cart.id} className="p-2 rounded-md bg-white flex items-center justify-between">
-                            <span>{cart.name}</span>
-                            {order.payementMethod === 'cash' && <button onClick={() => handleRemoveCartFromOrder(order.user_id!, cart.id, order.id!)}><CgClose /></button>}
+                            <div className="flex-1">
+                                <Cart key={cart.id} cart={cart} showControls={false} orderId={order.id} />
+                            </div>
+                            <button onClick={() => handleRemoveCartFromOrder(order.user_id!, cart.id, order.id!)}><CgClose /></button>
                         </span>
                         ))
                     }   

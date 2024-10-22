@@ -67,6 +67,9 @@ const cartSlice = createSlice({
         setCartToOrder: (state, action) => {
             state.cartToOrder = action.payload;
         },
+        updateCart: (state, action) => {
+            state.carts = state.carts.map(cart => cart.id === action.payload.id ? action.payload : cart);
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(deleteCartItem.fulfilled, (state, action) => {
@@ -95,6 +98,6 @@ const cartSlice = createSlice({
     }
 });
 
-export const { setCarts, setCartToOrder } = cartSlice.actions;
+export const { setCarts, setCartToOrder, updateCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

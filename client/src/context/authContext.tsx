@@ -15,23 +15,32 @@ import { setOrders } from "../features/orders/orders";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+export const updateUserOrders = async (userId: string, dispatch: AppDispatch) => {
+    const orders = await dispatch(api.endpoints.getUserOrders.initiate(userId));
+    dispatch(setOrders(orders.data?.orders));
+}
+
+export const updateUserCarts = async (userId: string, dispatch: AppDispatch) => {
+    const carts = await dispatch(api.endpoints.getUserCarts.initiate(userId));
+    dispatch(setCarts(carts.data?.carts));
+}
+
+const setUpUser = async (userId: string, dispatch: AppDispatch) => {
+    await updateUserCarts(userId, dispatch);
+    await updateUserOrders(userId, dispatch);
+}
+
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [error, setError] = useState<AuthError | null>(null);  // Error state for login/logout
     const dispatch = useDispatch<AppDispatch>()
 
-    const setUpUser = async (userId: string) => {
-        const carts = await dispatch(api.endpoints.getUserCarts.initiate(userId));
-        const orders = await dispatch(api.endpoints.getUserOrders.initiate(userId));
-        dispatch(setCarts(carts.data?.carts));
-        dispatch(setOrders(orders.data?.orders));
-    }
 
     const checkAuth = async () => {
         try {
             const response = await axios.get(`${SERVER_URL}/login`, { withCredentials: true });
             setUser(response.data.user);
-            setUpUser(response.data.user.id);
+            setUpUser(response.data.user.id, dispatch);
             setError(null);  // Clear any previous errors
         } catch (error) {
             const err = error as AxiosError;
@@ -43,7 +52,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const login = async (user: { email: string; password: string }) => {
         try {
             const response = await axios.post(`${SERVER_URL}/login`, user, { withCredentials: true });
-            setUpUser(response.data.user.id);
+            setUpUser(response.data.user.id, dispatch);
             setUser(response.data.user);
             setError(null);  // Clear any previous errors
         } catch (error) {

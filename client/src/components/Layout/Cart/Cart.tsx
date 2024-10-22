@@ -10,7 +10,7 @@ import { AppDispatch } from "../../../features/app/store"
 import { setOrderDisplayType, toggleViewOrder } from "../../../features/UI/UI"
 import { getOrderByID } from "../../../features/orders/orders"
 
-function Cart({ cart, showControls = true }: { cart: CartType, showControls?: boolean }) {
+function Cart({ cart, showControls = true, orderId }: { cart: CartType, showControls?: boolean, orderId?: number }) {
     const { user } = useAuth();
     const [cartName, setCartName] = useState(cart.name);
     const [displayCartItems, setDisplayCartItems] = useState(false);
@@ -65,11 +65,11 @@ function Cart({ cart, showControls = true }: { cart: CartType, showControls?: bo
                 }
             </div>
             <div className={`bg-gray-200 px-2 rounded-md ${!displayCartItems ? 'h-0 py-0' : 'h-96 py-2'} max-h-fit overflow-hidden transition-all ease-in-out duration-500`}>
-                <div className={`flex ${showControls ? 'flex-col' : 'flex-row'} gap-2 p-2 overflow-y-auto overflow-x-hidden max-h-40`}>
+                <div className={`flex flex-col gap-2 p-2 overflow-y-auto overflow-x-hidden max-h-40`}>
                     {
                         cart.items.length === 0 ? <p className="text-center text-xs">No items in cart</p> : 
                         cart.items.map((item) => (
-                            <CartItem key={item.id} item={item} />
+                            <CartItem key={item.id} item={item} orderId={orderId} />
                         ))
                     }
                 </div>

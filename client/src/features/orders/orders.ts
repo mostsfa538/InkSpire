@@ -15,12 +15,6 @@ const initialState = {
     orders: [],
 } as OrderState;
 
-export const getOrderByID = createAsyncThunk('orders/getOrderByID', async ({ userId, orderId }: { userId: string, orderId: number }) => {
-    const response = await axios.get(`${baseURL}/${userId}/order/${orderId}`, { withCredentials: true });
-    console.log(response.data.orders);
-    return response.data.order;
-});
-
 export const removeCartFromOrder = createAsyncThunk('orders/removeCartFromOrder', async ({ userId, orderId, cartId }: { userId: number, orderId: number, cartId: number }) => {
     const response = await axios.delete(`${baseURL}/${userId}/order/${orderId}/cart/${cartId}`, { withCredentials: true });
     return response.data.orders;
@@ -31,6 +25,12 @@ export const addCartToOrder = createAsyncThunk('orders/addCartToOrder', async ({
     return response.data.orders;
 });
 
+export const getOrderByID = createAsyncThunk('orders/getOrderByID', async ({ userId, orderId }: { userId: string, orderId: number }) => {
+    const response = await axios.get(`${baseURL}/${userId}/order/${orderId}`, { withCredentials: true });
+    console.log(response.data.orders);
+    return response.data.order;
+});
+
 export const createNewOrder = createAsyncThunk('orders/createNewOrder', async ({ userId, address, phone, cartsIds, paymentMethod }: { userId: number, address: string, phone: string, cartsIds: number[], paymentMethod: string }) => {
     const response = await axios.post(`${baseURL}/${userId}/order/carts/${address}/${phone}/${paymentMethod}`, { cartsIds }, { withCredentials: true });
     return response.data.orders;
@@ -38,6 +38,16 @@ export const createNewOrder = createAsyncThunk('orders/createNewOrder', async ({
 
 export const deleteOrder = createAsyncThunk('orders/deleteOrder', async ({ userId, orderId }: { userId: number, orderId: number }) => {
     const response = await axios.delete(`${baseURL}/${userId}/order/${orderId}`, { withCredentials: true });
+    return response.data.orders;
+});
+
+export const deleteItemFromOrder = createAsyncThunk('orders/deleteItemFromOrder', async ({ userId, orderId, cartId, itemId }: { userId: number, orderId: number, cartId: number, itemId: number }) => {
+    const response = await axios.delete(`${baseURL}/${userId}/order/${orderId}/cart/${cartId}/cartItem/${itemId}`, { withCredentials: true });
+    return response.data.orders;
+});
+
+export const updateOrderItemQuantity = createAsyncThunk('orders/updateItemQuantity', async ({ userId, orderId, cartId, itemId, quantity }: { userId: number, orderId: number, cartId: number, itemId: number, quantity: number }) => {
+    const response = await axios.put(`${baseURL}/${userId}/order/${orderId}/cart/${cartId}/cartItem/${itemId}/${quantity}`, {}, { withCredentials: true });
     return response.data.orders;
 });
 
@@ -63,6 +73,12 @@ const ordersSlice = createSlice({
             state.orders = action.payload;
         });
         builder.addCase(deleteOrder.fulfilled, (state, action) => {
+            state.orders = action.payload
+        });
+        builder.addCase(deleteItemFromOrder.fulfilled, (state, action) => {
+            state.orders = action.payload
+        });
+        builder.addCase(updateOrderItemQuantity.fulfilled, (state, action) => {
             state.orders = action.payload
         });
     }

@@ -3,13 +3,7 @@ import OrderDetails from "./OrderDetails";
 
 function Order({ orders }: { orders: OrderType[] }) {
     return (
-        orders.map(order => (
-            <div key={order.id} className="flex flex-col gap-2 [&>*]:rounded-md max-md:text-xs">
-                <OrderDetails order={order} />
-                <hr />
-            </div>
-            )
-        )
+        orders.length === 0 ? <h1 className="text-xs text-center p-2 bg-gray-200">No Orders</h1> : orders.map(order => <OrderDetails key={order.id} order={order} />)
     )
 }
 
