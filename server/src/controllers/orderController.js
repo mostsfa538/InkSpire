@@ -343,7 +343,7 @@ class orderController {
             req.session.user = await utils.getUpdatedUser(parseInt(user_id))
             return res.status(200).json({
                 "message": "order updated successfully",
-                order: await utils.getAllOrders(parseInt(user_id))
+                orders: await utils.getAllOrders(parseInt(user_id))
             })
         } catch(error) {
             console.log(error)
@@ -406,7 +406,7 @@ class orderController {
             return res.status(200).json({
                 "message": "item deleted from order cart successfully",
                 ...msg,
-                order: await utils.getAllOrders(parseInt(user_id))
+                orders: await utils.getAllOrders(parseInt(user_id))
             })
         } catch(error) {
             return res.status(500).json({"message": "an error occure while deleting from order"})
