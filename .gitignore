@@ -129,6 +129,9 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-
+# null files
+..gitignore.un~
+.gitignore~
+server/mysql-installer.msi
 
 package-lock.json
