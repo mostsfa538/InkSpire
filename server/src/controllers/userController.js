@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient;
+const utils = require('../utils/utils');
 
 class userController {
     static async getBooks(req, res) {
@@ -133,7 +134,7 @@ class userController {
 
     static async updateProfile(req, res) {
         const { f_name, l_name, image } = req.body;
-        const userId = req.params.userId;
+        const userId = req.params.user_id;
         try {
             const user = await prisma.user.update({
                 where: {
@@ -145,7 +146,7 @@ class userController {
                     image: image,
                 }
             });
-            res.status(200).json(user);
+            res.status(200).json({user: await utils.getUpdatedUser(userId)});
         } catch (err) {
             console.error(err);
             res.status(500).json({ message: 'An error occurred during update' });

@@ -113,7 +113,7 @@ router.delete(
 );
 
 router.post(
-    '/:userId/profile',
+    '/:user_id/profile',
     checkSession,
     userValidator.validateUpdateProfile,
     userController.updateProfile
