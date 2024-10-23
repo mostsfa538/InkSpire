@@ -19,49 +19,38 @@ async function getAccessToken() {
 
 exports.createOrder = async (req, res) => {
     const accessToken = await getAccessToken();
-    const userId = req.params.userId;
-    const cartId = req.params.cartId;
+    const orderId = req.params.orderId;
 
     try {
-        const cart = await prisma.cart.findUnique({
+        const order = await prisma.order.findFirst({
             where: {
-                user_id: parseInt(userId),
-                id: parseInt(cartId),
+                id: parseInt(orderId),
             },
             include: {
-                items: {
+                carts: {
                     include: {
-                        book: true,
+                        items: {
+                            include: {
+                                book: true,
+                            },
+                        },
                     },
                 },
             },
         });
 
-        if (!cart || !cart.items.length) {
-            return res.status(400).json({ error: 'Cart is empty' });
-        }
-
-        const totalAmount = cart.items.reduce((acc, { book, quantity }) => acc + book.price * quantity, 0).toFixed(2);
-
-        let order = await prisma.order.findUnique({
-            where: {
-                cart_id: parseInt(cartId),
-            },
-        });
-
         if (!order) {
-            order = await prisma.order.create({
-                data: {
-                    user_id: parseInt(userId),
-                    cart_id: parseInt(cartId),
-                    total_price: totalAmount,
-                    address: req.body.address || "test address",
-                    phone_number: req.body.phone_number || "011",
-                    order_status: 'pending',
-                    payementMethod: req.body.payementMethod || 'visa',
-                },
-            });
+            return res.status(404).json({ error: 'Order not found' });
         }
+
+        const allItems = order.carts.flatMap(cart => cart.items.map(({ book, quantity }) => ({
+            name: book.title,
+            unit_amount: {
+                currency_code: 'USD',
+                value: book.price.toFixed(2),
+            },
+            quantity: quantity.toString(),
+        })));
 
         const response = await axios({
             method: 'post',
@@ -74,29 +63,22 @@ exports.createOrder = async (req, res) => {
                 intent: 'CAPTURE',
                 purchase_units: [
                     {
-                        items: cart.items.map(({ book, quantity }) => ({
-                            name: book.title,
-                            unit_amount: {
-                                currency_code: 'USD',
-                                value: book.price.toString(),
-                            },
-                            quantity: quantity.toString(),
-                        })),
+                        items: allItems,
                         amount: {
                             currency_code: 'USD',
-                            value: totalAmount,
+                            value: order.total_price.toFixed(2),
                             breakdown: {
                                 item_total: {
                                     currency_code: 'USD',
-                                    value: totalAmount,
+                                    value: order.total_price.toFixed(2),
                                 },
                             },
                         },
                     },
                 ],
                 application_context: {
-                    return_url: `${process.env.BASE_URL}/`,
-                    cancel_url: `${process.env.BASE_URL}/`,
+                    return_url: `${process.env.BASE_URL}/api/user/complete-order`,
+                    cancel_url: `${process.env.BASE_URL}/api/user/cancel-order`,
                     shipping_preference: "NO_SHIPPING",
                     user_action: "PAY_NOW",
                     brand_name: "InkSpire",

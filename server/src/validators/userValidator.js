@@ -107,6 +107,11 @@ const validateCartId = [
     check('id')
         .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
 ]
+
+const validateOrderId = [
+    check('orderId')
+        .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
+]
 module.exports = {
     validateUserId,
     validateBookId,
@@ -114,5 +119,6 @@ module.exports = {
     validateUploadBook,
     validateSearch,
     validateUpdateProfile,
-    updateBook
+    updateBook,
+    validateOrderId
 };
