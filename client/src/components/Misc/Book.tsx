@@ -36,8 +36,8 @@ function Book({ book, style, direction }: { book: BookType, style?: string, dire
         <div className={`flex ${direction} items-center gap-2`}>
             <div className={`${style} bg-white z-20 relative`}>
                 <img src={book.image} alt={book.title} className="w-full h-full"/>
-                { user &&
-                    <div onMouseLeave={() => dispatch(toggleAddToCart(false))} className="absolute flex flex-col text-white w-full h-full top-0 opacity-0 transition-all hover:opacity-100">
+                { user && direction === "flex-col" &&
+                    <div onMouseLeave={() => dispatch(toggleAddToCart(false))} className="absolute flex flex-col text-white w-full h-full top-0 opacity-0 p-2 transition-all hover:opacity-100">
                         <div className="justify-between text-sm flex transition-all [&>*]:rounded-full [&>*]:bg-black [&>*]:bg-opacity-50 [&>*]:p-2 [&>*]:h-full [&>*]:flex [&>*]:justify-center">
                             <button onClick={() => handleToggleFavorite(user?.id!, book)}>
                                 { checkFavorite(book) ? <BsStarFill className="text-yellow-400" /> : <BiStar /> }
