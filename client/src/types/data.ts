@@ -1,5 +1,5 @@
 export type User = {
-    id?: string;
+    id?: number;
     email: string;
     password: string;
     f_name?: string;
@@ -67,4 +67,10 @@ export type OrderType = {
     pendingTime?: string,
     deliveryDate?: string,
     payementMethod?: string,
+}
+
+export type FavoritesType = {
+    id?: number,
+    id_user: number,
+    id_book: number,
 }

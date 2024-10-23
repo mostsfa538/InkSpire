@@ -4,6 +4,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import UIReducer from '../UI/UI'
 import CartReducer from '../cart/cart'
 import OrderReducer from '../orders/orders'
+import FavoritesReducer from '../favorites/favorites'
 
 
 
@@ -12,6 +13,7 @@ export const store = configureStore({
         UI: UIReducer,
         cart: CartReducer,
         orders: OrderReducer,
+        favorites: FavoritesReducer,
         [api.reducerPath]: api.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
