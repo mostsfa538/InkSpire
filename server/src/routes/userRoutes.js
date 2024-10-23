@@ -57,7 +57,7 @@ router.delete(
 );
 
 router.post(
-    '/favorites/:userId/add',
+    '/:user_id/favorites/:book_id/add',
     checkSession,
     userValidator.validateUserId,
     favoriteValidator.validateCreateFavorite,
@@ -65,14 +65,14 @@ router.post(
 );
 
 router.get(
-    '/favorites/:userId',
+    '/:user_id/favorites',
     checkSession,
     userValidator.validateUserId,
     favoriteController.getFavoritesByUser
 );
 
 router.delete(
-    '/favorites/delete/:id',
+    '/:user_id/favorites/:id/delete',
     checkSession,
     favoriteValidator.validateID,
     favoriteController.deleteFavorite
