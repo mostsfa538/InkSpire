@@ -7,7 +7,7 @@ type UIState = {
     displayAddToCart: boolean;
     displayViewOrder: {
         display: boolean;
-        type: 'view' | 'add';
+        type: 'view' | 'add' | 'checkout';
     };
 }
 

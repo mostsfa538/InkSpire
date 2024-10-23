@@ -3,7 +3,7 @@ import { BiShoppingBag } from 'react-icons/bi'
 
 import { useDispatch, useSelector } from "react-redux"
 
-import { toggleCart, toggleViewOrder } from "../../../features/UI/UI";
+import { setOrderDisplayType, toggleCart, toggleViewOrder } from "../../../features/UI/UI";
 import { RootState } from "../../../features/app/store";
 import { Link } from "react-router-dom";
 
@@ -20,7 +20,7 @@ function Carts() {
                 <div className={`bg-white py-4 rounded-xl gap-4 ${!displayCarts ? 'w-0 px-0' : 'px-4 w-96 max-w-full'} text-nowrap overflow-hidden transition-all ease-in-out duration-300`}>
                     <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-gray-300 underline">Carts</h3>
-                        <Link to="/orders" className="text-xs font-bold text-white text-primary bg-black p-1">Checkout</Link>
+                        <Link to="/checkout" onClick={() => dispatch(setOrderDisplayType('checkout'))} className="text-xs font-bold text-white text-primary bg-black p-1">Checkout</Link>
                     </div>
                         {
                             carts.length === 0 ? <p className="text-center text-xs">No carts available</p> :
@@ -34,7 +34,10 @@ function Carts() {
                                     }
                                     <div className="flex justify-center text-xs">
                                         <button
-                                        onClick={() => dispatch(toggleViewOrder(true))} 
+                                        onClick={() => {
+                                            dispatch(toggleViewOrder(true))
+                                            dispatch(setOrderDisplayType('view'))
+                                        }}
                                         className="p-2 bg-black font-bold text-white">
                                             View Ordered Carts
                                         </button>

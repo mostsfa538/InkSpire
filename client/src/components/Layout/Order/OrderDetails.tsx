@@ -68,43 +68,41 @@ function OrderDetails({ order }: { order: OrderType }) {
 
     return (
         <>
-            <div className="flex gap-2 cursor-pointer justify-between p-2 text-nowrap transition-all hover:bg-gray-200" onClick={() => setDisplayOrder(!displayOrder)}>
-                <span className="w-full h-full my-auto">
-                    Order Id: #<span className="text-info-text">{order.id}</span>
-                </span>
-            <div className="flex gap-1 items-center">
-                <span className="p-1 bg-info-background">
-                    {displayPaymentMethod(order.payementMethod!)}
-                </span>
-                <span>Total: {' '}
-                    <span className="font-extrabold text-success-text">
-                        {order.total_price}$
+            <div className="flex gap-2 hover:bg-gray-200 p-2">
+                <div className="flex w-full h-full my-auto gap-2 cursor-pointer items-center justify-between text-nowrap transition-all rounded-md max-md:text-sm" onClick={() => setDisplayOrder(!displayOrder)}>
+                    <span className="w-full h-full my-auto">
+                        Order Id: #<span className="text-info-text">{order.id}</span>
                     </span>
-                </span>
+                    <div className="flex gap-1 items-center">
+                        <span className="p-1 bg-info-background">
+                            {displayPaymentMethod(order.payementMethod!)}
+                        </span>
+                        <span>Total: {' '}
+                            <span className="font-extrabold text-success-text">
+                                {order.total_price}$
+                            </span>
+                        </span>
+                    </div>
+                </div>
+                <div className="flex gap-1">
+                        { displayViewOrder.type === 'add' && (order.order_status === 'delivering' || order.order_status === 'completed') ?
+                            <>
+                                <button onClick={() =>  handleAddCartToOrder(order.user_id!, cartToOrder!.id, order.id!)}
+                                className={`px-4 py-1 rounded-md bg-success-background text-success-text font-light disabled:opacity-50`}>
+                                    Add
+                                </button>
+                                <button onClick={() => handleDeleteOrder(order.user_id!, order.id!)}
+                                className="rounded-full p-2 bg-error-background text-error-text disabled:opacity-50">
+                                    <TbTrash />
+                                </button>
+                            </> : displayViewOrder.type === 'checkout' &&
+                            (
+                                <button className="bg-black text-white p-2 text-xs rounded-md font-semibold">Checkout</button>
+                            )
+                        }
+                </div>
             </div>
-            <div className="flex gap-1">
-                {displayViewOrder.type === 'add' &&
-                    <button 
-                    disabled={
-                        order.order_status === 'delivering' || order.order_status === 'completed' ||
-                        order.carts?.map(cart => cart.id).includes(cartToOrder!.id)
-                    }
-                    onClick={() =>  handleAddCartToOrder(order.user_id!, cartToOrder!.id, order.id!)}
-                    className={`px-4 py-1 rounded-md bg-success-background text-success-text font-light disabled:opacity-50`}>
-                        Add
-                    </button>
-                }
-                <button 
-                    disabled={
-                        order.order_status === 'delivering' || order.order_status === 'completed'
-                    }
-                onClick={() => handleDeleteOrder(order.user_id!, order.id!)}
-                className="rounded-full p-2 bg-error-background text-error-text disabled:opacity-50">
-                    <TbTrash />
-                </button>
-            </div>
-            </div>
-            <div className={`flex flex-col text-sm ${!displayOrder ? 'h-0 py-0' : 'h-96 py-2'} bg-gray-200 px-2 max-h-fit overflow-hidden gap-1 transition-all ease-in-out duration-500 [&>*>span]:underline max-lg:text-xs`}>
+            <div className={`flex flex-col text-sm ${!displayOrder ? 'h-0 py-0' : 'h-96 py-2'} bg-gray-200 rounded-md px-2 max-h-fit overflow-hidden gap-1 transition-all ease-in-out duration-500 [&>*>span]:underline max-lg:text-xs`}>
                 <span>
                     <span>Order Status:</span>
                     {` ${order.order_status}`}
