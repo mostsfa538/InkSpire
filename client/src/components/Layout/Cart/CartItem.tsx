@@ -11,22 +11,22 @@ function CartItem({ item, showControls = true, orderId }: { item: CartItemType, 
     const { user } = useAuth();
     const dispatch = useDispatch<AppDispatch>();
 
-    const handleIncrementItem = async (userId: string, cartId: number, itemId: number) => {
+    const handleIncrementItem = async (userId: number, cartId: number, itemId: number) => {
         if (orderId) {
-            dispatch(updateOrderItemQuantity({ userId: parseInt(userId), orderId, cartId, itemId, quantity: item.quantity + 1 }));
+            dispatch(updateOrderItemQuantity({ userId: userId, orderId, cartId, itemId, quantity: item.quantity + 1 }));
         } else {
             dispatch(updateCartItemQuantity({ userId, cartId, itemId, quantity: item.quantity + 1 }));
         }
 
     }
 
-    const handleDecrementItem = async (userId: string, cartId: number, itemId: number) => {
+    const handleDecrementItem = async (userId: number, cartId: number, itemId: number) => {
         if (orderId) {
             if (item.quantity === 1) {
-                dispatch(deleteItemFromOrder({ userId: parseInt(userId), orderId, cartId, itemId }));
+                dispatch(deleteItemFromOrder({ userId: userId, orderId, cartId, itemId }));
                 return;
             }
-            dispatch(updateOrderItemQuantity({ userId: parseInt(userId), orderId, cartId, itemId, quantity: item.quantity - 1 }));
+            dispatch(updateOrderItemQuantity({ userId: userId, orderId, cartId, itemId, quantity: item.quantity - 1 }));
         } else {
             if (item.quantity === 1) {
                 dispatch(deleteCartItem({ userId, cartId, itemId }));
@@ -37,9 +37,9 @@ function CartItem({ item, showControls = true, orderId }: { item: CartItemType, 
         
     }
 
-    const handleDeleteItem = async (userId: string, cartId: number, itemId: number) => {
+    const handleDeleteItem = async (userId: number, cartId: number, itemId: number) => {
         if (orderId) {
-            dispatch(deleteItemFromOrder({ userId: parseInt(userId), orderId, cartId, itemId }));
+            dispatch(deleteItemFromOrder({ userId: userId, orderId, cartId, itemId }));
         } else {
             dispatch(deleteCartItem({ userId, cartId, itemId }));
         }

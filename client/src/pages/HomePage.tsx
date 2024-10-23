@@ -1,19 +1,34 @@
 import Quote from "../components/Misc/Quote"
 import Search from "../components/UI/Search"
+import useAuth from "../hooks/useAuth"
 
 function HomePage() {
+    const { user } = useAuth()
     return (
         <section className="h-full flex flex-col justify-center items-center text-black">
             <div className="flex-1 w-full flex justify-center items-center">
-                <h1 className="text-4xl font-bold max-md:text-2xl">
-                    <span className="animate-fadeIn opacity-0">Find</span>{" "}
-                    <span className="animate-fadeInDelay opacity-0">Your</span>{" "}
-                    <span className="animate-blurIn opacity-0">
-                        <span className="bg-flower-pattern transition-all font-extrabold bg-[length:200%_auto] animate-animateBackground bg-clip-text text-transparent">
-                            In<span className="text-black italic">k</span>spiration
-                        </span>
-                    </span>
-                </h1>
+                <div className="text-4xl font-bold max-md:text-2xl">
+                    { !user ?
+                        <>
+                            <span className="animate-fadeIn opacity-0">Find</span>{" "}
+                            <span className="animate-fadeInDelay opacity-0">Your</span>{" "}
+                            <span className="animate-blurIn opacity-0">
+                                <span className="bg-flower-pattern transition-all font-extrabold bg-[length:200%_auto] animate-animateBackground bg-clip-text text-transparent">
+                                    In<span className="text-black italic">k</span>spiration
+                                </span>
+                            </span>
+                        </> : 
+                        (
+                            <h1>
+                                Welcome back, {' '}
+                                <span className="relative text-secondary">
+                                    {user.f_name ? user.f_name : `User ${user.id}`}{' '}
+                                    <span className="absolute bg-tertiary h-1 top-full left-0 animate-widthToFull"></span>
+                                </span> 🎉{' '}
+                            </h1>
+                        )
+                    }
+                </div>
             </div>
             <div className="flex-1 w-full flex flex-col justify-between items-center max-md:px-4">    
                 <Quote />

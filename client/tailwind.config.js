@@ -45,6 +45,10 @@ export default {
                     "0%": { filter: "blur(10px)", opacity: 1 },
                     "100%": { filter: "blur(0px)", opacity: 1 },
                 },
+                widthToFull: {
+                    "0%": { width: "0%" },
+                    "100%": { width: "100%" },
+                },
             },
             animation: {
                 fadeInOut: "fadeInOut 5.5s ease-in-out forwards",
@@ -52,6 +56,7 @@ export default {
                 blurIn: "blurIn 1s 2s ease-in-out forwards",
                 fadeIn: "fadeIn 1s ease-in-out forwards",
                 fadeInDelay: "fadeIn 1s 1s ease-in-out forwards",
+                widthToFull: "widthToFull .5s ease-in-out forwards",
             },
             backgroundImage: {
                 'sign-in-hero': "url('/signin-hero.jpg')",

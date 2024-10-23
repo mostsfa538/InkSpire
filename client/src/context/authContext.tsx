@@ -12,6 +12,7 @@ import { AppDispatch } from "../features/app/store";
 import { setCarts } from "../features/cart/cart";
 import { setOrders } from "../features/orders/orders";
 import { setFavorites } from "../features/favorites/favorites";
+import { setInitialSignUp } from "../features/UI/UI";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -60,6 +61,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const response = await axios.post(`${SERVER_URL}/signup`, user, { withCredentials: true });
 
             setUser(response.data.user);
+            dispatch(setInitialSignUp(true));
             dispatch(setCarts(response.data.user.carts));
             dispatch(setOrders(response.data.user.orders));
             dispatch(setFavorites(response.data.user.Favorites));
@@ -88,7 +90,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, signup, error }}>
+        <AuthContext.Provider value={{ user, login, logout, signup, setUser, error }}>
             {children}
         </AuthContext.Provider>
     );

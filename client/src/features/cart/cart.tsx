@@ -16,42 +16,42 @@ const initialState = {
 } as CartState;
 
 
-export const getCartById = createAsyncThunk('cart/getCartById', async ({userId, cartId}: { userId: string, cartId: number }) => {
+export const getCartById = createAsyncThunk('cart/getCartById', async ({userId, cartId}: { userId: number, cartId: number }) => {
     const response = await axios.get(`${baseURL}/${userId}/carts/${cartId}`, { withCredentials: true });
     return response.data;
 });
 
-export const deleteCartItem = createAsyncThunk('cart/deleteCartItem', async ({userId, cartId, itemId}: { userId: string, cartId: number, itemId: number }) => {
+export const deleteCartItem = createAsyncThunk('cart/deleteCartItem', async ({userId, cartId, itemId}: { userId: number, cartId: number, itemId: number }) => {
     const response = await axios.delete(`${baseURL}/${userId}/cart/${cartId}/cartItem/${itemId}`, { withCredentials: true });
     return response.data.carts;
 });
 
-export const addCartItem = createAsyncThunk('cart/addCartItem', async ({userId, cartId, bookId, quantity}: { userId: string, cartId: number, bookId: number, quantity: number }) => {
+export const addCartItem = createAsyncThunk('cart/addCartItem', async ({userId, cartId, bookId, quantity}: { userId: number, cartId: number, bookId: number, quantity: number }) => {
     const response = await axios.post(`${baseURL}/${userId}/carts/${cartId}/book/${bookId}/${quantity}`, {}, { withCredentials: true });
     return response.data.carts;
 });
 
-export const updateCartItemQuantity = createAsyncThunk('cart/updateCartItemQuantity', async ({userId, cartId, itemId, quantity}: { userId: string, cartId: number, itemId: number, quantity: number }) => {
+export const updateCartItemQuantity = createAsyncThunk('cart/updateCartItemQuantity', async ({userId, cartId, itemId, quantity}: { userId: number, cartId: number, itemId: number, quantity: number }) => {
     const response = await axios.put(`${baseURL}/${userId}/cart/${cartId}/cartItem/${itemId}/${quantity}`, {}, { withCredentials: true });
     return response.data.carts;
 });
 
-export const addNewCart = createAsyncThunk('cart/addNewCart', async ({userId, cartName}: { userId: string, cartName: string }) => {
+export const addNewCart = createAsyncThunk('cart/addNewCart', async ({userId, cartName}: { userId: number, cartName: string }) => {
     const response = await axios.post(`${baseURL}/${userId}/carts/${cartName}/add`, {}, { withCredentials: true });
     return response.data.carts;
 });
 
-export const updateCartName = createAsyncThunk('cart/updateCartName', async ({userId, cartId, cartName}: { userId: string, cartId: number, cartName: string }) => {
+export const updateCartName = createAsyncThunk('cart/updateCartName', async ({userId, cartId, cartName}: { userId: number, cartId: number, cartName: string }) => {
     const response = await axios.put(`${baseURL}/${userId}/carts/${cartId}/name/${cartName}`, {}, { withCredentials: true });
     return response.data.carts;
 });
 
-export const emptyCart = createAsyncThunk('cart/emptyCart', async ({userId, cartId}: { userId: string, cartId: number }) => {
+export const emptyCart = createAsyncThunk('cart/emptyCart', async ({userId, cartId}: { userId: number, cartId: number }) => {
     const response = await axios.put(`${baseURL}/${userId}/cart/${cartId}/empty`, {}, { withCredentials: true });
     return response.data.carts;
 });
 
-export const deleteCart = createAsyncThunk('cart/deleteCart', async ({userId, cartId}: { userId: string, cartId: number }) => {
+export const deleteCart = createAsyncThunk('cart/deleteCart', async ({userId, cartId}: { userId: number, cartId: number }) => {
     const response = await axios.delete(`${baseURL}/${userId}/carts/${cartId}`, { withCredentials: true });
     return response.data.carts;
 });

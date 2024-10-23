@@ -9,6 +9,7 @@ type UIState = {
         display: boolean;
         type: 'view' | 'add' | 'checkout';
     };
+    initialSignUp: boolean;
 }
 
 export const UISlice = createSlice({
@@ -22,6 +23,7 @@ export const UISlice = createSlice({
             display: false,
             type: 'view'
         },
+        initialSignUp: false
     } as UIState,
     reducers: {
         toggleSideMenu: (state) => {
@@ -47,6 +49,9 @@ export const UISlice = createSlice({
         },
         setOrderDisplayType: (state, action) => {
             state.displayViewOrder.type = action.payload
+        },
+        setInitialSignUp: (state, action) => {
+            state.initialSignUp = action.payload
         }
     },
 })
@@ -57,7 +62,8 @@ export const {
     toggleCartItems, 
     toggleAddToCart, 
     toggleViewOrder,
-    setOrderDisplayType
+    setOrderDisplayType,
+    setInitialSignUp
 } = UISlice.actions
 
 export default UISlice.reducer

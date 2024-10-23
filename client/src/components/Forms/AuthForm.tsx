@@ -22,7 +22,6 @@ function AuthForm({ type }: AuthFormProps) {
 
     const title = type === "signup" ? "Sign Up" : "Welcome Back";
     const action = type === "signup" ? signup : login;
-
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -53,9 +52,9 @@ function AuthForm({ type }: AuthFormProps) {
                                 <Input type="password" label="Confirm Password" defaultValue={confirmPassword} onChange={setConfirmPassword} />
                             )
                         }
-                        <Button text={type === "signup" ? "Sign Up" : "Sign In"} onClick={handleSubmit} disabled={
-                            !email || !password || (type === "signup" && !confirmPassword)
-                        } />
+                        <Button text={type === "signup" ? "Sign Up" : "Sign In"} onClick={handleSubmit}
+                        disabled={ !email || !password || (type === "signup" && !confirmPassword)} 
+                        />
                     </div>
                     <span className="flex-1">
                         {error && <Alert type="error" message={error.msg} />}

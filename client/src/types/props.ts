@@ -6,6 +6,7 @@ export type AuthContextType = {
     login: (user: { email: string; password: string; }) => void;
     signup: (user: { email: string; password: string; }) => void;
     logout: () => void;
+    setUser: (user: User | null) => void;
     error: { status: number, msg: string } | null;
 };
 
@@ -17,7 +18,7 @@ export type InputComponentProps = {
     onChange: (value: string) => void, 
     label?: string, 
     type: string, 
-    defaultValue: string 
+    defaultValue?: string 
     styles?: string
     placeHolder?: string
 }
