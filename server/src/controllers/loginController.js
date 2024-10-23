@@ -1,14 +1,12 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient;
 const bcrypt = require("bcrypt");
-const { use } = require('bcrypt/promises');
+const utils = require("../utils/utils");
 
 class loginContoller {
     static async getLogin(req, res) {
-        res.status(200).json({ user: {
-            ...req.session.user,
-            password: ""
-        }})
+        const user = await utils.getUpdatedUser(req.session.user.id)
+        res.status(200).json({ user: user })
     }
     static async postLogin (req, res) {
         const {email, password} = req.body

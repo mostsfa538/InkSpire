@@ -134,11 +134,11 @@ class userController {
 
     static async updateProfile(req, res) {
         const { f_name, l_name, image } = req.body;
-        const userId = req.params.user_id;
+        const userId = parseInt(req.params.user_id);
         try {
             const user = await prisma.user.update({
                 where: {
-                    id: parseInt(userId)
+                    id: userId
                 },
                 data: {
                     f_name: f_name,
