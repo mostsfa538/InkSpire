@@ -81,11 +81,12 @@
 
 ### Add to Favorites
 
-- **URL**: `/favorites/:userId/add`
+- **URL**: `/:user_id/favorites/:book_id/add`
 - **Method**: `POST`
 - **Description**: Adds a book to a user's favorite list.
 - **Request Params**:
-  - `userId` (path): ID of the user.
+  - `user_id` (path): ID of the user.
+  - `book_id` (path): ID of the book.
 
 ### Get All Favorites
 
@@ -97,11 +98,12 @@
 
 ### Remove from Favorites
 
-- **URL**: `/favorites/delete/:id`
+- **URL**: `/:user_id/favorites/:id/delete`
 - **Method**: `DELETE`
 - **Description**: Removes a book from favorites by its ID.
 - **Request Params**:
   - `id` (path): ID of the favorite record.
+  - `user_id` (path): ID of the user.
 
 ## User Search & Upload
 
