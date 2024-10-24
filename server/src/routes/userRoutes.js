@@ -120,20 +120,20 @@ router.post(
 );
 
 router.post(
-    '/:userId/:orderId/create-order',
+    '/:user_id/order/:order_id/checkout',
     checkSession,
     userValidator.validateCartId,
     userValidator.validateUserId,
     payingController.createOrder);
 
 router.get(
-    '/complete-order',
+    '/:user_id/order/:order_id/complete',
     checkSession,
     payingController.completeOrder
 );
 
 router.get(
-    '/cancel-order',
+    '/:user_id/order/:order_id/cancel',
     checkSession,
     payingController.cancelOrder
 );

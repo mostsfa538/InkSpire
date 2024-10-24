@@ -21,7 +21,7 @@ async function getUpdatedUser(user_id) {
             where: {id: user_id},
             include: {
                 carts: {include: {items: {include: {book: true}}}},
-                orders: true,
+                orders: {include: {carts: {include: {items: {include: {book: true}}}}}},
                 reviews: true,
                 Favorites: true,
                 OnHolds: true

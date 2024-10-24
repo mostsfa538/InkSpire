@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const axios = require('axios');
+const utils = require('../utils/utils.js');
 
 const prisma = new PrismaClient();
 
@@ -19,12 +20,13 @@ async function getAccessToken() {
 
 exports.createOrder = async (req, res) => {
     const accessToken = await getAccessToken();
-    const orderId = req.params.orderId;
+    const orderId = parseInt(req.params.order_id);
+    const userId = parseInt(req.params.user_id);
 
     try {
         const order = await prisma.order.findFirst({
             where: {
-                id: parseInt(orderId),
+                id: orderId,
             },
             include: {
                 carts: {
@@ -47,10 +49,14 @@ exports.createOrder = async (req, res) => {
             name: book.title,
             unit_amount: {
                 currency_code: 'USD',
-                value: book.price.toFixed(2),
+                value: parseFloat(book.price).toFixed(2),
             },
             quantity: quantity.toString(),
         })));
+
+        if (allItems.length === 0) {
+            return res.status(400).json({ error: 'Order is empty' });
+        }
 
         const response = await axios({
             method: 'post',
@@ -66,19 +72,19 @@ exports.createOrder = async (req, res) => {
                         items: allItems,
                         amount: {
                             currency_code: 'USD',
-                            value: order.total_price.toFixed(2),
+                            value: parseFloat(order.total_price).toFixed(2),
                             breakdown: {
                                 item_total: {
                                     currency_code: 'USD',
-                                    value: order.total_price.toFixed(2),
+                                    value: parseFloat(order.total_price).toFixed(2),
                                 },
                             },
                         },
                     },
                 ],
                 application_context: {
-                    return_url: `${process.env.BASE_URL}/api/user/complete-order`,
-                    cancel_url: `${process.env.BASE_URL}/api/user/cancel-order`,
+                    return_url: `${process.env.BASE_URL}/api/user/${userId}/order/${orderId}/complete`,
+                    cancel_url: `${process.env.BASE_URL}/api/user/${userId}/order/${orderId}/cancel`,
                     shipping_preference: "NO_SHIPPING",
                     user_action: "PAY_NOW",
                     brand_name: "InkSpire",
@@ -86,7 +92,14 @@ exports.createOrder = async (req, res) => {
             },
         });
 
-        res.status(200).json(response.data.links.find((link) => link.rel === 'approve').href);
+        const approvalUrl = response.data.links.find(link => link.rel === 'approve').href;
+
+        res.status(200).json(
+            {
+                approvalUrl,
+                orderId: response.data.id,
+            }
+        );
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal server error' });
@@ -117,9 +130,23 @@ exports.captureOrder = async (orderId) => {
 
 exports.completeOrder = async (req, res) => {
     const orderId = req.query.token;
+    const userId = parseInt(req.params.user_id);
+    const dbOrderId = parseInt(req.params.order_id);
     try {
         const response = await exports.captureOrder(orderId);
-        res.status(200).json({ message: 'Order captured successfully' });
+        
+        // Update the order status in the db
+        await prisma.order.update({
+            where: {
+                id: dbOrderId,
+            },
+            data: {
+                order_status: 'delivering',
+            },
+        });
+
+        res.status(200).json({ message: 'Order completed successfully' });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to capture the order' });
