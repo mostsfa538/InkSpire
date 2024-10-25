@@ -8,6 +8,7 @@ const noAuth = require('./src/routes/noAuthRoutes.js');
 const session = require('./src/middlewares/session.js');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const scheduleOrderStateChange = require("./src/cronJobs/checkOrderPendingState.js")
 
 const userRoute = require('./src/routes/userRoutes.js');
@@ -20,6 +21,8 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session)

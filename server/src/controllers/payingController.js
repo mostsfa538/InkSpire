@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const axios = require('axios');
 const utils = require('../utils/utils.js');
+const path = require('path');
 
 const prisma = new PrismaClient();
 
@@ -97,7 +98,6 @@ exports.createOrder = async (req, res) => {
         res.status(200).json(
             {
                 approvalUrl,
-                orderId: response.data.id,
             }
         );
     } catch (error) {
@@ -130,8 +130,8 @@ exports.captureOrder = async (orderId) => {
 
 exports.completeOrder = async (req, res) => {
     const orderId = req.query.token;
-    const userId = parseInt(req.params.user_id);
     const dbOrderId = parseInt(req.params.order_id);
+    const clientUrl = process.env.CLIENT_URL;
     try {
         const response = await exports.captureOrder(orderId);
         
@@ -145,7 +145,40 @@ exports.completeOrder = async (req, res) => {
             },
         });
 
-        res.status(200).json({ message: 'Order completed successfully' });
+        res.status(200)
+        .send(
+            `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link rel="stylesheet" type="text/css" href="/css/style.css" />
+                <title>Order Canceled</title>
+            </head>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const timer = document.querySelector('.timer');
+                    let count = 3;
+                    setInterval(() => {
+                        count--;
+                        timer.textContent = count;
+                        if (count === 1) {
+                            window.location.href = "${clientUrl}";
+                        }
+                    }, 1000);
+                });
+            </script>
+            <body>
+                <div class="container">
+                    <h1>Order <span class="cancel">Canceled</span></h1>
+                    <p>Your order has been canceled.</p>
+                    <p>Redirecting you to the home page... <span class="timer">3</span></p>
+                </div>
+            </body>
+            </html>
+        `)
+
 
     } catch (error) {
         console.error(error);
@@ -153,6 +186,39 @@ exports.completeOrder = async (req, res) => {
     }
 }
 
-exports.cancelOrder = async (req, res) => {
-    res.status(200).json({ message: 'Order cancelled successfully' });
+exports.cancelOrder = async (_req, res) => {
+    const clientUrl = process.env.CLIENT_URL;
+    res.status(200)
+    .send(
+        `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" type="text/css" href="/css/style.css" />
+            <title>Order Canceled</title>
+        </head>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const timer = document.querySelector('.timer');
+                let count = 3;
+                setInterval(() => {
+                    count--;
+                    timer.textContent = count;
+                    if (count === 1) {
+                        window.location.href = "${clientUrl}";
+                    }
+                }, 1000);
+            });
+        </script>
+        <body>
+            <div class="container">
+                <h1>Order <span class="cancel">Canceled</span></h1>
+                <p>Your order has been canceled.</p>
+                <p>Redirecting you to the home page... <span class="timer">3</span></p>
+            </div>
+        </body>
+        </html>
+    `)
 }
