@@ -17,7 +17,7 @@ router.get(
 router.get('/:id',
     userValidator.validateBookId,
     handleValidationErrors,
-    userController.getBooks
+    userController.getBookById
 );
 
 module.exports = router;
