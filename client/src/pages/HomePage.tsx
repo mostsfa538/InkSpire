@@ -22,9 +22,9 @@ function HomePage() {
                             <h1>
                                 Welcome back, {' '}
                                 <span className="relative text-secondary">
-                                    {user.f_name ? user.f_name : `User ${user.id}`}{' '}
+                                    {user.f_name ? user.f_name : `User ${user.id}`}
                                     <span className="absolute bg-tertiary h-1 top-full left-0 animate-widthToFull"></span>
-                                </span> 🎉{' '}
+                                </span> 🎉
                             </h1>
                         )
                     }

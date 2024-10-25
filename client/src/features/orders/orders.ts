@@ -51,6 +51,11 @@ export const updateOrderItemQuantity = createAsyncThunk('orders/updateItemQuanti
     return response.data.orders;
 });
 
+export const checkoutOrder = createAsyncThunk('orders/checkoutOrder', async ({ userId, orderId }: { userId: number, orderId: number }) => {
+    const response = await axios.post(`${baseURL}/${userId}/order/${orderId}/checkout`, {}, { withCredentials: true });
+    return response.data;
+});
+
 const ordersSlice = createSlice({
     name: "orders",
     initialState,

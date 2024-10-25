@@ -20,7 +20,7 @@ function Carts() {
                 <div className={`bg-white py-4 rounded-xl gap-4 ${!displayCarts ? 'w-0 px-0' : 'px-4 w-96 max-w-full'} text-nowrap overflow-hidden transition-all ease-in-out duration-300`}>
                     <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-gray-300 underline">Carts</h3>
-                        <Link to="/checkout" onClick={() => dispatch(setOrderDisplayType('checkout'))} className="text-xs font-bold text-white text-primary bg-black p-1">Checkout</Link>
+                        <Link to="/checkout" reloadDocument className="text-xs font-bold text-white text-primary bg-black p-1">Checkout</Link>
                     </div>
                         {
                             carts.length === 0 ? <p className="text-center text-xs">No carts available</p> :

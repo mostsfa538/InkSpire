@@ -5,11 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { BsCash } from "react-icons/bs";
 import { PiPaypalLogoBold } from "react-icons/pi";
 import { RiVisaFill } from "react-icons/ri";
-import { addCartToOrder, deleteOrder, removeCartFromOrder } from "../../../features/orders/orders";
+import { addCartToOrder, checkoutOrder, deleteOrder, removeCartFromOrder } from "../../../features/orders/orders";
 import { CgClose } from "react-icons/cg";
 import { TbTrash } from "react-icons/tb";
 import Cart from "../Cart/Cart";
 import { updateCart } from "../../../features/cart/cart";
+import { orderBackground, orderStatusText } from "../../../utils/styling";
 
 function OrderDetails({ order }: { order: OrderType }) {
     const { displayViewOrder } = useSelector((state: RootState) => state.UI);
@@ -66,39 +67,60 @@ function OrderDetails({ order }: { order: OrderType }) {
         }
     }
 
+    const handleCheckout = async () => {
+        const response = await dispatch(checkoutOrder({ userId: order.user_id!, orderId: order.id! }));
+
+        if (response.payload) window.location.href = response.payload.approvalUrl
+        else alert('Failed to checkout')
+    }
+
     return (
-        <>
-            <div className="flex gap-2 hover:bg-gray-200 p-2">
-                <div className="flex w-full h-full my-auto gap-2 cursor-pointer items-center justify-between text-nowrap transition-all rounded-md max-md:text-sm" onClick={() => setDisplayOrder(!displayOrder)}>
-                    <span className="w-full h-full my-auto">
-                        Order Id: #<span className="text-info-text">{order.id}</span>
+        <div className="flex flex-col gap-2 overflow-hidden">
+            <div className={`relative flex gap-2 rounded-md transition-all ${orderBackground(order.order_status!)} border-2 hover:bg-gray-200 p-2`}>
+                <div className="flex w-full h-full my-auto gap-2 cursor-pointer items-center justify-between text-nowrap transition-all rounded-md max-md:text-xs" onClick={() => setDisplayOrder(!displayOrder)}>
+                    <span className="h-full my-auto">
+                        Order Id: <span className="text-black">#{order.id}</span>
                     </span>
-                    <div className="flex gap-1 items-center">
-                        <span className="p-1 bg-info-background">
-                            {displayPaymentMethod(order.payementMethod!)}
-                        </span>
-                        <span>Total: {' '}
-                            <span className="font-extrabold text-success-text">
-                                {order.total_price}$
+                    <span className={`absolute w-full h-3/5 overflow-hidden left-0 top-1/3 opacity-20 text-center text-5xl ${orderStatusText(order.order_status!).color} italic max-md:hidden`}>
+                        {orderStatusText(order.order_status!).text}
+                    </span>
+                    <div className="flex justify-end">
+                        <div className="flex gap-1 rounded-lg w-fit items-center bg-white p-1 text-black ">
+                            <span className="p-2 bg-info-background rounded-md">
+                                {displayPaymentMethod(order.payementMethod!)}
                             </span>
-                        </span>
+                            <span className="">Total: {' '}
+                                <span className="font-extrabold text-success-text">
+                                    {order.total_price}$
+                                </span>
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div className="flex gap-1">
-                        { displayViewOrder.type === 'add' && (order.order_status === 'delivering' || order.order_status === 'completed') ?
+                        { !(order.order_status === 'delivering' || order.order_status === 'completed') &&
                             <>
-                                <button onClick={() =>  handleAddCartToOrder(order.user_id!, cartToOrder!.id, order.id!)}
-                                className={`px-4 py-1 rounded-md bg-success-background text-success-text font-light disabled:opacity-50`}>
-                                    Add
-                                </button>
+                                { displayViewOrder.type === 'add' ?
+                                (
+                                    <button
+                                    disabled={order.carts!.find(cart => cart.id === cartToOrder?.id) ? true : false}
+                                    onClick={() =>  handleAddCartToOrder(order.user_id!, cartToOrder!.id, order.id!)}
+                                    className={`px-4 py-1 rounded-md bg-success-background text-success-text font-light disabled:opacity-50`}>
+                                        Add
+                                    </button>
+                                ): displayViewOrder.type === 'checkout' &&
+                                (
+                                    <button
+                                    disabled={order.carts!.length === 0}
+                                    onClick={handleCheckout}
+                                    className="bg-black text-white p-2 h-fit my-auto text-xs rounded-md font-semibold disabled:opacity-50">Checkout</button>
+                                )
+                                }
                                 <button onClick={() => handleDeleteOrder(order.user_id!, order.id!)}
-                                className="rounded-full p-2 bg-error-background text-error-text disabled:opacity-50">
+                                className="rounded-full p-2 w-fit h-fit my-auto bg-error-background text-error-text disabled:opacity-50">
                                     <TbTrash />
                                 </button>
-                            </> : displayViewOrder.type === 'checkout' &&
-                            (
-                                <button className="bg-black text-white p-2 text-xs rounded-md font-semibold">Checkout</button>
-                            )
+                            </>
                         }
                 </div>
             </div>
@@ -139,7 +161,7 @@ function OrderDetails({ order }: { order: OrderType }) {
                 </div>
             </div>
         </div>
-        </>
+        </div>
     )
 }
 

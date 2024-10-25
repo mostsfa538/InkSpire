@@ -3,6 +3,7 @@ import { User } from "./data";
 
 export type AuthContextType = {
     user: User | null;
+    loading: boolean;
     login: (user: { email: string; password: string; }) => void;
     signup: (user: { email: string; password: string; }) => void;
     logout: () => void;
