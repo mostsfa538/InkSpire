@@ -7,7 +7,7 @@ import OrderDetails from "../components/Layout/Order/OrderDetails"
 import { useEffect } from "react"
 import { setOrderDisplayType } from "../features/UI/UI"
 
-function OrdersRoute() {
+function Orders() {
     const { user, loading } = useAuth()
     const { orders } = useSelector((state: RootState) => state.orders)
     const dispatch = useDispatch<AppDispatch>()
@@ -36,4 +36,4 @@ function OrdersRoute() {
     )
 }
 
-export default OrdersRoute
+export default Orders

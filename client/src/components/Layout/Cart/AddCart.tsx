@@ -17,7 +17,7 @@ function AddCart({ book }: { book: BookType }) {
     
     const dispatch = useDispatch<AppDispatch>();
 
-    const handleAddNewCart = async (e: React.FormEvent, userId: string, cartName: string) => {
+    const handleAddNewCart = async (e: React.FormEvent, userId: number, cartName: string) => {
         e.preventDefault();
         const name = cartName === '' ? "New Cart" : cartName.trim();
         const res = await dispatch(addNewCart({ userId, cartName: name }))
@@ -27,7 +27,7 @@ function AddCart({ book }: { book: BookType }) {
         }
     }
 
-    const handleAddCartItem = async (userId: string, cartId: number, bookId: number, quantity: number) => {
+    const handleAddCartItem = async (userId: number, cartId: number, bookId: number, quantity: number) => {
         const cart = (await dispatch(getCartById({ userId, cartId }))).payload.cart as CartType;
         if (cart.order_id !== null) return;
         
@@ -58,7 +58,7 @@ function AddCart({ book }: { book: BookType }) {
                     ))}
                 </div>
             )}
-            {   displayNewCart &&
+            { displayNewCart &&
                 <form className="relative flex flex-1 items-center [&>*]:outline-none">
                     <input className="text-black bg-white bg-opacity-65 flex-1 text-sm py-1 px-4 rounded-full font-normal"
                     autoFocus
