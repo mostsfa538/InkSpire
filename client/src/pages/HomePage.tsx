@@ -22,7 +22,7 @@ function HomePage() {
                         (
                             <h1>
                                 Welcome back, {' '}
-                                <Link to="/profile" className="relative text-secondary transition-all hover:text-info-text">
+                                <Link reloadDocument to="/profile" className="relative text-secondary transition-all hover:text-info-text">
                                     {user.f_name ? user.f_name : `User ${user.id}`}
                                     <span className="absolute bg-tertiary h-1 top-full left-0 animate-widthToFull"></span>
                                 </Link> 🎉

@@ -64,28 +64,41 @@ function Profile() {
                 </form>
                 <div className="flex flex-col gap-2 bg-warning-background font-bold">
                     <h1 className="text-xl underline">Your Favorites:</h1>
-                    <div className="flex gap-2 flex-wrap max-md:text-sm">
-                        {user?.Favorites?.map((favorite, index) => (
-                            <div key={index}>
-                                <Link to={`/catalog/item/${favorite.book.id}`} className="p-2 bg-yellow-200 rounded-md transition-all hover:bg-gray-200">{ favorite.book.title }</Link>
+                    {
+                        user?.Favorites?.length === 0 ? <p>No favorites yet</p> :
+                        (
+                            <div className="flex gap-2 flex-wrap max-md:text-sm">
+                                {user?.Favorites?.map((favorite, index) => (
+                                    <div key={index}>
+                                        <Link to={`/catalog/item/${favorite.book.id}`} 
+                                        className="p-2 bg-yellow-200 rounded-md transition-all hover:bg-gray-200">
+                                            { favorite.book.title }
+                                        </Link>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        )
+                    }
                 </div>
                 <div className="flex flex-col gap-2 bg-info-background font-bold">
                     <h1 className="text-xl underline">Your Reviews:</h1>
-                    <div className="flex flex-col gap-2 flex-wrap max-md:text-sm">
-                        {user?.reviews?.map((review, index) => (
-                            <Link to={`/catalog/item/${review.book.id}`} key={index} className="w-full shadow-md bg-white p-2 rounded-lg transition-all hover:bg-gray-200">
-                                <div className="flex justify-between w-full">
-                                    <div className="hover:underline">{review.book.title}</div>
-                                    <span>{review.rating}/5</span>
-                                </div>
-                                <hr />
-                                <p className="p-2">{review.body}</p>
-                            </Link>
-                        ))}
-                    </div>
+                    {
+                        user?.reviews?.length === 0 ? <p>No reviews yet</p> :
+                        (
+                            <div className="flex flex-col gap-2 flex-wrap max-md:text-sm">
+                                {user?.reviews?.map((review, index) => (
+                                <Link to={`/catalog/item/${review.book.id}`} key={index} className="w-full shadow-md bg-white p-2 rounded-lg transition-all hover:bg-gray-200">
+                                    <div className="flex justify-between w-full">
+                                       <div className="hover:underline">{review.book.title}</div>
+                                        <span>{review.rating}/5</span>
+                                    </div>
+                                    <hr />
+                                    <p className="p-2">{review.body}</p>
+                                </Link>
+                            ))}
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </div>
