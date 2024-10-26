@@ -42,7 +42,7 @@ class bookController {
                     image: image,
                     price: price,
                     category: category,
-                    quantity: quantity
+                    available: 10
                 }
             });
             if (!book) {
@@ -50,6 +50,7 @@ class bookController {
             }
             res.status(200).json({ message: 'Book created successfully' });
         } catch (err) {
+            console.log(err);
             res.status(500).json({ message: 'An error occurred during book creation' });
         }
     }
@@ -91,7 +92,7 @@ class bookController {
         const image = req.body.image;
         const price = req.body.price;
         const category = req.body.category;
-        const quantity = req.body.quantity;
+        const available = req.body.available;
         try {
             const book = await prisma.book.update({
                 where: {
@@ -104,7 +105,7 @@ class bookController {
                     image: image,
                     price: price,
                     category: category,
-                    quantity: quantity
+                    available: available
                 }
             });
             if (!book) {
@@ -140,7 +141,7 @@ class bookController {
                     status: 'pending'
                 }
             })
-            if (!requests)
+            if (!requests.length)
                 return res.status(401).json({ message: "No books found" });
             return res.status(200).json(requests);
         } catch (err) {
@@ -168,7 +169,8 @@ class bookController {
                     image: request.image,
                     price: request.price,
                     category: request.category,
-                    quantity: 1
+                    quantity: 1,
+                    available: request.available
                 }
             });
             if (book) {
@@ -244,6 +246,9 @@ class bookController {
             res.status(200).json({ message: 'Order updated successfully' });
         } catch (err) {
             console.log(err);
+            if (err.code === 'P2025') {
+                return res.status(404).json({ message: "Order not found" });
+            }
             res.status(500).json({ message: 'An error occurred during order update' });
         }
     }
