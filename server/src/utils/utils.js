@@ -22,7 +22,7 @@ async function getUpdatedUser(user_id) {
             include: {
                 carts: {include: {items: {include: {book: true}}}},
                 orders: {include: {carts: {include: {items: {include: {book: true}}}}}},
-                reviews: true,
+                reviews: {include: {user: true, book: true}},
                 Favorites: {include: {book: true}},
                 OnHolds: true
         }})

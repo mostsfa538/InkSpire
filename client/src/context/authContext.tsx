@@ -28,13 +28,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setLoading(true);
 
             const response = await axios.get(`${SERVER_URL}/login`, { withCredentials: true });
-            
+
             setUser(response.data.user);
             dispatch(setCarts(response.data.user.carts));
             dispatch(setOrders(response.data.user.orders));
             dispatch(setFavorites(response.data.user.Favorites));
-            
-            console.log(response.data.user.Favorites)
 
             setError(null);  // Clear any previous errors
         } catch (error) {

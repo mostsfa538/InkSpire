@@ -1,7 +1,7 @@
 const {check} = require('express-validator');
 
 const validateUserId = [
-    check('userId')
+    check('user_id')
         .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
 ];
 

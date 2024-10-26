@@ -9,7 +9,7 @@ export type User = {
     updatedAt?: string;
     carts: any[];
     orders: any[];
-    reviews: any[];
+    reviews: ReviewType[];
     onHold: any[];
     Favorites: FavoritesType[];
 };
@@ -73,5 +73,17 @@ export type FavoritesType = {
     id?: number,
     id_user: number,
     id_book: number,
+    book: BookType
+}
+
+export type ReviewType = {
+    id: number,
+    id_user: number,
+    id_book: number,
+    rating: number,
+    body: string,
+    createdAt: string,
+    updatedAt: string,
+    user: User,
     book: BookType
 }

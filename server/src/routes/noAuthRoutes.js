@@ -1,5 +1,6 @@
 const express = require('express');
 const userController = require('../controllers/userController');
+const reviewController = require('../controllers/reviewController');
 const userValidator = require('../validators/userValidator');
 const handleValidationErrors = require('../middlewares/validationErrorHandler');
 
@@ -18,6 +19,12 @@ router.get('/:id',
     userValidator.validateBookId,
     handleValidationErrors,
     userController.getBookById
+);
+
+router.get('/reviews/:id',
+    userValidator.validateBookId,
+    handleValidationErrors,
+    reviewController.getReviewsByBook
 );
 
 module.exports = router;

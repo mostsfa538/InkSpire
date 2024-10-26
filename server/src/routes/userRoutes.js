@@ -13,7 +13,7 @@ const payingController = require('../controllers/payingController');
 const router = express.Router();
 
 router.post(
-    'reviews/:userId/create',
+    '/reviews/:user_id/create',
     checkSession,
     userValidator.validateUserId,
     reviewValidator.validateCreateReview,
@@ -22,7 +22,7 @@ router.post(
 );
 
 router.get(
-    'reviews/:userId/book/:bookId',
+    '/reviews/:user_id/book/:bookId',
     checkSession,
     userValidator.validateUserId,
     reviewValidator.validateBookId,
@@ -31,7 +31,7 @@ router.get(
 );
 
 router.get(
-    'reviews/:userId',
+    '/reviews/:user_id',
     checkSession,
     userValidator.validateUserId,
     handleValidationErrors,
@@ -39,7 +39,7 @@ router.get(
 );
 
 router.put(
-    'reviews/:userId/update/:id',
+    '/reviews/:user_id/update/:id',
     checkSession,
     reviewValidator.validateUpdateReview,
     reviewValidator.validateReviewId,
@@ -48,7 +48,7 @@ router.put(
 );
 
 router.delete(
-    'reviews/:userId/delete/:id',
+    '/reviews/:user_id/delete/:id',
     checkSession,
     userValidator.validateUserId,
     reviewValidator.validateReviewId,
@@ -80,7 +80,7 @@ router.delete(
 
 
 router.post(
-    '/:userId/upload/',
+    '/:user_id/upload/',
     checkSession,
     userValidator.validateUserId,
     userValidator.validateUploadBook,
@@ -89,7 +89,7 @@ router.post(
 );
 
 router.put(
-    '/:userId/update/:id',
+    '/:user_id/update/:id',
     checkSession,
     userValidator.validateUserId,
     userValidator.updateBook,
@@ -98,14 +98,14 @@ router.put(
 );
 
 router.get(
-    '/:userId/status/',
+    '/:user_id/status/',
     checkSession,
     userValidator.validateUserId,
     userController.showBooksStatus
 );
 
 router.delete(
-    '/:userId/delete/:id',
+    '/:user_id/delete/:id',
     checkSession,
     userValidator.validateUserId,
     userValidator.validateBookId,

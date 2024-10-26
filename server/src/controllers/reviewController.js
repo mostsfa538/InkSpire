@@ -3,9 +3,9 @@ const prisma = new PrismaClient;
 
 class reviewController {
     static async createReview(req, res) {
-        const bookId = req.body.bookId;
-        const userId = req.body.userId;
-        const rating = req.body.rating;
+        const bookId = parseInt(req.body.bookId);
+        const userId = parseInt(req.body.userId);
+        const rating = parseInt(req.body.rating);
         const body = req.body.body;
         try {
             const review = await prisma.review.create({
@@ -23,17 +23,34 @@ class reviewController {
             if (!review) {
                 return res.status(401).json({ message: "Something went wrong" });
             }
-            res.status(200).json({ message: 'Review created successfully' });
+
+            const reviews = await prisma.review.findMany({
+                where: {
+                    book: {
+                        id: bookId
+                    },
+                },
+                include: {
+                    user: {
+                        select: {
+                            f_name: true,
+                            l_name: true
+                        }
+                    }
+                }
+            });
+
+            res.status(200).json({ message: 'Review created successfully', reviews: reviews });
         } catch (err) {
             res.status(500).json({ message: 'An error occurred during review creation' });
         }
     }
 
     static async updateReview(req, res) {
-        const id = req.params.id;
-        const bookId = req.body.bookId;
-        const userId = req.body.userId;
-        const rating = req.body.rating;
+        const id = parseInt(req.params.id);
+        const userId = parseInt(req.params.user_id);
+        const bookId = parseInt(req.body.bookId);
+        const rating = parseInt(req.body.rating);
         const body = req.body.body;
         try {
             const review = await prisma.review.update({
@@ -54,7 +71,24 @@ class reviewController {
             if (!review) {
                 return res.status(401).json({ message: "Something went wrong" });
             }
-            res.status(200).json({ message: 'Review updated successfully' });
+
+            const reviews = await prisma.review.findMany({
+                where: {
+                    book: {
+                        id: bookId
+                    },
+                },
+                include: {
+                    user: {
+                        select: {
+                            f_name: true,
+                            l_name: true
+                        }
+                    }
+                }
+            });
+
+            res.status(200).json({ message: 'Review updated successfully', reviews: reviews });
         } catch (err) {
             if (err.code === 'P2025') {
                 return res.status(404).json({ message: "Book not found" });
@@ -64,16 +98,18 @@ class reviewController {
     }
 
     static async deleteReview(req, res) {
-        const id = req.params.id;
+        const id = parseInt(req.params.id);
+
         try {
             const review = await prisma.review.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id,
                 }
             });
             if (!review) {
                 return res.status(401).json({ message: "Something went wrong" });
             }
+
             res.status(200).json({ message: 'Review deleted successfully' });
         }
         catch (err) {
@@ -85,12 +121,20 @@ class reviewController {
     }
     
     static async getReviewsByBook(req, res) {
-        const bookId = req.params.bookId;
+        const bookId = parseInt(req.params.id);
         try {
             const reviews = await prisma.review.findMany({
                 where: {
                     book: {
-                        id: parseInt(bookId)
+                        id: bookId
+                    }
+                },
+                include: {
+                    user: {
+                        select: {
+                            f_name: true,
+                            l_name: true
+                        }
                     }
                 }
             });
@@ -99,18 +143,24 @@ class reviewController {
             }
             res.status(200).json(reviews);
         } catch (err) {
-            console.error(err);
             res.status(500).json({ message: 'An error occurred during review retrieval' });
         }
     }
 
     static async getReviewsByUser(req, res) {
-        const userId = req.params.userId;
+        const userId = parseInt(req.params.userId);
         try {
             const reviews = await prisma.review.findMany({
                 where: {
                     user: {
-                        id: parseInt(userId)
+                        id: userId
+                    }
+                },
+                include: {
+                    book: {
+                        select: {
+                            title: true,
+                        }
                     }
                 }
             });
