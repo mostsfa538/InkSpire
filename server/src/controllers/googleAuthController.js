@@ -21,13 +21,5 @@ class googelAuthController {
             });
         })(req, res, next);
     }
-    // static async logout(req, res, next) {
-    //     req.logout(async function(err) {
-    //         if (err) { return next(err); }
-    //         await req.session.destroy()
-    //         res.clearCookie('sessionCookie')
-    //         return res.status(200).json({"message": "loged out successfully"})
-    //     });
-    // }
 }
 module.exports = googelAuthController

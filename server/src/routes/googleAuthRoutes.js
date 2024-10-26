@@ -9,8 +9,6 @@ router.get(
 )
 router.get(
     '/auth/google/redirect',
-    // passport.authenticate('google'),
     googelAuthController.redirectGoogle
 )
-// router.post('/logout', googelAuthController.logout);
 module.exports = router
