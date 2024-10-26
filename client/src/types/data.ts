@@ -11,7 +11,7 @@ export type User = {
     orders: any[];
     reviews: any[];
     onHold: any[];
-    favorites: any[];
+    Favorites: FavoritesType[];
 };
 
 export type AuthError = {
@@ -73,4 +73,5 @@ export type FavoritesType = {
     id?: number,
     id_user: number,
     id_book: number,
+    book: BookType
 }

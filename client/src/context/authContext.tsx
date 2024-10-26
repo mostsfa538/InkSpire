@@ -33,6 +33,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             dispatch(setCarts(response.data.user.carts));
             dispatch(setOrders(response.data.user.orders));
             dispatch(setFavorites(response.data.user.Favorites));
+            
+            console.log(response.data.user.Favorites)
 
             setError(null);  // Clear any previous errors
         } catch (error) {

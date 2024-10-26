@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom"
+import { Link, Navigate } from "react-router-dom"
 import Navbar from "../components/Layout/Navbar/Navbar"
 import useAuth from "../hooks/useAuth"
 import { useEffect, useState } from "react"
@@ -43,24 +43,36 @@ function Profile() {
     return (
         <div className="flex flex-col h-full">
             <Navbar />
-            <form className="flex flex-col gap-4 justify-center items-center">
-                <h1 className="text-2xl text-center mt-4">Profile</h1>
-                <img src={user?.image} alt="profile" className="w-40" />
-                <div className="flex flex-col gap-2 justify-center items-center [&>div]:flex [&>div]:gap-2 [&>div]:items-center [&>*>input]:outline-none [&>*>input]:text-lg [&>*>input]:font-bold [&>*>input]:bg-transparent">
-                    <div className="flex gap-2">
-                        <span>Name:</span>
-                        <input type="text" size={f_name?.length!} defaultValue={user?.f_name} onChange={(e) => setFName(e.target.value)} />
-                        <input type="text" size={l_name?.length!} defaultValue={user?.l_name} onChange={(e) => setLName(e.target.value)} />
+            <div className="w-1/2 mx-auto flex flex-col gap-4 [&>*]:p-4 [&>*]:rounded-md max-md:w-full max-md:p-2">
+                <form className="bg-white flex flex-col gap-4 justify-center items-center">
+                    <h1 className="text-2xl text-center mt-4">Update Profile</h1>
+                    <img src={user?.image} alt="profile" className="w-40" />
+                    <div className="flex flex-col gap-2 justify-center items-center [&>div]:flex [&>div]:gap-2 [&>div]:items-center [&>*>input]:outline-none [&>*>input]:text-lg [&>*>input]:font-bold [&>*>input]:bg-transparent">
+                        <div className="flex gap-2">
+                            <span>Name:</span>
+                            <input type="text" size={f_name?.length!} defaultValue={user?.f_name} onChange={(e) => setFName(e.target.value)} />
+                            <input type="text" size={l_name?.length!} defaultValue={user?.l_name} onChange={(e) => setLName(e.target.value)} />
+                        </div>
+                        <div className="flex gap-2">
+                            <span>Email:</span>
+                            <input type="email" size={email?.length! + 1} defaultValue={user?.email} onChange={(e) => setEmail(e.target.value)} />
+                        </div>
                     </div>
-                    <div className="flex gap-2">
-                        <span>Email:</span>
-                        <input type="email" size={email?.length! + 1} defaultValue={user?.email} onChange={(e) => setEmail(e.target.value)} />
+                    <button 
+                    disabled={f_name === user?.f_name && l_name === user?.l_name && email === user?.email && image === user?.image}
+                    onClick={handleSubmit} className="bg-black text-white py-2 px-6 rounded-md disabled:opacity-50">Update</button>
+                </form>
+                <div className="flex flex-col gap-2 bg-warning-background font-bold">
+                    <h1 className="text-xl underline">Your Favorites:</h1>
+                    <div className="flex gap-2 flex-wrap">
+                        {user?.Favorites?.map((favorite, index) => (
+                            <div key={index}>
+                                <Link to={`/catalog/item/${favorite.book.id}`} className="p-2 bg-yellow-200 rounded-md transition-all hover:bg-gray-200">{ favorite.book.title }</Link>
+                            </div>
+                        ))}
                     </div>
                 </div>
-                <button 
-                disabled={f_name === user?.f_name && l_name === user?.l_name && email === user?.email && image === user?.image}
-                onClick={handleSubmit} className="bg-black text-white py-2 px-6 rounded-md disabled:opacity-50">Update</button>
-            </form>
+            </div>
         </div>
     )
 }
