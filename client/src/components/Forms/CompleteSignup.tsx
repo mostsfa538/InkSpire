@@ -17,7 +17,7 @@ function CompleteSignup() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        const response = await dispatch(updateProfile({ userId: user!.id!.toString(), fName: firstName, lName: lastName, imageUrl: profileImage }))
+        const response = await dispatch(updateProfile({ userId: user!.id!.toString(), fName: firstName, lName: lastName, imageUrl: profileImage, email: user?.email! }))
         setUser(response.payload)
         dispatch(setInitialSignUp(false))
         return <Navigate to='/' />

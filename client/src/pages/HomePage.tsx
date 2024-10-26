@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import Quote from "../components/Misc/Quote"
 import Search from "../components/UI/Search"
 import useAuth from "../hooks/useAuth"
@@ -21,10 +22,10 @@ function HomePage() {
                         (
                             <h1>
                                 Welcome back, {' '}
-                                <span className="relative text-secondary">
+                                <Link to="/profile" className="relative text-secondary transition-all hover:text-info-text">
                                     {user.f_name ? user.f_name : `User ${user.id}`}
                                     <span className="absolute bg-tertiary h-1 top-full left-0 animate-widthToFull"></span>
-                                </span> 🎉
+                                </Link> 🎉
                             </h1>
                         )
                     }

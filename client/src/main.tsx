@@ -16,6 +16,7 @@ import './index.css'
 import Catalog from './routes/Catalog.tsx'
 import Orders from './routes/Orders.tsx'
 import Book from './routes/Book.tsx'
+import Profile from './routes/Profile.tsx'
 
 const router = createBrowserRouter([
     {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
         path: '/checkout',
         element: <Orders />,
     },
+    {
+        path: '/profile',
+        element: <Profile />,
+    }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

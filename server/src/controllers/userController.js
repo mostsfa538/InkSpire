@@ -151,7 +151,7 @@ class userController {
     }
 
     static async updateProfile(req, res) {
-        const { f_name, l_name, image } = req.body;
+        const { f_name, l_name, image, email } = req.body;
         const userId = parseInt(req.params.user_id);
         try {
             const user = await prisma.user.update({
@@ -162,6 +162,7 @@ class userController {
                     f_name: f_name,
                     l_name: l_name,
                     image: image,
+                    email: email
                 }
             });
             res.status(200).json({user: await utils.getUpdatedUser(userId)});

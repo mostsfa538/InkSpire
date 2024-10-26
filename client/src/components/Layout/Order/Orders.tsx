@@ -6,7 +6,7 @@ import AddOrder from "./AddOrder";
 import Order from "./Order";
 
 
-function Orders({ type = 'view' }: { type: 'view' | 'add' }) {
+function Orders({ type = 'view' }: { type: 'view' | 'add' | 'checkout' }) {
     const { orders, orderToView } = useSelector((state: RootState) => state.orders);
     const dispatch = useDispatch<AppDispatch>();
 

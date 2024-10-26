@@ -6,6 +6,7 @@ function NavLinks({ flexFlow = 'flex-row' }: { flexFlow?: string }) {
         <div className={`flex ${flexFlow} gap-x-4 gap-y-2`}>
             <CustomLink to='/' styles={sideMenuStyling}>Home</CustomLink>
             <CustomLink to='/catalog' styles={sideMenuStyling}>Catalog</CustomLink>
+            <CustomLink to='/profile' styles={sideMenuStyling}>Profile</CustomLink>
         </div>
     )
 }
