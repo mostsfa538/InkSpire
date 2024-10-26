@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient;
+const utils = require('../utils/utils');
 
 class userController {
     static async getBooks(req, res) {
@@ -9,6 +10,24 @@ class userController {
                 return res.status(404).json({ message: "No books found" });
             }
             res.status(200).json(books);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ message: 'An error occurred' });
+        }
+    }
+
+    static async getBookById(req, res) {
+        const bookId = req.params.id;
+        try {
+            const book = await prisma.book.findUnique({
+                where: {
+                    id: parseInt(bookId)
+                }
+            });
+            if (!book) {
+                return res.status(404).json({ message: "No book found" });
+            }
+            res.status(200).json(book);
         } catch (err) {
             console.log(err);
             res.status(500).json({ message: 'An error occurred' });
@@ -132,20 +151,21 @@ class userController {
     }
 
     static async updateProfile(req, res) {
-        const { f_name, l_name, image } = req.body;
-        const userId = req.params.userId;
+        const { f_name, l_name, image, email } = req.body;
+        const userId = parseInt(req.params.user_id);
         try {
             const user = await prisma.user.update({
                 where: {
-                    id: parseInt(userId)
+                    id: userId
                 },
                 data: {
                     f_name: f_name,
                     l_name: l_name,
                     image: image,
+                    email: email
                 }
             });
-            res.status(200).json(user);
+            res.status(200).json({user: await utils.getUpdatedUser(userId)});
         } catch (err) {
             console.error(err);
             res.status(500).json({ message: 'An error occurred during update' });

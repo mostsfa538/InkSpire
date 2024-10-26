@@ -4,7 +4,7 @@ import { CustomLinkProps } from "../../types/props"
 function CustomLink({ children, to, styles, button = false, onClick }: CustomLinkProps) {
     const defalutStyles = button ? 'py-2 px-6 rounded-md h-fit max-lg:p-1 max-md:text-xs' : 'text-tertiary font-bold hover:underline hover:text-secondary'
     return (
-        <Link className={`transition-all font-semibold ${defalutStyles} ${styles}`} to={to} onClick={onClick ? () => onClick() : undefined}>{children}</Link>
+        <Link reloadDocument className={`transition-all font-semibold ${defalutStyles} ${styles}`} to={to} onClick={onClick ? () => onClick() : undefined}>{children}</Link>
     )
 }
 

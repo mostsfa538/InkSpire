@@ -1,10 +1,11 @@
 const { PrismaClient } = require('@prisma/client');
+const utils = require("../utils/utils")
 const prisma = new PrismaClient;
 
 class favoriteController {
     static async createFavorite(req, res) {
-        const userId = req.body.userId;
-        const bookId = req.body.bookId;
+        const userId = parseInt(req.params.user_id);
+        const bookId = parseInt(req.params.book_id);
         try {
             const book = await prisma.favorite.findFirst({
                 where: {
@@ -28,7 +29,7 @@ class favoriteController {
             if (!favorite) {
                 return res.status(401).json({ message: "Something went wrong" });
             }
-            res.status(200).json({ message: 'Favorite created successfully' });
+            res.status(200).json({ message: 'Favorite created successfully', updatedUser: await utils.getUpdatedUser(userId) });
         } catch (err) {
             console.log(err);
             res.status(500).json({ message: 'An error occurred during favorite creation' });
@@ -36,7 +37,7 @@ class favoriteController {
     }
 
     static async getFavoritesByUser(req, res) {
-        const userId = req.body.userId;
+        const userId = parseInt(req.params.user_id);
     
         try {
             const favorites = await prisma.favorite.findMany({
@@ -60,18 +61,20 @@ class favoriteController {
     }
 
     static async deleteFavorite(req, res) {
-        const id = req.params.id;
+        const id = parseInt(req.params.id);
+        const userId = parseInt(req.params.user_id);
         try {
             const favorite = await prisma.favorite.delete({
                 where: {
-                    id: parseInt(id),
+                    id: id,
                 }
             });
             if (!favorite) {
                 return res.status(401).json({ message: "Something went wrong" });
             }
-            res.status(200).json({ message: 'Favorite deleted successfully' });
+            res.status(200).json({ message: 'Favorite deleted successfully', updatedUser: await utils.getUpdatedUser(userId) });
         } catch (err) {
+            console.log(err);
             if (err.code === 'P2025') {
                 return res.status(404).json({ message: "Favorite not found" });
             }

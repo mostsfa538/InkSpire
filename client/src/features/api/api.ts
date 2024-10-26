@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BookType, CartType } from "../../types/data";
+import { BookType, CartType, OrderType } from "../../types/data";
 import { SERVER_URL } from "../../constants/values";
 
 export const api = createApi({
@@ -9,9 +9,19 @@ export const api = createApi({
         getAllBooks: builder.query<BookType[], void>({
             query: () => ''
         }),
+        getBookById: builder.query<BookType, string>({
+            query: (id) => `/${id}`
+        }),
         getUserCarts: builder.query<{message: string, carts: CartType[]}, string>({
             query: (id) => ({
                 url: `/api/user/${id}/carts`,
+                method: 'GET',
+                credentials: 'include'
+            })
+        }),
+        getUserOrders: builder.query<{message: string, orders: OrderType[]}, string>({
+            query: (id) => ({
+                url: `/api/user/${id}/orders`,
                 method: 'GET',
                 credentials: 'include'
             })
@@ -28,6 +38,8 @@ export const api = createApi({
 
 export const { 
     useGetAllBooksQuery,
+    useGetBookByIdQuery,
     useGetUserCartsQuery,
+    useGetUserOrdersQuery,
     useSearchQuery
 } = api;

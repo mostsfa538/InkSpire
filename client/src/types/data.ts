@@ -1,5 +1,5 @@
 export type User = {
-    id?: string;
+    id?: number;
     email: string;
     password: string;
     f_name?: string;
@@ -9,9 +9,9 @@ export type User = {
     updatedAt?: string;
     carts: any[];
     orders: any[];
-    reviews: any[];
+    reviews: ReviewType[];
     onHold: any[];
-    favorites: any[];
+    Favorites: FavoritesType[];
 };
 
 export type AuthError = {
@@ -36,6 +36,8 @@ export type BookType = {
 export type CartType = {
     id: number,
     name: string,
+    order_id?: number | null,
+    Order: OrderType | null,
     createdAt: string,
     updatedAt: string,
     user_id: number,
@@ -50,4 +52,38 @@ export type CartItemType = {
     quantity: number,
     createdAt: string,
     updatedAt: string,
+}
+
+export type OrderType = {
+    id?: number,
+    user_id?: number,
+    carts?: CartType[],
+    total_price?: number,
+    createdAt?: string,
+    updatedAt?: string,
+    address?: string,
+    phone_number?: string,
+    order_status?: string,
+    pendingTime?: string,
+    deliveryDate?: string,
+    payementMethod?: string,
+}
+
+export type FavoritesType = {
+    id?: number,
+    id_user: number,
+    id_book: number,
+    book: BookType
+}
+
+export type ReviewType = {
+    id: number,
+    id_user: number,
+    id_book: number,
+    rating: number,
+    body: string,
+    createdAt: string,
+    updatedAt: string,
+    user: User,
+    book: BookType
 }

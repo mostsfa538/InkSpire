@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
 const adminRoute = require('./src/routes/adminRoutes.js');
 const loginRoute = require('./src/routes/loginRoutes.js');
@@ -20,7 +21,10 @@ dotenv.config()
 app.use(cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

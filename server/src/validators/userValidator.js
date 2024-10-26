@@ -1,7 +1,7 @@
 const {check} = require('express-validator');
 
 const validateUserId = [
-    check('userId')
+    check('user_id')
         .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
 ];
 
@@ -103,11 +103,22 @@ const validateBookId = [
         .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
 ]
 
+const validateCartId = [
+    check('id')
+        .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
+]
+
+const validateOrderId = [
+    check('orderId')
+        .isInt({ gt: 0 }).withMessage('ID must be a positive integer')
+]
 module.exports = {
     validateUserId,
     validateBookId,
+    validateCartId,
     validateUploadBook,
     validateSearch,
     validateUpdateProfile,
-    updateBook
+    updateBook,
+    validateOrderId
 };

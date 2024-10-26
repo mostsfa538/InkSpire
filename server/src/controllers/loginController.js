@@ -1,14 +1,12 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient;
 const bcrypt = require("bcrypt");
-const { use } = require('bcrypt/promises');
+const utils = require("../utils/utils");
 
 class loginContoller {
     static async getLogin(req, res) {
-        res.status(200).json({ user: {
-            ...req.session.user,
-            password: ""
-        }})
+        const user = await utils.getUpdatedUser(req.session.user.id)
+        res.status(200).json({ user: user })
     }
     static async postLogin (req, res) {
         const {email, password} = req.body
@@ -26,19 +24,15 @@ class loginContoller {
             if (!user) {
                 return res.status(404).send({"message": "no user found"})
             }
-            bcrypt.compare(password, user.password).then(valid => {
-                if (!valid) {
-                    return res.status(401).json({"message": "wrong email or password"})
-                }
-                req.session.user = user;
-                return res.status(200).json({
-                    "message": "loggedIn successfully",
-                    "user": {
-                        ...user,
-                        password: ""
-                    }
-                })
-            })
+
+            const valid = await bcrypt.compare(password, user.password)
+
+            if (!valid) return res.status(400).send({"message": "invalid password"})
+
+            req.session.user = user
+
+            return res.status(200).json({ user: await utils.getUpdatedUser(user.id) })
+
         } catch (error) {
             return res.status(500).json({"message": "server error"})
         }

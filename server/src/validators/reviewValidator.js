@@ -17,7 +17,7 @@ const validateCreateReview = [
     check('userId')
         .isInt({ gt: 0 }).withMessage('User ID must be a positive integer'),
     check('rating')
-        .isInt({ gt: 0, lt: 6 }).withMessage('Rating must be an integer between 1 and 5'),
+        .isInt({ gt: -1, lt: 6 }).withMessage('Rating must be an integer between 0 and 5'),
     check('body')
         .isString().withMessage('Body must be a string')
 ];

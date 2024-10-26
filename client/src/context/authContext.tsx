@@ -9,39 +9,50 @@ import { AuthContextType, AuthProviderProps } from "../types/props";
 import { handleAuthError } from "../utils/errors";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../features/app/store";
-import { api } from "../features/api/api";
 import { setCarts } from "../features/cart/cart";
+import { setOrders } from "../features/orders/orders";
+import { setFavorites } from "../features/favorites/favorites";
+import { setInitialSignUp } from "../features/UI/UI";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);  // Loading state for login/logout
     const [error, setError] = useState<AuthError | null>(null);  // Error state for login/logout
     const dispatch = useDispatch<AppDispatch>()
 
-    const setUserUpCart = async (userId: string) => {
-        const carts = await dispatch(api.endpoints.getUserCarts.initiate(userId))
-        dispatch(setCarts(carts.data?.carts))
-    }
 
     const checkAuth = async () => {
         try {
+            setLoading(true);
+
             const response = await axios.get(`${SERVER_URL}/login`, { withCredentials: true });
+
             setUser(response.data.user);
-            setUserUpCart(response.data.user.id);
+            dispatch(setCarts(response.data.user.carts));
+            dispatch(setOrders(response.data.user.orders));
+            dispatch(setFavorites(response.data.user.Favorites));
+
             setError(null);  // Clear any previous errors
         } catch (error) {
+ 
             const err = error as AxiosError;
             setUser(null);  // Clear user state
             setError(handleAuthError(err, 'checkauth'));  // Set error message
         }
+        setLoading(false);
     };
 
     const login = async (user: { email: string; password: string }) => {
         try {
             const response = await axios.post(`${SERVER_URL}/login`, user, { withCredentials: true });
-            setUserUpCart(response.data.user.id);
+
             setUser(response.data.user);
+            dispatch(setCarts(response.data.user.carts));
+            dispatch(setOrders(response.data.user.orders));
+            dispatch(setFavorites(response.data.user.Favorites));
+
             setError(null);  // Clear any previous errors
         } catch (error) {
             const err = error as AxiosError;
@@ -53,7 +64,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const signup = async (user: { email: string; password: string; }) => {
         try {
             const response = await axios.post(`${SERVER_URL}/signup`, user, { withCredentials: true });
+
             setUser(response.data.user);
+            dispatch(setInitialSignUp(true));
+            dispatch(setCarts(response.data.user.carts));
+            dispatch(setOrders(response.data.user.orders));
+            dispatch(setFavorites(response.data.user.Favorites));
+
             setError(null);  // Clear any previous errors
         } catch (error) {
             const err = error as AxiosError;
@@ -78,7 +95,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, signup, error }}>
+        <AuthContext.Provider value={{ user, loading, login, logout, signup, setUser, error }}>
             {children}
         </AuthContext.Provider>
     );

@@ -5,21 +5,44 @@ import { deleteCartItem, updateCartItemQuantity } from '../../../features/cart/c
 import useAuth from '../../../hooks/useAuth';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../features/app/store';
+import { deleteItemFromOrder, updateOrderItemQuantity } from '../../../features/orders/orders';
 
-function CartItem({ item }: { item: CartItemType }) {
+function CartItem({ item, showControls = true, orderId }: { item: CartItemType, showControls?: boolean, orderId?: number }) {
     const { user } = useAuth();
     const dispatch = useDispatch<AppDispatch>();
 
-    const handleIncrementItem = async (userId: string, cartId: number, itemId: number) => {
-        dispatch(updateCartItemQuantity({ userId, cartId, itemId, quantity: item.quantity + 1 }));
+    const handleIncrementItem = async (userId: number, cartId: number, itemId: number) => {
+        if (orderId) {
+            dispatch(updateOrderItemQuantity({ userId: userId, orderId, cartId, itemId, quantity: item.quantity + 1 }));
+        } else {
+            dispatch(updateCartItemQuantity({ userId, cartId, itemId, quantity: item.quantity + 1 }));
+        }
+
     }
 
-    const handleDecrementItem = async (userId: string, cartId: number, itemId: number) => {
-        dispatch(updateCartItemQuantity({ userId, cartId, itemId, quantity: item.quantity - 1 }));
+    const handleDecrementItem = async (userId: number, cartId: number, itemId: number) => {
+        if (orderId) {
+            if (item.quantity === 1) {
+                dispatch(deleteItemFromOrder({ userId: userId, orderId, cartId, itemId }));
+                return;
+            }
+            dispatch(updateOrderItemQuantity({ userId: userId, orderId, cartId, itemId, quantity: item.quantity - 1 }));
+        } else {
+            if (item.quantity === 1) {
+                dispatch(deleteCartItem({ userId, cartId, itemId }));
+                return;
+            }
+            dispatch(updateCartItemQuantity({ userId, cartId, itemId, quantity: item.quantity - 1 }));
+        }
+        
     }
 
-    const handleDeleteItem = async (userId: string, cartId: number, itemId: number) => {
-        dispatch(deleteCartItem({ userId, cartId, itemId }));
+    const handleDeleteItem = async (userId: number, cartId: number, itemId: number) => {
+        if (orderId) {
+            dispatch(deleteItemFromOrder({ userId: userId, orderId, cartId, itemId }));
+        } else {
+            dispatch(deleteCartItem({ userId, cartId, itemId }));
+        }
     }
 
     return (
@@ -28,17 +51,19 @@ function CartItem({ item }: { item: CartItemType }) {
                 <Book book={item.book} style='w-16' direction='flex-row' />
                 <p className="text-xs max-md:text-xs">Quantity: {item.quantity}</p>
             </div>
-            <div className='relative rounded-lg overflow-hidden h-full w-fit flex flex-col border border-white'>
-                <button className="bg-success-background text-success-text p-2 max-md:text-xs" onClick={() => handleIncrementItem(user?.id!, item.cart_id, item.id)}>
-                    <TbPlus />
-                </button>
-                <button className="bg-error-background text-error-text p-2 max-md:text-xs" onClick={() => handleDeleteItem(user?.id!, item.cart_id, item.id)}>
-                    <TbTrash />
-                </button>
-                <button className="bg-info-background text-info-text p-2 max-md:text-xs" onClick={() => handleDecrementItem(user?.id!, item.cart_id, item.id)}>
-                    <TbMinus />
-                </button>
-            </div>
+            { showControls &&
+                <div className='relative rounded-lg overflow-hidden h-full w-fit flex flex-col border border-white'>
+                    <button className="bg-success-background text-success-text p-2 max-md:text-xs" onClick={() => handleIncrementItem(user?.id!, item.cart_id, item.id)}>
+                        <TbPlus />
+                    </button>
+                    <button className="bg-error-background text-error-text p-2 max-md:text-xs" onClick={() => handleDeleteItem(user?.id!, item.cart_id, item.id)}>
+                        <TbTrash />
+                    </button>
+                    <button className="bg-info-background text-info-text p-2 max-md:text-xs" onClick={() => handleDecrementItem(user?.id!, item.cart_id, item.id)}>
+                        <TbMinus />
+                    </button>
+                </div>
+            }
         </div>
     )
 }
