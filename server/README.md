@@ -30,6 +30,20 @@
 - **Description**: login to user account
 - **Request Params**: None
 
+## googleAuth
+
+### get googleAuth consent screen
+- **URL**: `/auth/google`
+- **Method**: `GET`
+- **Description**: login to user account using google account credentials
+- **Request Params**: None
+
+### redirect from google
+- **URL**: `'/auth/google/redirect',`
+- **Method**: `GET`
+- **Description**: redirect from google consent screen after user agree or disagree
+- **Request Params**: None
+
 ## users api/user
 
 ## Reviews
