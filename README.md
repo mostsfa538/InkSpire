@@ -20,15 +20,19 @@
 - **Shopping Cart and Orders**: Easily add books to a shopping cart, review orders, and manage purchases.
 - **Payment Integration**: Streamlined and secure payment processing with PayPal.
 
-## API Documentation
-
-Explore the complete API documentation for InkSpire on [SwaggerHub](https://app.swaggerhub.com/apis-docs/MOSTAFA51MOKTAR/ink-spire_book_store_api/1.0.0).
-
 ## Use Case Architecture
 
 The following diagram illustrates the various roles and interactions within the **InkSpire** web application. Each actor's responsibilities and control over website features are outlined to enhance user experience and functionality.
 
 <img src="./useCase_Architecture.png" style="width:100%; margin:0;">
+
+## API Documentation
+
+Explore the complete API documentation for InkSpire on [SwaggerHub](https://app.swaggerhub.com/apis-docs/MOSTAFA51MOKTAR/ink-spire_book_store_api/1.0.0).
+
+## Run Product
+
+Follow steps to [run](client\README.md)
 
 ## Acknowledgements
 
