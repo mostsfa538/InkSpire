@@ -61,7 +61,7 @@ router.get(
 
 router.put('/update-order/:id',
     adminBookValidator.validateID,
-    // checkAdmin,
+    checkAdmin,
     adminBookValidator.validateUpdateOrder,
     handleValidationErrors,
     adminController.updateOrder
