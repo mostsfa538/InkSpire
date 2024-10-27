@@ -21,10 +21,6 @@ function Profile() {
     
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if (!f_name || !l_name || !email || !image) {
-            alert('Please fill all fields')
-            return
-        }
         const response = await dispatch(updateProfile({ userId: user!.id!.toString(), fName: f_name!, lName: l_name!, imageUrl: image!, email: email! }))
         setUser(response.payload)
     }

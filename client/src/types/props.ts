@@ -21,7 +21,8 @@ export type InputComponentProps = {
     type: string, 
     defaultValue?: string 
     styles?: string
-    placeHolder?: string
+    placeHolder?: string,
+    max?: number
 }
 
 export type AuthFormProps = {

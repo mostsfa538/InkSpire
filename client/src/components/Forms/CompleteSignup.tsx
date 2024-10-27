@@ -17,7 +17,13 @@ function CompleteSignup() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        const response = await dispatch(updateProfile({ userId: user!.id!.toString(), fName: firstName, lName: lastName, imageUrl: profileImage, email: user?.email! }))
+        const response = await dispatch(updateProfile({ 
+            userId: user!.id!.toString(), 
+            fName: firstName.length !== 0 ? firstName : `User ${user?.id}`,
+            lName: lastName.length !== 0 ? lastName : 'User Last Name',
+            imageUrl: profileImage.length !== 0 ? profileImage : 'https://placehold.co/20',
+            email: user?.email! 
+        }))
         setUser(response.payload)
         dispatch(setInitialSignUp(false))
         return <Navigate to='/' />
@@ -40,11 +46,11 @@ function CompleteSignup() {
                     className={`mx-auto rounded-full w-20 h-20 flex overflow-hidden`}>
                     </div>
                     <Input type="text" placeHolder="Profile Image (Url)" onChange={setProfileImage} />
-                    <Input type="text" placeHolder="First Name" onChange={setFirstName} />
-                    <Input type="text" placeHolder="Last Name" onChange={setLastName} />
+                    <Input type="text" placeHolder="First Name" onChange={setFirstName} max={10} />
+                    <Input type="text" placeHolder="Last Name" onChange={setLastName} max={10} />
                 </div>
                 <div className="flex justify-between p-2">
-                    <Link to='/' className="bg-info-background text-info-text py-2 px-6 rounded-md">Skip</Link>
+                    <Link to='/' onClick={handleSubmit} className="bg-info-background text-info-text py-2 px-6 rounded-md">Skip</Link>
                     <button onClick={handleSubmit} className="bg-black text-white py-2 px-6 rounded-md">Done</button>
                 </div>
             </form>

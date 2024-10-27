@@ -81,7 +81,7 @@ function OrderDetails({ order }: { order: OrderType }) {
                     <span className="h-full my-auto">
                         Order Id: <span className="text-black">#{order.id}</span>
                     </span>
-                    <span className={`absolute w-full h-3/5 overflow-hidden left-0 top-1/3 opacity-20 text-center text-5xl ${orderStatusText(order.order_status!).color} italic max-md:hidden`}>
+                    <span className={`absolute w-full h-3/5 overflow-hidden left-0 top-1/3 opacity-20 text-center text-5xl ${orderStatusText(order.order_status!).color} z-0 italic max-md:hidden`}>
                         {orderStatusText(order.order_status!).text}
                     </span>
                     <div className="flex justify-end">
@@ -97,7 +97,7 @@ function OrderDetails({ order }: { order: OrderType }) {
                         </div>
                     </div>
                 </div>
-                <div className="flex gap-1">
+                <div className="flex gap-1 z-10">
                         { !(order.order_status === 'delivering' || order.order_status === 'completed') &&
                             <>
                                 { displayViewOrder.type === 'add' ?
