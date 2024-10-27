@@ -32,7 +32,7 @@ Explore the complete API documentation for InkSpire on [SwaggerHub](https://app.
 
 ## Run Product
 
-Follow steps to [run](client\README.md)
+Follow steps to [run](client/README.md)
 
 ## Acknowledgements
 
