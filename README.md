@@ -24,10 +24,6 @@
 
 Explore the complete API documentation for InkSpire on [SwaggerHub](https://app.swaggerhub.com/apis-docs/MOSTAFA51MOKTAR/ink-spire_book_store_api/1.0.0).
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](./lICENSE) file for more details.
-
 ## Use Case Architecture
 
 The following diagram illustrates the various roles and interactions within the **InkSpire** web application. Each actor's responsibilities and control over website features are outlined to enhance user experience and functionality.
@@ -41,3 +37,7 @@ This project was developed as part of the ALX Software Engineering program's gra
 ## Authors
 
 © All Rights Reserved - Product's [Authors](./AUTHORS).
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
