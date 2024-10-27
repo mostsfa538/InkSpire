@@ -124,7 +124,7 @@ function Book() {
                 <div style={{ backgroundColor, color: getTextContrast(cardBackgroundColor) }} className="flex flex-col gap-2 rounded-xl">
                     <h2 className="text-2xl underline font-bold">Reviews:</h2>
                     {
-                        (user && update) && 
+                        user &&
                         (
                             <div className="flex flex-col gap-2 p-2 rounded-lg">
                                 <h3 className="font-bold">Add a review:</h3>
@@ -171,8 +171,8 @@ function Book() {
                                     { user?.id === review.id_user && 
                                         <>
                                             <button className="w-fit h-fit p-2 bg-info-background text-info-text rounded-full" onClick={() => {
-                                                    setUpdate(!update); 
                                                     setUserReview(review)
+                                                    setUpdate(!update); 
                                                     setNewReview(review.body);
                                                 }}>
                                                 <TbPencil />
