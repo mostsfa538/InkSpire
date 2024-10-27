@@ -24,19 +24,9 @@
 
 Explore the complete API documentation for InkSpire on [SwaggerHub](https://app.swaggerhub.com/apis-docs/MOSTAFA51MOKTAR/ink-spire_book_store_api/1.0.0).
 
-## Authors
-
-### Back-End Developers
-- **Mostafa Mokhtar** - [mostafa51moktar@gmail.com](mailto:mostafa51moktar@gmail.com)
-- **Mostafa Abokhadra** - [mbukhadra@gmail.com](mailto:mbukhadra@gmail.com)
-
-### Front-End Developers
-- **Momen Sameh** - [momensameh5@gmail.com](mailto:momensameh5@gmail.com)
-- **Abdullah Osama** - [abdullahosama.aoao@gmail.com](mailto:abdullahosama.aoao@gmail.com)
-
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
+This project is licensed under the MIT License. See the [LICENSE](./lICENSE) file for more details.
 
 ## Use Case Architecture
 
@@ -47,3 +37,7 @@ The following diagram illustrates the various roles and interactions within the 
 ## Acknowledgements
 
 This project was developed as part of the ALX Software Engineering program's graduation portfolio. Special thanks to the ALX instructors and mentors for their invaluable support and guidance.
+
+## Authors
+
+© All Rights Reserved - Product's [Authors](./AUTHORS).
