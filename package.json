@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "passport": "^0.7.0",
+    "passport-google-oidc": "^0.1.0"
+  }
+}

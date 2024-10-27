@@ -69,8 +69,8 @@ class userController {
     }
 
     static async uploadBook(req, res) {
-        const { title, author, image, price, description } = req.body;
-        const userId = req.params.userId;
+        const { title, author, image, price, category, description } = req.body;
+        const userId = req.params.user_id;
         try {
             const book = await prisma.onHold.create({
                 data: {
@@ -78,6 +78,7 @@ class userController {
                     author: author,
                     image: image,
                     price: price,
+                    category: category,
                     description: description,
                     status: "pending",
                     user: {
@@ -96,7 +97,7 @@ class userController {
     }
 
     static async updateBook(req, res) {
-        const { title, author, image, price, description } = req.body;
+        const { title, author, image, price, category, description } = req.body;
         const bookId = req.params.id;
         try {
             const book = await prisma.onHold.update({
@@ -108,12 +109,15 @@ class userController {
                     author: author,
                     image: image,
                     price: price,
+                    category: category,
                     description: description
                 }
             });
             res.status(200).json(book);
         } catch (err) {
-            console.error(err);
+            if (err.code === 'P2025') {
+                return res.status(404).json({ message: "Book not found" });
+            }
             res.status(500).json({ message: 'An error occurred during update' });
         }
     }
@@ -128,12 +132,15 @@ class userController {
             });
             res.status(200).json(book);
         } catch (err) {
+            if (err.code === 'P2025') {
+                return res.status(404).json({ message: "Book not found" });
+            }
             res.status(500).json({ message: 'An error occurred during delete' });
         }
     }
 
     static async showBooksStatus(req, res) {
-        const userId = req.params.userId;
+        const userId = req.params.user_id;
         try {
             const books = await prisma.onHold.findMany({
                 where: {
@@ -146,6 +153,7 @@ class userController {
             res.status(200).json(books);
         } catch (err) {
             console.log(err);
+
             res.status(500).json({ message: 'An error occurred' });
         }
     }

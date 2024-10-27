@@ -24,9 +24,9 @@ const validateCreateBook = [
     check('category')
         .not().isEmpty().withMessage('Category is required')
         .isString().withMessage('Category must be a string'),
-    check('quantity')
+    check('available')
         .not().isEmpty().withMessage('Quantity is required')
-        .isInt({ gt: 0 }).withMessage('Quantity must be an integer greater than 0')
+        .isInt({ gt: 0 }).withMessage('Available must be an integer greater than 0')
 ];
 
 const validateUpdateBook = [
@@ -48,15 +48,15 @@ const validateUpdateBook = [
     check('category')
         .optional()
         .isString().withMessage('Category must be a string'),
-    check('quantity')
+    check('available')
         .optional()
-        .isInt({ gt: 0 }).withMessage('Quantity must be an integer greater than 0')
+        .isInt({ gt: 0 }).withMessage('Available must be an integer greater than 0')
 ];
 
 const validateUpdateOrder = [
     check('status')
-        .isIn(['cancel', 'delivering', 'completed'])
-        .withMessage('Status must be either "cancel" or "delivering" or "completed"')
+        .isIn(['pending', 'delivering', 'completed'])
+        .withMessage('Status must be either "pending" or "delivering" or "completed"')
 ];
 
 module.exports = { validateUpdateOrder, validateID, validateCreateBook, validateUpdateBook };
