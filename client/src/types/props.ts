@@ -22,6 +22,7 @@ export type InputComponentProps = {
     defaultValue?: string 
     styles?: string
     placeHolder?: string,
+    min?: number
     max?: number
 }
 

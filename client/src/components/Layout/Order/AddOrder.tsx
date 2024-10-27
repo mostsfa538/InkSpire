@@ -52,8 +52,8 @@ function AddOrder({ orders }: { orders: OrderType[] }) {
             { displayForm &&
                 <form className={`flex flex-col gap-2 p-2`}>
                     <h1 className="text-center">New Order</h1>
-                    <Input key="address" type="text" placeHolder="Address of delivery" defaultValue="" label="Address" onChange={setAddress} />
-                    <Input key="phone" type="text" placeHolder="Phone for contact" defaultValue="" label="Phone" onChange={setPhone} />
+                    <Input key="address" min={4} max={20} type="text" placeHolder="Address of delivery" defaultValue="" label="Address" onChange={setAddress} />
+                    <Input key="phone" min={5} max={12} type="text" placeHolder="Phone for contact" defaultValue="" label="Phone" onChange={setPhone} />
                     <div className="flex p-1 items-center justify-between text-nowrap">
                         <h3 className="text-secondary text-sm">Payment Method</h3>
                         <div className="flex w-fit justify-center gap-2 [&>*]:text-2xl [&>*]:p-1 [&>*]:rounded-md [&>*]:cursor-pointer [&>*]:transition-all max-lg:[&>*]:text-sm">
@@ -63,11 +63,7 @@ function AddOrder({ orders }: { orders: OrderType[] }) {
                         </div>
                     </div>
                     <button
-                    disabled={
-                        cartToOrder === undefined ||
-                        address.length <= 20 ||
-                        (phone.length <= 5 || phone.length > 12)
-                    }
+                    disabled={ cartToOrder === undefined }
                     onClick={(e) => handleCreateOrder(e, cartToOrder!.user_id, address, [cartToOrder!.id], phone, paymentMethod)}
                     className="w-fit mx-auto p-2 bg-black text-white rounded-sm disabled:opacity-50">
                         Submit
