@@ -17,7 +17,7 @@ function BookCard({ book, avgRating, imgRef }: BookCardProps) {
 			/>
 			<div className="[&>*>span]:font-bold [&>*>span]:underline [&>*]:border-b-2 [&>*]:border-gray-400 [&>*]:py-2">
 				<h4>
-					<span>Rating:</span> {avgRating}/5
+					<span>Rating:</span> {avgRating.toFixed(1)}/5
 				</h4>
 				<h4>
 					<span>Author:</span> {book?.author}

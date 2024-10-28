@@ -147,13 +147,37 @@ class bookController {
 	static async deleteBook(req, res) {
 		const id = req.params.id;
 		try {
-			const book = await prisma.book.delete({
+			// delete all carts that contain the book
+			await prisma.cartItem.deleteMany({
+				where: {
+					book_id: parseInt(id),
+				},
+			});
+
+			// delete favorites that contain the book
+			await prisma.favorite.deleteMany({
+				where: {
+					id_book: parseInt(id),
+				},
+			});
+
+			// delete all reviews that contain the book
+			await prisma.review.deleteMany({
+				where: {
+					id_book: parseInt(id),
+				},
+			});
+
+			// delete the book
+			await prisma.book.delete({
 				where: {
 					id: parseInt(id),
 				},
 			});
+
 			res.status(200).json({ message: "Book deleted successfully" });
 		} catch (err) {
+			console.log(err);
 			if (err.code === "P2025") {
 				return res.status(404).json({ message: "Book not found" });
 			}
