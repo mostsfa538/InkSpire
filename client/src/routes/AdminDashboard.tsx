@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../components/Layout/Navbar/Navbar";
 import { AppDispatch, RootState } from "../features/app/store";
 import { useEffect, useState } from "react";
-import { getAllUsers, makeAdmin } from "../features/admin/admin";
+import { getAllUsers } from "../features/admin/admin";
 import UserDetails from "../components/Dashboard/UserDetails";
 import { BookType, User } from "../types/data";
 import { Link, Navigate } from "react-router-dom";
@@ -15,17 +15,9 @@ function AdminDashboard() {
 	const { user, loading } = useAuth();
 	const { users } = useSelector((state: RootState) => state.admin);
 	const [books, setBooks] = useState<BookType[]>([]);
-	const [showUser, setShowUser] = useState(false);
 	const [displayBookForm, setDisplayBookForm] = useState(false);
 	const [displayedUsers, setDisplayedUsers] = useState<User[]>(users);
 	const dispatch = useDispatch<AppDispatch>();
-
-	const handleMakeAdmin = (id: number) => {
-		dispatch(makeAdmin(id));
-
-		const updatedUsers = users.filter((user) => user.id !== id);
-		setDisplayedUsers(updatedUsers);
-	};
 
 	const fetchData = async () => {
 		const allBooks = await dispatch(api.endpoints.getAllBooks.initiate());
@@ -60,21 +52,7 @@ function AdminDashboard() {
 							{users.map((user) => {
 								return (
 									<div key={user.id} className="flex flex-col gap-2">
-										<div className="flex flex-col bg-white items-center p-1 rounded-md transition-all cursor-pointer hover:bg-gray-200">
-											<div className="flex items-center h-full w-full">
-												<span
-													className="p-2 h-full w-full"
-													onClick={() => setShowUser(!showUser)}>
-													{`${user.f_name} ${user.l_name}`}
-												</span>
-												<button
-													onClick={() => handleMakeAdmin(user.id!)}
-													className="text-nowrap bg-black text-white p-2 text-xs rounded-md">
-													Make Admin
-												</button>
-											</div>
-										</div>
-										<UserDetails user={user} showUser={showUser} />
+										<UserDetails user={user} />
 									</div>
 								);
 							})}
