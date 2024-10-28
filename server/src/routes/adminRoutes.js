@@ -26,7 +26,7 @@ router.post(
 
 router.put(
 	"/update/:id",
-	checkAdmin,
+	// checkAdmin,
 	adminBookValidator.validateUpdateBook,
 	adminBookValidator.validateID,
 	handleValidationErrors,
