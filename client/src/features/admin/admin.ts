@@ -49,9 +49,29 @@ export const addBook = createAsyncThunk(
 export const updateBook = createAsyncThunk(
 	"admin/updateBook",
 	async (book: BookType) => {
-		const response = await axios.put(`${baseUrl}/update/${book.id}`, book, {
-			withCredentials: true,
-		});
+		const title = book.title;
+		const author = book.author;
+		const description = book.description;
+		const price = book.price;
+		const category = book.category;
+		const available = book.available;
+		const image = book.image;
+
+		const response = await axios.put(
+			`${baseUrl}/update/${book.id}`,
+			{
+				title,
+				author,
+				description,
+				price,
+				category,
+				available,
+				image,
+			},
+			{
+				withCredentials: true,
+			}
+		);
 		return response.data;
 	}
 );

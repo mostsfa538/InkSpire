@@ -20,14 +20,16 @@ function BookForm({ book, type }: { book?: BookType; type: string }) {
 
 	const dispatch = useDispatch<AppDispatch>();
 
-	const handleSubmit = () => {
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
 		const updatedBook = {
+			id: book?.id,
 			title,
 			author,
 			description,
-			price,
+			price: parseInt(price.toString()),
 			category,
-			available,
+			available: parseInt(available.toString()),
 			image,
 		} as BookType;
 
@@ -35,6 +37,8 @@ function BookForm({ book, type }: { book?: BookType; type: string }) {
 
 		if (type === "add") dispatch(addBook(updatedBook));
 		if (type === "update") dispatch(updateBook(updatedBook));
+
+		window.location.href = `/catalog/item/${updatedBook.id}`;
 	};
 
 	return (

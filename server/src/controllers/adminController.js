@@ -116,9 +116,9 @@ class bookController {
 		const author = req.body.author;
 		const description = req.body.description;
 		const image = req.body.image;
-		const price = parseInt(req.body.price);
+		const price = req.body.price;
 		const category = req.body.category;
-		const available = parseInt(req.body.available);
+		const available = req.body.available;
 		try {
 			const book = await prisma.book.update({
 				where: {
