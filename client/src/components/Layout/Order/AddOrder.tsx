@@ -52,7 +52,7 @@ function AddOrder({ orders }: { orders: OrderType[] }) {
             { displayForm &&
                 <form className={`flex flex-col gap-2 p-2`}>
                     <h1 className="text-center">New Order</h1>
-                    <Input key="address" min={4} max={20} type="text" placeHolder="Address of delivery" defaultValue="" label="Address" onChange={setAddress} />
+                    <Input key="address" min={4} max={40} type="text" placeHolder="Address of delivery" defaultValue="" label="Address" onChange={setAddress} />
                     <Input key="phone" min={5} max={12} type="text" placeHolder="Phone for contact" defaultValue="" label="Phone" onChange={setPhone} />
                     <div className="flex p-1 items-center justify-between text-nowrap">
                         <h3 className="text-secondary text-sm">Payment Method</h3>

@@ -105,7 +105,7 @@ function OrderDetails({ order }: { order: OrderType }) {
                                     <button
                                     disabled={order.carts!.find(cart => cart.id === cartToOrder?.id) ? true : false}
                                     onClick={() =>  handleAddCartToOrder(order.user_id!, cartToOrder!.id, order.id!)}
-                                    className={`px-4 py-1 rounded-md bg-success-background text-success-text font-light disabled:opacity-50`}>
+                                    className={`px-4 py-1 rounded-md bg-success-background border-white border-2 text-success-text font-light disabled:opacity-50`}>
                                         Add
                                     </button>
                                 ): displayViewOrder.type === 'checkout' &&
