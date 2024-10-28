@@ -16,15 +16,15 @@ function Cart({ cart, showControls = true, orderId }: { cart: CartType, showCont
     const [displayCartItems, setDisplayCartItems] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
 
-    const handleEmptyCart = async (userId: string, cartId: number) => {
+    const handleEmptyCart = async (userId: number, cartId: number) => {
         dispatch(emptyCart({ userId, cartId }));
     }
 
-    const handleDeleteCart = async (userId: string, cartId: number) => {
+    const handleDeleteCart = async (userId: number, cartId: number) => {
         dispatch(deleteCart({ userId, cartId }));
     }
 
-    const handleAddOrder = async (userId: string, cart: CartType) => {
+    const handleAddOrder = async (userId: number, cart: CartType) => {
         if (cart.order_id !== null) {
             dispatch(getOrderByID({ userId, orderId: cart.order_id! })).then(() => {
                 dispatch(setOrderDisplayType('view'));

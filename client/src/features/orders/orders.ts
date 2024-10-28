@@ -25,7 +25,7 @@ export const addCartToOrder = createAsyncThunk('orders/addCartToOrder', async ({
     return response.data.orders;
 });
 
-export const getOrderByID = createAsyncThunk('orders/getOrderByID', async ({ userId, orderId }: { userId: string, orderId: number }) => {
+export const getOrderByID = createAsyncThunk('orders/getOrderByID', async ({ userId, orderId }: { userId: number, orderId: number }) => {
     const response = await axios.get(`${baseURL}/${userId}/order/${orderId}`, { withCredentials: true });
     console.log(response.data.orders);
     return response.data.order;

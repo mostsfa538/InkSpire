@@ -17,6 +17,7 @@ import Catalog from './routes/Catalog.tsx'
 import Orders from './routes/Orders.tsx'
 import Book from './routes/Book.tsx'
 import Profile from './routes/Profile.tsx'
+import AdminDashboard from './routes/AdminDashboard.tsx'
 
 const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
     {
         path: '/profile',
         element: <Profile />,
+    },
+    {
+        path: '/admin',
+        element: <AdminDashboard />,
     }
 ])
 
