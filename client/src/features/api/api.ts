@@ -12,6 +12,9 @@ export const api = createApi({
         getBookById: builder.query<BookType, string>({
             query: (id) => `/${id}`
         }),
+        getPopularBooks: builder.query<BookType[], void>({
+            query: () => '/books/popular'
+        }),
         getUserCarts: builder.query<{message: string, carts: CartType[]}, string>({
             query: (id) => ({
                 url: `/api/user/${id}/carts`,
@@ -39,6 +42,7 @@ export const api = createApi({
 export const { 
     useGetAllBooksQuery,
     useGetBookByIdQuery,
+    useGetPopularBooksQuery,
     useGetUserCartsQuery,
     useGetUserOrdersQuery,
     useSearchQuery

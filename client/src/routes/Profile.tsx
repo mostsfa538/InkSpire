@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { AppDispatch } from "../features/app/store"
 import { useDispatch } from "react-redux"
 import { updateProfile } from "../features/profile/profile"
+import Input from "../components/UI/Input"
 
 function Profile() {
     
@@ -13,7 +14,7 @@ function Profile() {
     
     const [f_name, setFName] = useState("")
     const [l_name, setLName] = useState("")
-    const [image, _setImage] = useState("")
+    const [image, setImage] = useState("")
     const [email, setEmail] = useState("")
     
     const dispatch = useDispatch<AppDispatch>()
@@ -23,13 +24,14 @@ function Profile() {
         e.preventDefault()
         const response = await dispatch(updateProfile({ userId: user!.id!.toString(), fName: f_name!, lName: l_name!, imageUrl: image!, email: email! }))
         setUser(response.payload)
+        setImage('')
     }
 
     useEffect(() => {
         if (user) {
             setFName(user.f_name!)
             setLName(user.l_name!)
-            _setImage(user.image!)
+            setImage(user.image!)
             setEmail(user.email!)
         }
     }, [user])
@@ -39,19 +41,29 @@ function Profile() {
     return (
         <div className="flex flex-col h-full">
             <Navbar />
-            <div className="w-1/2 mx-auto flex flex-col gap-4 [&>*]:p-4 [&>*]:rounded-md max-md:w-full max-md:p-2">
+            <div className="w-1/2 mx-auto flex flex-col py-4 gap-4 [&>*]:p-4 [&>*]:rounded-md max-md:w-full max-md:px-2">
                 <form className="flex flex-col gap-4 justify-center items-center">
                     <h1 className="text-2xl text-center mt-4">Update Profile</h1>
-                    <img src={user?.image} alt="profile" className="w-40" />
-                    <div className="flex flex-col gap-2 justify-center items-center [&>div]:flex [&>div]:gap-2 [&>div]:items-center [&>*>input]:outline-none [&>*>input]:text-lg [&>*>input]:font-bold [&>*>input]:bg-transparent">
-                        <div className="flex gap-2">
-                            <span>Name:</span>
-                            <input type="text" max={20} size={f_name?.length!} defaultValue={user?.f_name} onChange={(e) => setFName(e.target.value)} />
-                            <input type="text" max={20} size={l_name?.length!} defaultValue={user?.l_name} onChange={(e) => setLName(e.target.value)} />
+                    <div
+                    style={{
+                        backgroundImage: `url(${image === '' ? 'https://placehold.co/20' : image})`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    }} 
+                    className={`mx-auto w-40 h-40 flex overflow-hidden`}>
+                    </div>
+                    <div className="w-full flex flex-col gap-1 justify-center items-center [&>div]:flex [&>div]:gap-2 [&>div]:items-center [&>*>input]:outline-none [&>*>input]:text-lg [&>*>input]:font-bold [&>*>input]:bg-transparent">
+                        <div className="w-full">
+                            <Input type="text" placeHolder="URL for an image" label="Image (URL):" onChange={setImage} />
                         </div>
-                        <div className="flex gap-2">
-                            <span>Email:</span>
-                            <input type="email" max={30} size={email?.length! + 1} defaultValue={user?.email} onChange={(e) => setEmail(e.target.value)} />
+                        <div className="w-full">
+                            <Input type="text" max={20} label="First Name:" size={f_name?.length! + 1} defaultValue={user?.f_name} onChange={setFName} />
+                        </div>
+                        <div className="w-full">
+                            <Input type="text" max={20} label="Last Name:" size={l_name?.length!} defaultValue={user?.l_name} onChange={setLName} />
+                        </div>
+                        <div className="w-full">
+                            <Input type="email" max={30} label="Email:" size={email?.length! + 1} defaultValue={user?.email} onChange={setEmail} />
                         </div>
                     </div>
                     <button 

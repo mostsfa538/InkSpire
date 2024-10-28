@@ -179,6 +179,36 @@ class userController {
             res.status(500).json({ message: 'An error occurred during update' });
         }
     }
+
+    static async getPopularBooks(req, res) {
+        try {
+            const favCount = await prisma.favorite.groupBy({
+                by: ['id_book'],
+                _count: {
+                    id_book: true
+                },
+            })
+
+            const allBooks = await prisma.book.findMany();
+
+            const books = allBooks.map(book => {
+                const fav = favCount.find(f => f.id_book === book.id);
+                return {
+                    ...book,
+                    favCount: fav ? fav._count.id_book : 0
+                }
+            });
+
+            if (!books) {
+                return res.status(404).json({ message: "No books found" });
+            }
+
+            res.status(200).json(books);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ message: 'An error occurred' });
+        }
+    }
 }
 
 module.exports = userController;

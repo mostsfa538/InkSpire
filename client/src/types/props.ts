@@ -16,14 +16,15 @@ export type AuthProviderProps = {
 };
 
 export type InputComponentProps = { 
-    onChange: (value: string) => void, 
+    onChange: (value: string | any) => void, 
     label?: string, 
     type: string, 
     defaultValue?: string 
     styles?: string
     placeHolder?: string,
-    min?: number
-    max?: number
+    min?: number,
+    max?: number,
+    size?: number
 }
 
 export type AuthFormProps = {

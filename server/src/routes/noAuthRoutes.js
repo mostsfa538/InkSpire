@@ -27,4 +27,6 @@ router.get('/reviews/:id',
     reviewController.getReviewsByBook
 );
 
+router.get('/books/popular', userController.getPopularBooks);
+
 module.exports = router;
