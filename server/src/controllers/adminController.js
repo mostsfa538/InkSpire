@@ -111,18 +111,18 @@ class bookController {
 	}
 
 	static async updateBook(req, res) {
-		const id = req.params.id;
+		const id = parseInt(req.params.id);
 		const title = req.body.title;
 		const author = req.body.author;
 		const description = req.body.description;
 		const image = req.body.image;
-		const price = req.body.price;
+		const price = parseInt(req.body.price);
 		const category = req.body.category;
-		const available = req.body.available;
+		const available = parseInt(req.body.available);
 		try {
 			const book = await prisma.book.update({
 				where: {
-					id: parseInt(id),
+					id: id,
 				},
 				data: {
 					title: title,

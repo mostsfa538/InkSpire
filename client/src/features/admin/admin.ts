@@ -1,16 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { SERVER_URL } from "../../constants/values";
 import axios from "axios";
-import { User } from "../../types/data";
+import { BookType, User } from "../../types/data";
 
 const baseUrl = `${SERVER_URL}/api/admin`;
 
 type AdminState = {
 	users: User[];
+	books: BookType[];
 };
 
 const initialState = {
 	users: [],
+	books: [],
 } as AdminState;
 
 export const getAllUsers = createAsyncThunk("admin/getAllUsers", async () => {
@@ -30,6 +32,36 @@ export const makeAdmin = createAsyncThunk(
 			},
 			{ withCredentials: true }
 		);
+		return response.data;
+	}
+);
+
+export const addBook = createAsyncThunk(
+	"admin/addBook",
+	async (book: BookType) => {
+		const response = await axios.post(`${baseUrl}/create`, book, {
+			withCredentials: true,
+		});
+		return response.data;
+	}
+);
+
+export const updateBook = createAsyncThunk(
+	"admin/updateBook",
+	async (book: BookType) => {
+		const response = await axios.put(`${baseUrl}/update/${book.id}`, book, {
+			withCredentials: true,
+		});
+		return response.data;
+	}
+);
+
+export const deleteBook = createAsyncThunk(
+	"admin/deleteBook",
+	async (id: number) => {
+		const response = await axios.delete(`${baseUrl}/delete/${id}`, {
+			withCredentials: true,
+		});
 		return response.data;
 	}
 );
