@@ -111,11 +111,11 @@ function Book() {
 	}, [reviews]);
 
 	return (
-		<div className="h-full">
+		<div className="h-full overflow-auto">
 			<Navbar />
-			<div className="p-4 h-full [&>*]:p-2 [&>*]:mb-4 [&>*]:rounded-xl">
+			<div className="p-4 [&>*]:p-2 [&>*]:mb-4 [&>*]:rounded-xl">
 				<div
-					className="relative h-[90%] flex flex-col justify-center items-center overflow-hidden"
+					className="relative flex flex-col justify-center items-center overflow-hidden"
 					style={{
 						backgroundColor:
 							backgroundColor !== "rgba(0, 0, 0, 0)"
@@ -192,60 +192,69 @@ function Book() {
 						/>
 					)}
 					<div className="flex flex-col gap-2 rounded-lg [&>*]:rounded-lg max-md:text-sm">
-						{reviews.map((review, index) => (
-							<div
-								key={index}
-								className="flex flex-col gap-2 p-2 shadow-md rounded-lg even:bg-black odd:bg-white even:text-white odd:text-black">
-								{user && userReview && update && userReview.id === review.id ? (
-									<AddReview
-										book={book}
-										setReviews={setReviews}
-										userReview={review}
-										update={update}
-										setUpdate={setUpdate}
-										newReview={newReview}
-										setNewReview={setNewReview}
-										newRating={newRating}
-										setNewRating={setNewRating}
-									/>
-								) : (
-									<div className="p-2">
-										<span className="flex justify-between">
-											<h3 className="font-bold">{`${review.user.f_name} ${review.user.l_name}`}</h3>
-											<span className="font-bold">
-												Rating:{" "}
-												<span className="text-lg">{review.rating}/5</span>
-											</span>
-										</span>
-										<div className="p-2">
-											<p className="border-l-2 border-gray-400 p-2">
-												{review.body}
-											</p>
-										</div>
-									</div>
-								)}
-								<div className="flex justify-end gap-1">
-									{user?.id === review.id_user && (
-										<>
-											<button
-												className="w-fit h-fit p-2 bg-info-background text-info-text rounded-full"
-												onClick={() => {
-													setUserReview(review);
-													setUpdate(!update);
-													setNewReview(review.body);
-												}}>
-												<TbPencil />
-											</button>
-											<button
-												className="w-fit h-fit p-2 bg-error-background text-error-text rounded-full"
-												onClick={() => handleDeleteReview(review.id)}>
-												<TbTrash />
-											</button>
-										</>
-									)}
-								</div>
+						{reviews.length === 0 ? (
+							<div className="p-2 text-center">
+								<h3 className="font-bold">No reviews yet</h3>
 							</div>
-						))}
+						) : (
+							reviews.map((review, index) => (
+								<div
+									key={index}
+									className="flex flex-col gap-2 p-2 shadow-md rounded-lg even:bg-black odd:bg-white even:text-white odd:text-black">
+									{user &&
+									userReview &&
+									update &&
+									userReview.id === review.id ? (
+										<AddReview
+											book={book}
+											setReviews={setReviews}
+											userReview={review}
+											update={update}
+											setUpdate={setUpdate}
+											newReview={newReview}
+											setNewReview={setNewReview}
+											newRating={newRating}
+											setNewRating={setNewRating}
+										/>
+									) : (
+										<div className="p-2">
+											<span className="flex justify-between">
+												<h3 className="font-bold">{`${review.user.f_name} ${review.user.l_name}`}</h3>
+												<span className="font-bold">
+													Rating:{" "}
+													<span className="text-lg">{review.rating}/5</span>
+												</span>
+											</span>
+											<div className="p-2">
+												<p className="border-l-2 border-gray-400 p-2">
+													{review.body}
+												</p>
+											</div>
+										</div>
+									)}
+									<div className="flex justify-end gap-1">
+										{user?.id === review.id_user && (
+											<>
+												<button
+													className="w-fit h-fit p-2 bg-info-background text-info-text rounded-full"
+													onClick={() => {
+														setUserReview(review);
+														setUpdate(!update);
+														setNewReview(review.body);
+													}}>
+													<TbPencil />
+												</button>
+												<button
+													className="w-fit h-fit p-2 bg-error-background text-error-text rounded-full"
+													onClick={() => handleDeleteReview(review.id)}>
+													<TbTrash />
+												</button>
+											</>
+										)}
+									</div>
+								</div>
+							))
+						)}
 					</div>
 				</div>
 			</div>
