@@ -10,9 +10,10 @@ function Input({
 	placeHolder,
 	min,
 	max,
+	horizontal,
 }: InputComponentProps) {
 	return (
-		<div className="w-full">
+		<div className={`w-full ${horizontal && "flex gap-2 items-center"}`}>
 			{label && (
 				<label className="text-sm font-semibold text-secondary">{label}</label>
 			)}

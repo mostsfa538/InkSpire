@@ -25,6 +25,7 @@ export type InputComponentProps = {
 	min?: number;
 	max?: number;
 	size?: number;
+	horizontal?: boolean;
 };
 
 export type AuthFormProps = {

@@ -43,10 +43,12 @@ function AdminDashboard() {
 				<h1 className="w-full text-center text-2xl font-bold">
 					Admin Dashboard
 				</h1>
-				{displayedUsers.length === 0 ? (
-					<span>No users</span>
-				) : (
-					<div className="flex flex-col gap-4">
+				<div className="flex flex-col gap-4">
+					{displayedUsers.length === 0 ? (
+						<span className="w-full bg-gray-200 text-center p-1 font-semibold">
+							No users
+						</span>
+					) : (
 						<div className="flex flex-col gap-2">
 							<h2 className="text-xl underline font-semibold">Users:</h2>
 							{users.map((user) => {
@@ -57,34 +59,34 @@ function AdminDashboard() {
 								);
 							})}
 						</div>
-						<div className="flex flex-col gap-2 py-2">
-							<div className="flex justify-between">
-								<h2 className="text-xl underline font-semibold">Books:</h2>
-								<button
-									onClick={() => setDisplayBookForm(!displayBookForm)}
-									className="flex items-center text-sm gap-2 bg-black text-white p-2 rounded-md">
-									<PiPlus /> Add
-								</button>
-							</div>
-							<div
-								className={`bg-white px-4 rounded-md ${
-									!displayBookForm ? "h-0 px-0" : "py-2 h-96"
-								} max-h-fit overflow-hidden transition-all ease-in-out duration-300 max-md:text-sm`}>
-								<BookForm type="add" />
-							</div>
-							<div className="flex flex-col gap-2 max-md:grid-cols-2">
-								{books.map((book) => (
-									<Link
-										to={`/catalog/item/${book.id}`}
-										key={book.id}
-										className="flex flex-col bg-white p-2 rounded-md transition-all hover:bg-gray-200">
-										<span className="font-semibold">{book.title}</span>
-									</Link>
-								))}
-							</div>
+					)}
+					<div className="flex flex-col gap-2 py-2">
+						<div className="flex justify-between">
+							<h2 className="text-xl underline font-semibold">Books:</h2>
+							<button
+								onClick={() => setDisplayBookForm(!displayBookForm)}
+								className="flex items-center text-sm gap-2 bg-black text-white p-2 rounded-md">
+								<PiPlus /> Add
+							</button>
+						</div>
+						<div
+							className={`bg-white px-4 rounded-md ${
+								!displayBookForm ? "h-0 px-0" : "py-2 h-96"
+							} max-h-fit overflow-hidden transition-all ease-in-out duration-300 max-md:text-sm`}>
+							<BookForm type="add" />
+						</div>
+						<div className="flex flex-col gap-2 max-md:grid-cols-2">
+							{books.map((book) => (
+								<Link
+									to={`/catalog/item/${book.id}`}
+									key={book.id}
+									className="flex flex-col bg-white p-2 rounded-md transition-all hover:bg-gray-200">
+									<span className="font-semibold">{book.title}</span>
+								</Link>
+							))}
 						</div>
 					</div>
-				)}
+				</div>
 			</div>
 		</div>
 	);

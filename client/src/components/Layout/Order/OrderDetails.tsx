@@ -202,16 +202,19 @@ function OrderDetails({ order }: { order: OrderType }) {
 										orderId={order.id}
 									/>
 								</div>
-								<button
-									onClick={() =>
-										handleRemoveCartFromOrder(
-											order.user_id!,
-											cart.id,
-											order.id!
-										)
-									}>
-									<CgClose />
-								</button>
+								{order.order_status === "delivering" ||
+								order.order_status === "completed" ? null : (
+									<button
+										onClick={() =>
+											handleRemoveCartFromOrder(
+												order.user_id!,
+												cart.id,
+												order.id!
+											)
+										}>
+										<CgClose />
+									</button>
+								)}
 							</span>
 						))}
 					</div>

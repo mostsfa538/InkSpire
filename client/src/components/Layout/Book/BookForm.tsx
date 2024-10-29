@@ -42,9 +42,9 @@ function BookForm({ book, type }: { book?: BookType; type: string }) {
 	};
 
 	return (
-		<form className="flex flex-col gap-2">
-			<div className="flex gap-2 max-md:flex-col">
-				<div className="flex flex-col gap-2">
+		<form className="flex flex-col gap-2 h-full">
+			<div className="flex gap-2 h-full max-md:flex-col">
+				<div className="flex flex-col h-full gap-2">
 					<img src={image} alt={title} className="w-80 h-80 mx-auto" />
 					<Input
 						type="text"
@@ -53,7 +53,7 @@ function BookForm({ book, type }: { book?: BookType; type: string }) {
 						placeHolder="Image URL"
 					/>
 				</div>
-				<div className="flex flex-col gap-2 w-full text text-black">
+				<div className="flex flex-col gap-2 w-full h-full text-black justify-evenly">
 					<Input
 						type="text"
 						defaultValue={title}
@@ -67,17 +67,21 @@ function BookForm({ book, type }: { book?: BookType; type: string }) {
 						placeHolder="Author"
 					/>
 					<textarea
+						placeholder="Description"
 						className="w-full p-2 rounded-md outline-none border-2 border-gray-200"
 						defaultValue={description}
 						maxLength={200}
 						onChange={(e) => setDescription(e.target.value)}
 					/>
+
 					<Input
+						label="Price"
 						min={0}
 						type="number"
 						defaultValue={price}
 						onChange={setPrice}
 						placeHolder="Price"
+						horizontal
 					/>
 					<Input
 						type="text"
@@ -86,11 +90,13 @@ function BookForm({ book, type }: { book?: BookType; type: string }) {
 						placeHolder="Categories separated by commas (,)"
 					/>
 					<Input
+						label="Available"
 						min={0}
 						type="number"
 						defaultValue={available}
 						onChange={setAvailable}
 						placeHolder="Available"
+						horizontal
 					/>
 					<button
 						onClick={handleSubmit}
