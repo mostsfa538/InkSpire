@@ -54,7 +54,11 @@ function AdminDashboard() {
 							{users.map((user) => {
 								return (
 									<div key={user.id} className="flex flex-col gap-2">
-										<UserDetails user={user} />
+										<UserDetails
+											user={user}
+											allUsers={users}
+											setAllUsers={setDisplayedUsers}
+										/>
 									</div>
 								);
 							})}

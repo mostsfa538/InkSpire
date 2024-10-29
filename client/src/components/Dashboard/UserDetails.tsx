@@ -9,7 +9,15 @@ import {
 } from "../../features/admin/admin";
 import { TbTrash } from "react-icons/tb";
 
-function UserDetails({ user }: { user: User }) {
+function UserDetails({
+	user,
+	allUsers,
+	setAllUsers,
+}: {
+	user: User;
+	allUsers: User[];
+	setAllUsers: React.Dispatch<React.SetStateAction<User[]>>;
+}) {
 	const [orders, setOrders] = useState<OrderType[]>(user.orders);
 	const dispatch = useDispatch<AppDispatch>();
 	const [showUser, setShowUser] = useState(false);
@@ -33,6 +41,15 @@ function UserDetails({ user }: { user: User }) {
 		dispatch(deleteOrder(id));
 	};
 
+	const handleMakeAdmin = (id: number) => {
+		// remove user from allUsers
+		const updatedUsers = allUsers.filter((user) => user.id !== id);
+		setAllUsers(updatedUsers);
+
+		// make user admin
+		dispatch(makeAdmin(id));
+	};
+
 	return (
 		<>
 			<div className="flex flex-col bg-white items-center p-1 rounded-md transition-all cursor-pointer hover:bg-gray-200">
@@ -43,7 +60,7 @@ function UserDetails({ user }: { user: User }) {
 						{`${user.f_name} ${user.l_name}`}
 					</span>
 					<button
-						onClick={() => dispatch(makeAdmin(user.id!))}
+						onClick={() => handleMakeAdmin(user.id!)}
 						className="text-nowrap bg-black text-white p-2 text-xs rounded-md">
 						Make Admin
 					</button>
@@ -61,7 +78,9 @@ function UserDetails({ user }: { user: User }) {
 					<span>Orders:</span>
 					<div className="px-2 flex flex-col gap-1">
 						{user.orders.length === 0 ? (
-							<span className="text-center">No Orders</span>
+							<span className="w-full text-center bg-gray-200 p-1">
+								No Orders
+							</span>
 						) : (
 							orders.map((order) => {
 								return (
