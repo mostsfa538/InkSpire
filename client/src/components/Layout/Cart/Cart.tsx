@@ -108,7 +108,12 @@ function Cart({
 						<p className="text-center text-xs">No items in cart</p>
 					) : (
 						cart.items.map((item) => (
-							<CartItem key={item.id} item={item} orderId={orderId} />
+							<CartItem
+								key={item.id}
+								item={item}
+								orderId={orderId}
+								showControls={cart.order_id ? false : true}
+							/>
 						))
 					)}
 				</div>
