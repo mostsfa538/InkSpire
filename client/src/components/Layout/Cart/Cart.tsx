@@ -31,6 +31,7 @@ function Cart({
 
 	const handleEmptyCart = async (userId: number, cartId: number) => {
 		dispatch(emptyCart({ userId, cartId }));
+		setDisplayCartItems(true);
 	};
 
 	const handleDeleteCart = async (userId: number, cartId: number) => {

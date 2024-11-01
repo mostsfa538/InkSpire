@@ -9,12 +9,16 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import { getCartItem } from "../../../utils/cart";
 import { BookType, CartType } from "../../../types/data";
-import { toggleAddToCart } from "../../../features/UI/UI";
+import {
+	setDisplayNotification,
+	toggleAddToCart,
+} from "../../../features/UI/UI";
 import { PiPlus } from "react-icons/pi";
 import { useState } from "react";
 
 function AddCart({ book }: { book: BookType }) {
 	const { user } = useAuth();
+	const { displayNotification } = useSelector((state: RootState) => state.UI);
 	const { carts } = useSelector((state: RootState) => state.cart);
 
 	const [newCartName, setNewCartName] = useState("");
@@ -60,6 +64,22 @@ function AddCart({ book }: { book: BookType }) {
 					quantity: item!.quantity + 1,
 				})
 			);
+
+			dispatch(
+				setDisplayNotification({
+					display: !displayNotification.display,
+					message: "Quantity updated",
+					type: "info",
+				})
+			);
+		} else {
+			dispatch(
+				setDisplayNotification({
+					display: !displayNotification.display,
+					message: "Added to cart",
+					type: "success",
+				})
+			);
 		}
 
 		dispatch(toggleAddToCart(false));
@@ -77,9 +97,9 @@ function AddCart({ book }: { book: BookType }) {
 							!cart.order_id && (
 								<h3
 									key={cart.id}
-									onClick={() =>
-										handleAddCartItem(user?.id!, cart.id, book.id, 1)
-									}
+									onClick={() => {
+										handleAddCartItem(user?.id!, cart.id, book.id, 1);
+									}}
 									className="p-1 text-white cursor-pointer text-start rounded-md bg-black overflow-hidden text-ellipsis">
 									{cart.name}
 								</h3>
