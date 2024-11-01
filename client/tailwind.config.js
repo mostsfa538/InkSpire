@@ -52,9 +52,11 @@ export default {
 					"100%": { width: "100%" },
 				},
 				fadeInOutToTop: {
-					"0%%": { opacity: 0, transform: "translateY(0)" },
+					"0%": { display: "none" },
+					"10%%": { opacity: 0, transform: "translateY(0)" },
 					"50%": { opacity: 1 },
-					"100%": { opacity: 0, transform: "translateY(-100%)" },
+					"90%": { opacity: 0, transform: "translateY(-100%)" },
+					"100%": { display: "block" },
 				},
 			},
 			animation: {
@@ -64,7 +66,7 @@ export default {
 				fadeIn: "fadeIn 1s ease-in-out forwards",
 				fadeInDelay: "fadeIn 1s 1s ease-in-out forwards",
 				widthToFull: "widthToFull .5s ease-in-out forwards",
-				notificationFadeInOut: "fadeInOutToTop 1s ease-in-out forwards",
+				notificationFadeInOut: "fadeInOutToTop 1.5s ease-in-out forwards",
 			},
 			backgroundImage: {
 				"sign-in-hero": "url('/signin-hero.jpg')",

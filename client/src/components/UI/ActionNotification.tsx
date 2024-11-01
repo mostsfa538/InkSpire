@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../features/app/store";
 
 function ActionNotification() {
-	const [display, setDisplay] = useState(true);
 	const [client, setClient] = useState({ x: 0, y: 0 });
 	const { displayNotification } = useSelector((state: RootState) => state.UI);
 
@@ -25,16 +24,10 @@ function ActionNotification() {
 
 	const getMousePosition = () => {
 		window.addEventListener("mousemove", (event) => {
-			setDisplay(true);
-
 			setClient({
 				x: event.clientX + window.scrollX - 20,
 				y: event.clientY + window.scrollY - 30,
 			});
-		});
-
-		window.addEventListener("scroll", () => {
-			setDisplay(false);
 		});
 	};
 
@@ -44,14 +37,11 @@ function ActionNotification() {
 
 	return (
 		<div
-			key={`${displayNotification.display} ${displayNotification.message}`}
+			key={`${displayNotification.display}`}
 			style={{
 				zIndex: 1000,
 				top: `${client.y}px`,
 				left: `${client.x}px`,
-				display: `${
-					client.x > window.innerWidth - 100 || !display ? "none" : "block"
-				}`,
 			}}
 			className={`absolute p-1 ${style} text-xs rounded-md opacity-0 shadow-md animate-notificationFadeInOut`}>
 			{displayNotification.message}
