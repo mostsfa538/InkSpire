@@ -6,12 +6,13 @@ import {
 	updateCartItemQuantity,
 } from "../../../features/cart/cart";
 import useAuth from "../../../hooks/useAuth";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../features/app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../features/app/store";
 import {
 	deleteItemFromOrder,
 	updateOrderItemQuantity,
 } from "../../../features/orders/orders";
+import { sendNotfication } from "../../../utils/styling";
 
 function CartItem({
 	item,
@@ -24,6 +25,7 @@ function CartItem({
 }) {
 	const { user } = useAuth();
 	const dispatch = useDispatch<AppDispatch>();
+	const { displayNotification } = useSelector((state: RootState) => state.UI);
 
 	const handleIncrementItem = async (
 		userId: number,
@@ -50,6 +52,15 @@ function CartItem({
 				})
 			);
 		}
+
+		sendNotfication(
+			{
+				message: "Quantity updated",
+				type: "info",
+				toggle: !displayNotification.toggle,
+			},
+			dispatch
+		);
 	};
 
 	const handleDecrementItem = async (
@@ -87,6 +98,15 @@ function CartItem({
 				})
 			);
 		}
+
+		sendNotfication(
+			{
+				message: "Quantity updated",
+				type: "info",
+				toggle: !displayNotification.toggle,
+			},
+			dispatch
+		);
 	};
 
 	const handleDeleteItem = async (
@@ -101,6 +121,15 @@ function CartItem({
 		} else {
 			dispatch(deleteCartItem({ userId, cartId, itemId }));
 		}
+
+		sendNotfication(
+			{
+				message: "Item deleted",
+				type: "error",
+				toggle: !displayNotification.toggle,
+			},
+			dispatch
+		);
 	};
 
 	return (

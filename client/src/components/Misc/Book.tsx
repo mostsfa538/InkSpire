@@ -16,6 +16,7 @@ import {
 	removeFavorite,
 } from "../../features/favorites/favorites";
 import useAuth from "../../hooks/useAuth";
+import { sendNotfication } from "../../utils/styling";
 
 function Book({
 	book,
@@ -29,6 +30,7 @@ function Book({
 	const { user } = useAuth();
 	const { displayAddToCart } = useSelector((state: RootState) => state.UI);
 	const { favorites } = useSelector((state: RootState) => state.favorites);
+	const { displayNotification } = useSelector((state: RootState) => state.UI);
 	const dispatch = useDispatch<AppDispatch>();
 
 	const checkFavorite = (book: BookType) => {
@@ -40,8 +42,24 @@ function Book({
 		const fav = checkFavorite(book);
 		if (fav) {
 			dispatch(removeFavorite({ userId: fav.id_user, id: fav.id! }));
+			sendNotfication(
+				{
+					message: "Unfavorited",
+					type: "error",
+					toggle: !displayNotification.toggle,
+				},
+				dispatch
+			);
 		} else {
 			dispatch(addFavorite({ userId, itemId: book.id }));
+			sendNotfication(
+				{
+					message: "Favorited",
+					type: "success",
+					toggle: !displayNotification.toggle,
+				},
+				dispatch
+			);
 		}
 	};
 

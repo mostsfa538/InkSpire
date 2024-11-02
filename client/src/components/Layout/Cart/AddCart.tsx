@@ -9,12 +9,10 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import { getCartItem } from "../../../utils/cart";
 import { BookType, CartType } from "../../../types/data";
-import {
-	setDisplayNotification,
-	toggleAddToCart,
-} from "../../../features/UI/UI";
+import { toggleAddToCart } from "../../../features/UI/UI";
 import { PiPlus } from "react-icons/pi";
 import { useState } from "react";
+import { sendNotfication } from "../../../utils/styling";
 
 function AddCart({ book }: { book: BookType }) {
 	const { user } = useAuth();
@@ -65,20 +63,23 @@ function AddCart({ book }: { book: BookType }) {
 				})
 			);
 
-			dispatch(
-				setDisplayNotification({
-					display: !displayNotification.display,
+			sendNotfication(
+				{
 					message: "Quantity updated",
 					type: "info",
-				})
+					toggle: !displayNotification.toggle,
+				},
+				dispatch
 			);
 		} else {
-			dispatch(
-				setDisplayNotification({
-					display: !displayNotification.display,
+			sendNotfication(
+				{
+					display: true,
 					message: "Added to cart",
 					type: "success",
-				})
+					toggle: !displayNotification.toggle,
+				},
+				dispatch
 			);
 		}
 
