@@ -6,8 +6,8 @@ import {
 	updateCartItemQuantity,
 } from "../../../features/cart/cart";
 import useAuth from "../../../hooks/useAuth";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../features/app/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../features/app/store";
 import {
 	deleteItemFromOrder,
 	updateOrderItemQuantity,
@@ -25,7 +25,6 @@ function CartItem({
 }) {
 	const { user } = useAuth();
 	const dispatch = useDispatch<AppDispatch>();
-	const { displayNotification } = useSelector((state: RootState) => state.UI);
 
 	const handleIncrementItem = async (
 		userId: number,
@@ -57,7 +56,6 @@ function CartItem({
 			{
 				message: "Quantity updated",
 				type: "info",
-				toggle: !displayNotification.toggle,
 			},
 			dispatch
 		);
@@ -103,7 +101,6 @@ function CartItem({
 			{
 				message: "Quantity updated",
 				type: "info",
-				toggle: !displayNotification.toggle,
 			},
 			dispatch
 		);
@@ -126,7 +123,6 @@ function CartItem({
 			{
 				message: "Item deleted",
 				type: "error",
-				toggle: !displayNotification.toggle,
 			},
 			dispatch
 		);

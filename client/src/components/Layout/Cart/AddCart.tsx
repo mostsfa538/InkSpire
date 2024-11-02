@@ -16,7 +16,6 @@ import { sendNotfication } from "../../../utils/styling";
 
 function AddCart({ book }: { book: BookType }) {
 	const { user } = useAuth();
-	const { displayNotification } = useSelector((state: RootState) => state.UI);
 	const { carts } = useSelector((state: RootState) => state.cart);
 
 	const [newCartName, setNewCartName] = useState("");
@@ -67,7 +66,6 @@ function AddCart({ book }: { book: BookType }) {
 				{
 					message: "Quantity updated",
 					type: "info",
-					toggle: !displayNotification.toggle,
 				},
 				dispatch
 			);
@@ -77,7 +75,6 @@ function AddCart({ book }: { book: BookType }) {
 					display: true,
 					message: "Added to cart",
 					type: "success",
-					toggle: !displayNotification.toggle,
 				},
 				dispatch
 			);

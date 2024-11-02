@@ -30,7 +30,6 @@ function Book({
 	const { user } = useAuth();
 	const { displayAddToCart } = useSelector((state: RootState) => state.UI);
 	const { favorites } = useSelector((state: RootState) => state.favorites);
-	const { displayNotification } = useSelector((state: RootState) => state.UI);
 	const dispatch = useDispatch<AppDispatch>();
 
 	const checkFavorite = (book: BookType) => {
@@ -46,7 +45,6 @@ function Book({
 				{
 					message: "Unfavorited",
 					type: "error",
-					toggle: !displayNotification.toggle,
 				},
 				dispatch
 			);
@@ -56,7 +54,6 @@ function Book({
 				{
 					message: "Favorited",
 					type: "success",
-					toggle: !displayNotification.toggle,
 				},
 				dispatch
 			);

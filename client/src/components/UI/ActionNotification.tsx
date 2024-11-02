@@ -24,10 +24,17 @@ function ActionNotification() {
 
 	const getMousePosition = () => {
 		window.addEventListener("mousemove", (event) => {
-			setClient({
-				x: event.clientX + window.scrollX - 20,
-				y: event.clientY + window.scrollY - 30,
-			});
+			if (event.clientX + window.scrollX - 20 > window.innerWidth - 100) {
+				setClient({
+					x: event.clientX + window.scrollX - 120,
+					y: event.clientY + window.scrollY - 30,
+				});
+			} else {
+				setClient({
+					x: event.clientX + window.scrollX - 20,
+					y: event.clientY + window.scrollY - 30,
+				});
+			}
 		});
 	};
 

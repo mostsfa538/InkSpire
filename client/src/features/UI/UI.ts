@@ -66,7 +66,7 @@ export const UISlice = createSlice({
 		setDisplayNotification: (state, action) => {
 			state.displayNotification.display = true;
 
-			state.displayNotification.toggle = action.payload.toggle;
+			state.displayNotification.toggle = !state.displayNotification.toggle;
 			state.displayNotification.message = action.payload.message;
 			state.displayNotification.type = action.payload.type;
 		},

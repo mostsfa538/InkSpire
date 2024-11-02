@@ -93,5 +93,5 @@ export type NotificationType = {
 	display?: boolean;
 	message: string;
 	type: "success" | "error" | "info";
-	toggle: boolean;
+	toggle?: boolean;
 };
