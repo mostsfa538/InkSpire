@@ -14,6 +14,7 @@ import {
 import { AppDispatch } from "../../../features/app/store";
 import { setOrderDisplayType, toggleViewOrder } from "../../../features/UI/UI";
 import { getOrderByID } from "../../../features/orders/orders";
+import { sendNotfication } from "../../../utils/styling";
 
 function Cart({
 	cart,
@@ -68,6 +69,13 @@ function Cart({
 										cartId: cart.id,
 										cartName,
 									})
+								);
+								sendNotfication(
+									{
+										message: "Cart name updated",
+										type: "success",
+									},
+									dispatch
 								);
 							}}
 							onChange={(e) => setCartName(e.target.value)}

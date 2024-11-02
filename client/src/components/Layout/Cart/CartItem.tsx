@@ -54,8 +54,11 @@ function CartItem({
 
 		sendNotfication(
 			{
-				message: "Quantity updated",
-				type: "info",
+				message:
+					item.quantity + 1 >= item.book.available
+						? "Max quantity"
+						: "Quantity updated",
+				type: item.quantity + 1 >= item.book.available ? "error" : "info",
 			},
 			dispatch
 		);
@@ -99,8 +102,8 @@ function CartItem({
 
 		sendNotfication(
 			{
-				message: "Quantity updated",
-				type: "info",
+				message: item.quantity - 1 <= 0 ? "Item deleted" : "Quantity updated",
+				type: item.quantity - 1 <= 0 ? "error" : "info",
 			},
 			dispatch
 		);

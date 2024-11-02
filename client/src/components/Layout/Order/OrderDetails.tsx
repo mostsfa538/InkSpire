@@ -15,7 +15,11 @@ import { CgClose } from "react-icons/cg";
 import { TbTrash } from "react-icons/tb";
 import Cart from "../Cart/Cart";
 import { updateCart } from "../../../features/cart/cart";
-import { orderBackground, orderStatusText } from "../../../utils/styling";
+import {
+	orderBackground,
+	orderStatusText,
+	sendNotfication,
+} from "../../../utils/styling";
 
 function OrderDetails({ order }: { order: OrderType }) {
 	const { displayViewOrder } = useSelector((state: RootState) => state.UI);
@@ -50,6 +54,14 @@ function OrderDetails({ order }: { order: OrderType }) {
 			const updatedCart = { ...cart, order_id: orderId };
 			dispatch(updateCart(updatedCart));
 		}
+
+		sendNotfication(
+			{
+				message: "Cart Added",
+				type: "success",
+			},
+			dispatch
+		);
 	};
 
 	const handleDeleteOrder = async (userId: number, orderId: number) => {
@@ -63,6 +75,14 @@ function OrderDetails({ order }: { order: OrderType }) {
 				dispatch(updateCart(updatedCart));
 			});
 		}
+
+		sendNotfication(
+			{
+				message: "Order Deleted",
+				type: "error",
+			},
+			dispatch
+		);
 	};
 
 	const handleRemoveCartFromOrder = async (
@@ -78,6 +98,14 @@ function OrderDetails({ order }: { order: OrderType }) {
 			const updatedCart = { ...cart, order_id: null };
 			dispatch(updateCart(updatedCart));
 		}
+
+		sendNotfication(
+			{
+				message: "Cart Removed",
+				type: "error",
+			},
+			dispatch
+		);
 	};
 
 	const handleCheckout = async () => {
