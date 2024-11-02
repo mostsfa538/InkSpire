@@ -143,7 +143,7 @@ function OrderDetails({ order }: { order: OrderType }) {
 							<span className="">
 								Total:{" "}
 								<span className="font-extrabold text-success-text">
-									{order.total_price}$
+									{order.carts?.length === 0 ? 0 : order.total_price}
 								</span>
 							</span>
 						</div>

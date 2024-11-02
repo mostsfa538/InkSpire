@@ -8,6 +8,7 @@ import {
 	updateOrderStatus,
 } from "../../features/admin/admin";
 import { TbTrash } from "react-icons/tb";
+import { sendNotfication } from "../../utils/styling";
 
 function UserDetails({
 	user,
@@ -21,6 +22,7 @@ function UserDetails({
 	const [orders, setOrders] = useState<OrderType[]>(user.orders);
 	const dispatch = useDispatch<AppDispatch>();
 	const [showUser, setShowUser] = useState(false);
+
 	const handleOrderUpdate = (id: number, status: string) => {
 		const order = orders.find((order) => order.id === id);
 		if (order) {
@@ -32,6 +34,14 @@ function UserDetails({
 		}
 
 		dispatch(updateOrderStatus({ id, status }));
+
+		sendNotfication(
+			{
+				message: "Status Updated",
+				type: "success",
+			},
+			dispatch
+		);
 	};
 
 	const handleOrderDelete = (id: number) => {
@@ -39,6 +49,14 @@ function UserDetails({
 		setOrders(updatedOrders);
 
 		dispatch(deleteOrder(id));
+
+		sendNotfication(
+			{
+				message: "Order Deleted",
+				type: "error",
+			},
+			dispatch
+		);
 	};
 
 	const handleMakeAdmin = (id: number) => {
@@ -48,6 +66,15 @@ function UserDetails({
 
 		// make user admin
 		dispatch(makeAdmin(id));
+
+		// show notification
+		sendNotfication(
+			{
+				message: "User made admin",
+				type: "success",
+			},
+			dispatch
+		);
 	};
 
 	return (
