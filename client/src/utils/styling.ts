@@ -1,3 +1,7 @@
+import { AppDispatch } from "../features/app/store";
+import { setDisplayNotification } from "../features/UI/UI";
+import { NotificationType } from "../types/data";
+
 export const orderBackground = (orderStatus: string) => {
 	switch (orderStatus) {
 		case "pending":
@@ -83,4 +87,11 @@ export const getTextContrast = (color: string) => {
 		(parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) /
 		1000;
 	return brightness >= 128 ? "black" : "white";
+};
+
+export const sendNotfication = async (
+	notfication: NotificationType,
+	dispatch: AppDispatch
+) => {
+	dispatch(setDisplayNotification(notfication));
 };

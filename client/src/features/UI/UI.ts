@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { NotificationType } from "../../types/data";
 
 type UIState = {
 	displaySideMenu: boolean;
@@ -10,11 +11,7 @@ type UIState = {
 		type: "view" | "add" | "checkout";
 	};
 	initialSignUp: boolean;
-	displayNotification: {
-		display: boolean;
-		message: string;
-		type: "success" | "error" | "info";
-	};
+	displayNotification: NotificationType;
 };
 
 export const UISlice = createSlice({
@@ -33,6 +30,7 @@ export const UISlice = createSlice({
 			display: false,
 			message: "",
 			type: "success",
+			toggle: false,
 		},
 	} as UIState,
 	reducers: {
@@ -66,7 +64,9 @@ export const UISlice = createSlice({
 			state.initialSignUp = action.payload;
 		},
 		setDisplayNotification: (state, action) => {
-			state.displayNotification.display = action.payload.display;
+			state.displayNotification.display = true;
+
+			state.displayNotification.toggle = action.payload.toggle;
 			state.displayNotification.message = action.payload.message;
 			state.displayNotification.type = action.payload.type;
 		},

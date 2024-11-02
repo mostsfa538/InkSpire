@@ -33,15 +33,16 @@ function ActionNotification() {
 
 	useEffect(() => {
 		getMousePosition();
-	}, [displayNotification.display]);
+	}, [displayNotification.toggle]);
 
 	return (
 		<div
-			key={`${displayNotification.display}`}
+			key={`${displayNotification.toggle}`}
 			style={{
 				zIndex: 1000,
 				top: `${client.y}px`,
 				left: `${client.x}px`,
+				display: displayNotification.display ? "block" : "none",
 			}}
 			className={`absolute p-1 ${style} text-xs rounded-md opacity-0 shadow-md animate-notificationFadeInOut`}>
 			{displayNotification.message}

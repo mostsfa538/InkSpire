@@ -88,3 +88,10 @@ export type ReviewType = {
 	user: User;
 	book: BookType;
 };
+
+export type NotificationType = {
+	display?: boolean;
+	message: string;
+	type: "success" | "error" | "info";
+	toggle: boolean;
+};
