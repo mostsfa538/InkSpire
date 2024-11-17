@@ -82,7 +82,7 @@ function HomePage() {
 				<h1 className="font-semibold">
 					Popular Books <span className="text-secondary">🔥</span>
 				</h1>
-				{popularBooks.length > 0 ? (
+				{popularBooks && popularBooks.length > 0 ? (
 					<div className="flex gap-10 justify-center items-start max-md:gap-5">
 						{popularBooks.map((book) => (
 							<Link
